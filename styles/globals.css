@@ -1,0 +1,38 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #06060f;
+  color: #e8e8ff;
+  font-family: 'Nunito', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+img { display: block; max-width: 100%; }
+
+button { cursor: pointer; font-family: inherit; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #06060f; }
+::-webkit-scrollbar-thumb { background: rgba(0,180,255,0.3); border-radius: 2px; }
+
+@keyframes starPulse {
+  from { opacity: 0.1; }
+  to   { opacity: 0.8; }
+}
+@keyframes neonFlicker {
+  0%,100% { opacity: 1; }
+  92%      { opacity: 0.9; }
+  93%      { opacity: 0.5; }
+  94%      { opacity: 1; }
+}
+@keyframes scanline {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(120vh); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
