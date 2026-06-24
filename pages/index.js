@@ -11,13 +11,21 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
 
-  const filtered = products.filter(p => {
-    const matchCat = activeCategory === 'All' || p.category === activeCategory;
-    const matchSearch = !search ||
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.description?.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
-  });
+  const filtered = products
+    .filter(p => {
+      const matchCat = activeCategory === 'All' || p.category === activeCategory;
+      const matchSearch = !search ||
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.description?.toLowerCase().includes(search.toLowerCase());
+      return matchCat && matchSearch;
+    })
+    .sort((a, b) => {
+      const aOut = a.stock === 0;
+      const bOut = b.stock === 0;
+      if (aOut && !bOut) return 1;
+      if (!aOut && bOut) return -1;
+      return 0;
+    });
 
   const addToCart = (product) => {
     setCart(prev => {
@@ -235,7 +243,6 @@ export async function getServerSideProps({ res }) {
       .filter(item => {
         if (item.is_deleted) return false;
         if (!item.item_data?.name) return false;
-        // Respect Square's online visibility settings
         if (item.item_data?.ecom_visibility === 'HIDDEN') return false;
         if (item.item_data?.available_online === false) return false;
         return true;
@@ -263,7 +270,8 @@ export async function getServerSideProps({ res }) {
           })),
         };
       })
-      .filter(p => p.price > 0);
+      .filter(p => p.price > 0)
+      .reverse();
 
     const categories = ['All', ...new Set(products.map(p => p.category))];
 
