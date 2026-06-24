@@ -1,0 +1,191 @@
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.eyebrow {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  letter-spacing: 6px;
+  color: #ff2052;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 900;
+  letter-spacing: 4px;
+  background: linear-gradient(135deg, #fff 0%, #00b4ff 50%, #ff2052 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+}
+
+.statusBadge {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 6px 16px;
+  border-radius: 20px;
+}
+
+.statusOpen {
+  background: rgba(57, 255, 20, 0.1);
+  color: #39ff14;
+  border: 1px solid rgba(57, 255, 20, 0.3);
+}
+
+.statusClosed {
+  background: rgba(255, 32, 82, 0.1);
+  color: #ff2052;
+  border: 1px solid rgba(255, 32, 82, 0.3);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Cards */
+.card {
+  background: linear-gradient(145deg, #0d0d1a, #0a0a14);
+  border: 1px solid rgba(0, 180, 255, 0.1);
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: rgba(0, 180, 255, 0.25); }
+
+.cardLabel {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #ff2052;
+  margin-bottom: 14px;
+}
+
+.address {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  color: #aab;
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+.address div:first-child {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  color: #e8e8ff;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.directionsBtn {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 180, 255, 0.3);
+  background: rgba(0, 180, 255, 0.06);
+  color: #00b4ff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.directionsBtn:hover {
+  background: rgba(0, 180, 255, 0.12);
+  box-shadow: 0 0 16px rgba(0, 180, 255, 0.2);
+}
+
+.email {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  color: #00b4ff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.email:hover { opacity: 0.7; }
+
+/* Hours */
+.hours { display: flex; flex-direction: column; gap: 6px; }
+
+.hourRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.hourRow:hover { background: rgba(255,255,255,0.02); }
+
+.hourToday {
+  background: rgba(0, 180, 255, 0.06) !important;
+  border: 1px solid rgba(0, 180, 255, 0.15);
+}
+
+.hourDay {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  color: #889;
+}
+
+.hourToday .hourDay {
+  color: #00b4ff;
+  font-weight: 800;
+}
+
+.hourTime {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  color: #556;
+  letter-spacing: 1px;
+}
+
+.hourToday .hourTime {
+  color: #00b4ff;
+}
+
+/* Map */
+.mapCol { position: sticky; top: 88px; }
+
+.mapWrap {
+  width: 100%;
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 180, 255, 0.15);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+}
+
+.mapLink {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  color: #445;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.mapLink:hover { color: #00b4ff; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .mapCol { position: static; }
+  .mapWrap { height: 300px; }
+  .page { padding: 24px 14px 60px; }
+}
