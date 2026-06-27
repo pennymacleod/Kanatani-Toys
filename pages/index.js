@@ -46,7 +46,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
   return (
     <>
       <Head>
-        <title>Kanatani Toys — Lewes, East Sussex</title>
+        <title>Kanatani Toys — Strange Toys for Strange People</title>
         <meta name="description" content="Screen-free, open-ended toys thoughtfully chosen for curious minds. Shop online or visit us in Lewes, East Sussex." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
@@ -78,10 +78,10 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
           <div className={styles.heroStars} aria-hidden="true" />
           <div className={styles.heroContent}>
             <p className={styles.heroEyebrow}>カナタニ · LEWES · EAST SUSSEX</p>
-            <h1 className={styles.heroTitle}>Play Without<br />Limits</h1>
+            <h1 className={styles.heroTitle}>Strange Toys<br />for Strange<br />People</h1>
             <p className={styles.heroSub}>
-              Screen-free, open-ended toys for curious minds. Every product in this shop
-              is managed in real-time from our Square till — stock updates the moment we sell.
+              Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists from Japan and around the world. Hand-picked. Genuinely loved.
+              
             </p>
             <div className={styles.searchWrap}>
               <span className={styles.searchIcon}>🔍</span>
@@ -144,7 +144,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             <img src="/logo.png" alt="" className={styles.footerLogo} />
             <div>
               <div className={styles.footerName}>KANATANI TOYS</div>
-              <div className={styles.footerSub}>Lewes, East Sussex · Tue–Sun</div>
+              <div className={styles.footerSub}>Strange Toys for Strange People</div>
             </div>
           </div>
           <div className={styles.footerRight}>
