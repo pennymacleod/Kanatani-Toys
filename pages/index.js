@@ -64,8 +64,8 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
           </div>
           <nav className={styles.nav}>
             <a href="#shop">Shop</a>
-            <a href="/about">About</a>
-            <a href="/about#contact">Contact</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
           </nav>
           <button className={styles.cartBtn} onClick={() => setCartOpen(true)}>
             <span>🛒</span>
