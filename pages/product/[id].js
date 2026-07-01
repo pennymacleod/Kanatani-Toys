@@ -75,9 +75,9 @@ export default function ProductPage({ product, error }) {
             </div>
           </div>
           <nav className={homeStyles.nav}>
-            <a href="/">Shop</a>
-            <a href="/#about">About</a>
-            <a href="/#contact">Contact</a>
+            <a href="/#shop">Shop</a>
+            <a href="/our-story">Our Story</a>
+            <a href="/about">Find Us</a>
           </nav>
           <button className={homeStyles.cartBtn} onClick={() => setCartOpen(true)}>
             <span>🛒</span>
