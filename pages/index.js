@@ -64,8 +64,8 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
           </div>
           <nav className={styles.nav}>
             <a href="#shop">Shop</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
+            <a href="/our-story">Our Story</a>
+            <a href="/about">Find Us</a>
           </nav>
           <button className={styles.cartBtn} onClick={() => setCartOpen(true)}>
             <span>🛒</span>
@@ -74,7 +74,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
           </button>
         </header>
 
-        <section className={styles.hero} id="shop">
+        <section className={styles.hero}>
           <div className={styles.heroStars} aria-hidden="true" />
           <div className={styles.heroContent}>
             <p className={styles.heroEyebrow}>カナタニ · LEWES · EAST SUSSEX</p>
@@ -84,7 +84,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             </p>
             <div className={styles.heroActions}>
               <a href="#shop" className={styles.heroBtnPrimary}>Browse the Shop</a>
-              <a href="/about" className={styles.heroBtnSecondary}>Our Story →</a>
+              <a href="/our-story" className={styles.heroBtnSecondary}>Our Story →</a>
             </div>
             <div className={styles.searchWrap}>
               <span className={styles.searchIcon}>🔍</span>
@@ -115,7 +115,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
           </div>
         )}
 
-        <div className={styles.filterBar}>
+        <div className={styles.filterBar} id="shop">
           <div className={styles.filterTabs}>
             {categories.map(cat => (
               <button

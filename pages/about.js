@@ -51,9 +51,9 @@ export default function About() {
             </div>
           </div>
           <nav className={homeStyles.nav}>
-            <a href="/">Shop</a>
-            <a href="/about" style={{ color: '#00b4ff' }}>About</a>
-            <a href="/about#contact">Contact</a>
+            <a href="/#shop">Shop</a>
+            <a href="/our-story">Our Story</a>
+            <a href="/about" style={{ color: '#00b4ff' }}>Find Us</a>
           </nav>
           <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
             ← Back to Shop
@@ -68,17 +68,6 @@ export default function About() {
             <div className={`${styles.statusBadge} ${open ? styles.statusOpen : styles.statusClosed}`}>
               {open ? '⬤ Open Now' : '⬤ Closed Now'}
             </div>
-          </div>
-
-          {/* Brand story */}
-          <div className={styles.story}>
-            <div className={styles.storyLabel}>OUR STORY</div>
-            <p>At Kanatani Toys, we're passionate about Japanese pop culture and the incredible artists who continue to shape it.</p>
-            <p>Our mission is to bring a carefully curated collection of Japanese toys, art and collectibles to the UK, celebrating everything from kaiju and Godzilla to sofubi, designer toys and independent artists.</p>
-            <p>Several times a year we travel to Japan, personally hand-picking unique vintage and second-hand treasures that are then shipped back to our shop in the UK. Alongside these finds, we proudly showcase work from independent artists from Japan, the UK and around the world whose creations are inspired by Japanese pop culture.</p>
-            <p>Every item in our shop is carefully chosen because we genuinely love it. Whether you're searching for a rare vintage figure, an independent sofubi release or something wonderfully weird, we hope you'll discover something special.</p>
-            <p>Kanatani Toys is more than just a toy shop—it's a place to celebrate Japanese creativity, support talented artists, and share our passion for unique collectibles.</p>
-            <p className={styles.storyTagline}>Strange Toys for Strange People.</p>
           </div>
 
           <div className={styles.layout}>
