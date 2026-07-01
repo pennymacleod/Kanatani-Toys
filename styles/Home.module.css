@@ -141,17 +141,6 @@
   pointer-events: none;
 }
 
-/* Horizontal scan line */
-.hero::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 180, 255, 0.25), transparent);
-  animation: scanline 9s linear infinite;
-  pointer-events: none;
-}
-
 .heroContent {
   position: relative;
   text-align: center;

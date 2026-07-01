@@ -29,10 +29,6 @@ button { cursor: pointer; font-family: inherit; }
   93%      { opacity: 0.5; }
   94%      { opacity: 1; }
 }
-@keyframes scanline {
-  from { transform: translateY(-100%); }
-  to   { transform: translateY(120vh); }
-}
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
