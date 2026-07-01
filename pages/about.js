@@ -125,7 +125,7 @@ export default function About() {
               <div className={styles.mapWrap}>
                 <iframe
                   title="Kanatani Toys location"
-                  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY&q=Old+Needlemakers,West+Street,Lewes,BN7+2NZ"
+                  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCdAxai6mQFAdEjuy2BwK1IhHlHrklNuVg&q=Old+Needlemakers,West+Street,Lewes,BN7+2NZ"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
