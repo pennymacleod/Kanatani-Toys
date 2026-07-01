@@ -47,7 +47,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
     <>
       <Head>
         <title>Kanatani Toys — Strange Toys for Strange People</title>
-        <meta name="description" content="Screen-free, open-ended toys thoughtfully chosen for curious minds. Shop online or visit us in Lewes, East Sussex." />
+        <meta name="description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us in Lewes, East Sussex." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
@@ -81,8 +81,11 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             <h1 className={styles.heroTitle}>Strange Toys<br />for Strange<br />People</h1>
             <p className={styles.heroSub}>
               Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists from Japan and around the world. Hand-picked. Genuinely loved.
-              
             </p>
+            <div className={styles.heroActions}>
+              <a href="#shop" className={styles.heroBtnPrimary}>Browse the Shop</a>
+              <a href="/about" className={styles.heroBtnSecondary}>Our Story →</a>
+            </div>
             <div className={styles.searchWrap}>
               <span className={styles.searchIcon}>🔍</span>
               <input
@@ -95,6 +98,16 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             </div>
           </div>
         </section>
+
+        <div className={styles.aboutStrip}>
+          <span className={styles.aboutStripItem}>🇯🇵 Hand-picked in Japan</span>
+          <span className={styles.aboutStripDivider} />
+          <span className={styles.aboutStripItem}>🎌 Independent Artists</span>
+          <span className={styles.aboutStripDivider} />
+          <span className={styles.aboutStripItem}>👾 Kaiju · Sofubi · Designer Toys</span>
+          <span className={styles.aboutStripDivider} />
+          <span className={styles.aboutStripItem}>📍 Old Needlemakers Lewes</span>
+        </div>
 
         {error && (
           <div className={styles.errorBanner}>

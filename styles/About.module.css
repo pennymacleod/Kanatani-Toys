@@ -182,10 +182,47 @@
 }
 .mapLink:hover { color: #00b4ff; }
 
+/* Brand story */
+.story {
+  max-width: 760px;
+  margin: 0 auto 48px;
+  padding: 32px 36px;
+  background: linear-gradient(145deg, #0d0d1a, #0a0a14);
+  border: 1px solid rgba(0, 180, 255, 0.1);
+  border-radius: 12px;
+}
+
+.storyLabel {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #ff2052;
+  margin-bottom: 18px;
+}
+
+.story p {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #aab;
+  margin-bottom: 16px;
+}
+
+.story p:last-child { margin-bottom: 0; }
+
+.storyTagline {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px !important;
+  letter-spacing: 1px;
+  color: #00b4ff !important;
+  margin-top: 24px !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .layout { grid-template-columns: 1fr; }
   .mapCol { position: static; }
   .mapWrap { height: 300px; }
   .page { padding: 24px 14px 60px; }
+  .story { padding: 24px 20px; }
 }
