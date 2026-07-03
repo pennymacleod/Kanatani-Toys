@@ -239,8 +239,89 @@
   border-radius: 4px;
 }
 
+/* Lightbox */
+.lightboxOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(2, 2, 8, 0.94);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+.lightboxImg {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 0 60px rgba(0, 180, 255, 0.15);
+  cursor: default;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e8e8ff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.lightboxClose:hover { background: rgba(255, 32, 82, 0.15); color: #ff2052; }
+
+.lightboxArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e8e8ff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.lightboxArrow:hover { background: rgba(0, 180, 255, 0.12); color: #00b4ff; border-color: rgba(0, 180, 255, 0.3); }
+
+.lightboxPrev { left: 20px; }
+.lightboxNext { right: 20px; }
+
+.lightboxCounter {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #778;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 /* Responsive */
 @media (max-width: 700px) {
   .layout { grid-template-columns: 1fr; gap: 24px; }
   .page { padding: 16px 14px 60px; }
+}
+
+@media (max-width: 640px) {
+  .lightboxArrow { width: 40px; height: 40px; font-size: 20px; }
+  .lightboxPrev { left: 8px; }
+  .lightboxNext { right: 8px; }
+  .lightboxClose { top: 10px; right: 12px; }
 }

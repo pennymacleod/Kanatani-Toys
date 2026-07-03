@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Cart from '../../components/Cart';
@@ -16,6 +16,23 @@ export default function ProductPage({ product, error }) {
   );
   const [added, setAdded] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const imageCount = product?.imageUrls?.length || 0;
+
+  const showPrevImg = () => setActiveImg(i => (i - 1 + imageCount) % imageCount);
+  const showNextImg = () => setActiveImg(i => (i + 1) % imageCount);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setLightboxOpen(false);
+      else if (e.key === 'ArrowLeft' && imageCount > 1) showPrevImg();
+      else if (e.key === 'ArrowRight' && imageCount > 1) showNextImg();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [lightboxOpen, imageCount]);
 
   if (error || !product) {
     return (
@@ -95,7 +112,11 @@ export default function ProductPage({ product, error }) {
           <div className={styles.layout}>
             {/* Images */}
             <div className={styles.imageSection}>
-              <div className={styles.mainImage}>
+              <div
+                className={styles.mainImage}
+                style={{ cursor: imageCount > 0 ? 'zoom-in' : 'default' }}
+                onClick={() => imageCount > 0 && setLightboxOpen(true)}
+              >
                 {product.imageUrls?.length > 0 ? (
                   <img
                     src={product.imageUrls[activeImg]}
@@ -203,6 +224,51 @@ export default function ProductPage({ product, error }) {
             onChangeQty={changeQty}
             onRemove={(id) => setCart(prev => prev.filter(i => i.id !== id))}
           />
+        )}
+
+        {lightboxOpen && imageCount > 0 && (
+          <div className={styles.lightboxOverlay} onClick={() => setLightboxOpen(false)}>
+            <button
+              className={styles.lightboxClose}
+              onClick={(e) => { e.stopPropagation(); setLightboxOpen(false); }}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            {imageCount > 1 && (
+              <button
+                className={`${styles.lightboxArrow} ${styles.lightboxPrev}`}
+                onClick={(e) => { e.stopPropagation(); showPrevImg(); }}
+                aria-label="Previous image"
+              >
+                ‹
+              </button>
+            )}
+
+            <img
+              className={styles.lightboxImg}
+              src={product.imageUrls[activeImg]}
+              alt={product.name}
+              onClick={(e) => e.stopPropagation()}
+            />
+
+            {imageCount > 1 && (
+              <button
+                className={`${styles.lightboxArrow} ${styles.lightboxNext}`}
+                onClick={(e) => { e.stopPropagation(); showNextImg(); }}
+                aria-label="Next image"
+              >
+                ›
+              </button>
+            )}
+
+            {imageCount > 1 && (
+              <div className={styles.lightboxCounter}>
+                {activeImg + 1} / {imageCount}
+              </div>
+            )}
+          </div>
         )}
       </div>
     </>
