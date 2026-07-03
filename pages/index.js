@@ -82,7 +82,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
           <div className={styles.heroStars} aria-hidden="true" />
           <div className={styles.heroContent}>
             <p className={styles.heroEyebrow}>カナタニ · LEWES · EAST SUSSEX</p>
-            <h1 className={styles.heroTitle}>Strange Toys<br />for Strange<br />People</h1>
+            <h1 className={styles.heroTitle}>Kanatani Toys</h1>
             <p className={styles.heroSub}>
               Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists from Japan and around the world. Hand-picked. Genuinely loved.
             </p>
