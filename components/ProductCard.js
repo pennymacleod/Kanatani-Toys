@@ -1,23 +1,26 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
 
 const fmt = (pence) => `£${(pence / 100).toFixed(2)}`;
 
-export default function ProductCard({ product, onAddToCart, cart, onOpenCart }) {
+export default function ProductCard({ product, onAddToCart, onOpenCart }) {
   const router = useRouter();
+  const [justAdded, setJustAdded] = useState(false);
   const outOfStock = product.stock === 0;
   const lowStock = product.stock !== null && product.stock > 0 && product.stock <= 5;
-  const inCart = cart?.some(i => i.id === product.id);
 
   const badge = outOfStock ? 'Sold Out' : lowStock ? 'Low Stock' : null;
 
   const handleClick = (e) => {
     e.stopPropagation(); // don't navigate when clicking the button
     if (outOfStock) return;
-    if (inCart) {
+    if (justAdded) {
       onOpenCart?.();
+      setJustAdded(false); // revert to "Add" so another one can be added
     } else {
       onAddToCart(product);
+      setJustAdded(true);
     }
   };
 
@@ -59,11 +62,11 @@ export default function ProductCard({ product, onAddToCart, cart, onOpenCart }) 
         <div className={styles.cardFooter}>
           <span className={styles.price}>{fmt(product.price)}</span>
           <button
-            className={`${styles.addBtn} ${inCart ? styles.addBtnDone : ''}`}
+            className={`${styles.addBtn} ${justAdded ? styles.addBtnDone : ''}`}
             onClick={handleClick}
             disabled={outOfStock}
           >
-            {outOfStock ? 'Sold Out' : inCart ? 'View Basket →' : 'Add'}
+            {outOfStock ? 'Sold Out' : justAdded ? 'View Basket →' : 'Add'}
           </button>
         </div>
       </div>
