@@ -172,9 +172,9 @@ export default function ProductPage({ product, error }) {
                 {outOfStock ? 'Sold Out' : added ? '✓ Added to Basket' : 'Add to Basket'}
               </button>
 
-              {added && (
+              {cartCount > 0 && (
                 <button className={styles.viewCartBtn} onClick={() => setCartOpen(true)}>
-                  View Basket →
+                  View Basket ({cartCount}) →
                 </button>
               )}
 

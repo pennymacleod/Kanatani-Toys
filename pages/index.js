@@ -138,6 +138,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
         </div>
 
         <main className={styles.main}>
+          <h2 className={styles.sectionTitle}>Featured Items</h2>
           {filtered.length === 0 ? (
             <div className={styles.noResults}>
               <p>🔍</p>
