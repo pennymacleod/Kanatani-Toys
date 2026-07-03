@@ -151,6 +151,8 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
                   key={product.id}
                   product={product}
                   onAddToCart={addToCart}
+                  cart={cart}
+                  onOpenCart={() => setCartOpen(true)}
                 />
               ))}
             </div>
