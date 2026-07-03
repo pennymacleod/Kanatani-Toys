@@ -218,6 +218,20 @@
   margin-top: 24px !important;
 }
 
+/* Shopfront photo */
+.storyPhotoWrap {
+  max-width: 480px;
+  margin: 0 auto 40px;
+}
+
+.storyPhoto {
+  display: block;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 180, 255, 0.15);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .layout { grid-template-columns: 1fr; }
@@ -225,4 +239,5 @@
   .mapWrap { height: 300px; }
   .page { padding: 24px 14px 60px; }
   .story { padding: 24px 20px; }
+  .storyPhotoWrap { max-width: 340px; }
 }

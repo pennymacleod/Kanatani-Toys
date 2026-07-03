@@ -43,6 +43,15 @@ export default function OurStory() {
             <h1 className={styles.title}>Our Story</h1>
           </div>
 
+          {/* Shopfront photo */}
+          <div className={styles.storyPhotoWrap}>
+            <img
+              src="/store-front.png"
+              alt="Kanatani Toys shopfront in Lewes, East Sussex"
+              className={styles.storyPhoto}
+            />
+          </div>
+
           {/* Brand story */}
           <div className={styles.story}>
             <div className={styles.storyLabel}>OUR STORY</div>
