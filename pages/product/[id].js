@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Cart from '../../components/Cart';
 import SocialLinks from '../../components/SocialLinks';
+import LegalLinks from '../../components/LegalLinks';
 import styles from '../../styles/Product.module.css';
 import homeStyles from '../../styles/Home.module.css';
 
@@ -227,7 +228,10 @@ export default function ProductPage({ product, error }) {
               <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
             </div>
           </div>
-          <div className={homeStyles.footerRight}>Powered by Square API</div>
+          <div className={homeStyles.footerRight}>
+            Powered by Square API
+            <LegalLinks />
+          </div>
         </footer>
 
         {cartOpen && (

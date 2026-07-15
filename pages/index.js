@@ -3,6 +3,7 @@ import Head from 'next/head';
 import ProductCard from '../components/ProductCard';
 import Cart from '../components/Cart';
 import SocialLinks from '../components/SocialLinks';
+import LegalLinks from '../components/LegalLinks';
 import styles from '../styles/Home.module.css';
 
 export default function Home({ initialProducts, categories, error, fetchedAt }) {
@@ -182,6 +183,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
           </div>
           <div className={styles.footerRight}>
             Powered by Square API · Products & stock update automatically
+            <LegalLinks />
           </div>
         </footer>
 

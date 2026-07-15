@@ -726,6 +726,20 @@
   font-family: 'Nunito', sans-serif;
 }
 
+.legalLinks {
+  margin-top: 6px;
+  font-size: 10px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.legalLinks a {
+  color: #334;
+  text-decoration: none;
+}
+.legalLinks a:hover { color: #556; }
+
+.legalLinks span { color: #223; margin: 0 6px; }
+
 .socialDropdown {
   position: relative;
 }

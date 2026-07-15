@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import styles from '../styles/About.module.css';
 import homeStyles from '../styles/Home.module.css';
 import SocialLinks from '../components/SocialLinks';
+import LegalLinks from '../components/LegalLinks';
 
 const HOURS = [
   { day: 'Monday',    open: null,    close: null },
@@ -170,6 +171,7 @@ export default function About() {
           </div>
           <div className={homeStyles.footerRight}>
             Old Needlemakers · West Street · Lewes · BN7 2NZ
+            <LegalLinks />
           </div>
         </footer>
       </div>
