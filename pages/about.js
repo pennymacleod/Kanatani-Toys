@@ -10,7 +10,7 @@ const HOURS = [
   { day: 'Thursday',  open: '10:30', close: '17:00' },
   { day: 'Friday',    open: '10:30', close: '17:00' },
   { day: 'Saturday',  open: '10:30', close: '17:00' },
-  { day: 'Sunday',    open: '11:00', close: '15:00' },
+  { day: 'Sunday',    open: null,    close: null },
 ];
 
 function isOpenNow() {
@@ -152,7 +152,7 @@ export default function About() {
             <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
             <div>
               <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sun</div>
+              <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
             </div>
           </div>
           <div className={homeStyles.footerRight}>

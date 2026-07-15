@@ -211,7 +211,7 @@ export default function ProductPage({ product, error }) {
             <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
             <div>
               <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sun</div>
+              <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
             </div>
           </div>
           <div className={homeStyles.footerRight}>Powered by Square API</div>
