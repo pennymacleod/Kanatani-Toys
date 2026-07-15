@@ -9,18 +9,21 @@ const SOCIALS = [
 
 export default function SocialLinks() {
   return (
-    <div className={styles.footerSocial}>
-      {SOCIALS.map(({ name, href }) => (
-        <a
-          key={name}
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.footerSocialLink}
-        >
-          {name}
-        </a>
-      ))}
-    </div>
+    <details className={styles.footerSocial}>
+      <summary className={styles.footerSocialToggle}>Follow Us</summary>
+      <div className={styles.footerSocialMenu}>
+        {SOCIALS.map(({ name, href }) => (
+          <a
+            key={name}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.footerSocialLink}
+          >
+            {name}
+          </a>
+        ))}
+      </div>
+    </details>
   );
 }
