@@ -122,6 +122,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             <a href="#shop">Shop</a>
             <a href="/our-story">Our Story</a>
             <a href="/about">Find Us</a>
+            <a href="#testimonials">Testimonials</a>
           </nav>
           <div className={styles.headerRight}>
             <SocialLinks />

@@ -41,6 +41,7 @@ export default function OurStory() {
             <a href="/#shop">Shop</a>
             <a href="/our-story" className={homeStyles.navActive}>Our Story</a>
             <a href="/about">Find Us</a>
+            <a href="/#testimonials">Testimonials</a>
           </nav>
           <div className={homeStyles.headerRight}>
             <SocialLinks />

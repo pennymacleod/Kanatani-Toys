@@ -32,6 +32,7 @@ export default function Terms() {
             <a href="/#shop">Shop</a>
             <a href="/our-story">Our Story</a>
             <a href="/about">Find Us</a>
+            <a href="/#testimonials">Testimonials</a>
           </nav>
           <div className={homeStyles.headerRight}>
             <SocialLinks />

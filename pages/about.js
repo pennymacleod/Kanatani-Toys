@@ -67,6 +67,7 @@ export default function About() {
             <a href="/#shop">Shop</a>
             <a href="/our-story">Our Story</a>
             <a href="/about" className={homeStyles.navActive}>Find Us</a>
+            <a href="/#testimonials">Testimonials</a>
           </nav>
           <div className={homeStyles.headerRight}>
             <SocialLinks />

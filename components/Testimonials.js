@@ -87,7 +87,7 @@ export default function Testimonials() {
   const visibleReviews = expanded ? REVIEWS : REVIEWS.slice(0, INITIAL_COUNT);
 
   return (
-    <section className={styles.testimonials}>
+    <section className={styles.testimonials} id="testimonials">
       <h2 className={styles.sectionTitle}>What People Say</h2>
       <div className={styles.testimonialGrid}>
         {visibleReviews.map(({ quote, author }) => (
