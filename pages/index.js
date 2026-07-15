@@ -4,6 +4,7 @@ import ProductCard from '../components/ProductCard';
 import Cart from '../components/Cart';
 import SocialLinks from '../components/SocialLinks';
 import LegalLinks from '../components/LegalLinks';
+import Testimonials from '../components/Testimonials';
 import styles from '../styles/Home.module.css';
 
 export default function Home({ initialProducts, categories, error, fetchedAt }) {
@@ -172,6 +173,8 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             </div>
           )}
         </main>
+
+        <Testimonials />
 
         <footer className={styles.footer}>
           <div className={styles.footerLeft}>
