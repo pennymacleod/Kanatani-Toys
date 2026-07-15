@@ -7,7 +7,7 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-        <script src="https://aisaas-aisaaszak.vercel.app/api/widget?key=4d18ab5a13c0b762ce"></script>
+        <script src="https://pipeliner.eu/api/widget?key=41d83cfdc3c2574ebe"></script>
       </body>
     </Html>
   );
