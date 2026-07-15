@@ -930,6 +930,23 @@
   margin-bottom: 10px;
 }
 
+.testimonialShowMore {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #00b4ff;
+  text-shadow: 0 0 8px rgba(0, 180, 255, 0.45);
+  text-transform: uppercase;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.testimonialShowMore:hover {
+  color: #ff2052;
+  text-shadow: 0 0 10px rgba(255, 32, 82, 0.7);
+}
+
 /* ── About strip ───────────────────────────────────────────────────────────── */
 .aboutStrip {
   display: flex;
