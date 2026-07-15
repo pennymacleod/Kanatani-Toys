@@ -63,6 +63,46 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Store',
+              '@id': 'https://kanatanitoys.com',
+              name: 'Kanatani Toys',
+              image: 'https://kanatanitoys.com/social-share.jpg',
+              url: 'https://kanatanitoys.com',
+              telephone: '+447484826746',
+              email: 'kanatanitoys@gmail.com',
+              priceRange: '££',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: 'Old Needlemakers, West Street',
+                addressLocality: 'Lewes',
+                postalCode: 'BN7 2NZ',
+                addressCountry: 'GB',
+              },
+              openingHoursSpecification: [{
+                '@type': 'OpeningHoursSpecification',
+                dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                opens: '10:30',
+                closes: '17:00',
+              }],
+              sameAs: [
+                'https://www.instagram.com/kanatani_toys',
+                'https://www.tiktok.com/@kanatani.toys',
+                'https://www.facebook.com/share/1EYfzmmyZi/',
+                'https://www.youtube.com/@KANATANITOYS-g6q',
+              ],
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: '5.0',
+                reviewCount: '19',
+              },
+            }),
+          }}
+        />
       </Head>
 
       <div className={styles.root}>

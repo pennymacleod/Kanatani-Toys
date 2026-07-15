@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../styles/About.module.css';
@@ -31,6 +32,7 @@ function isOpenNow() {
 export default function About() {
   const router = useRouter();
   const open = isOpenNow();
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   return (
     <>
@@ -140,16 +142,28 @@ export default function About() {
             {/* Right — map */}
             <div className={styles.mapCol}>
               <div className={styles.mapWrap}>
-                <iframe
-                  title="Kanatani Toys location"
-                  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCdAxai6mQFAdEjuy2BwK1IhHlHrklNuVg&q=Old+Needlemakers,West+Street,Lewes,BN7+2NZ"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
+                {mapLoaded ? (
+                  <iframe
+                    title="Kanatani Toys location"
+                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCdAxai6mQFAdEjuy2BwK1IhHlHrklNuVg&q=Old+Needlemakers,West+Street,Lewes,BN7+2NZ"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setMapLoaded(true)}
+                    className={styles.mapPlaceholder}
+                  >
+                    <span>📍</span>
+                    <span>Click to load map</span>
+                    <span className={styles.mapPlaceholderNote}>Loads Google Maps — see our Privacy Policy</span>
+                  </button>
+                )}
               </div>
               {/* Fallback static map link */}
               <a
