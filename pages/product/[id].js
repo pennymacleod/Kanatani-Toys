@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Cart from '../../components/Cart';
+import SocialLinks from '../../components/SocialLinks';
 import styles from '../../styles/Product.module.css';
 import homeStyles from '../../styles/Home.module.css';
 
@@ -76,6 +77,15 @@ export default function ProductPage({ product, error }) {
       <Head>
         <title>{product.name} — Kanatani Toys</title>
         <meta name="description" content={product.description || product.name} />
+        <meta property="og:title" content={`${product.name} — Kanatani Toys`} />
+        <meta property="og:description" content={product.description || product.name} />
+        <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
+        <meta property="og:image:width" content="1254" />
+        <meta property="og:image:height" content="1254" />
+        <meta property="og:type" content="product" />
+        <meta property="og:url" content={`https://kanatanitoys.com/product/${product.id}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://kanatanitoys.com/social-share.jpg" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
@@ -214,6 +224,7 @@ export default function ProductPage({ product, error }) {
               <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
             </div>
           </div>
+          <SocialLinks />
           <div className={homeStyles.footerRight}>Powered by Square API</div>
         </footer>
 

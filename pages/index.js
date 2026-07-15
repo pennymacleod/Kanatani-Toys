@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Head from 'next/head';
 import ProductCard from '../components/ProductCard';
 import Cart from '../components/Cart';
+import SocialLinks from '../components/SocialLinks';
 import styles from '../styles/Home.module.css';
 
 export default function Home({ initialProducts, categories, error, fetchedAt }) {
@@ -48,6 +49,15 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
       <Head>
         <title>Kanatani Toys — Strange Toys for Strange People</title>
         <meta name="description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us in Lewes, East Sussex." />
+        <meta property="og:title" content="Kanatani Toys — Strange Toys for Strange People" />
+        <meta property="og:description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us in Lewes, East Sussex." />
+        <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
+        <meta property="og:image:width" content="1254" />
+        <meta property="og:image:height" content="1254" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://kanatanitoys.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://kanatanitoys.com/social-share.jpg" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
@@ -167,6 +177,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
               <div className={styles.footerSub}>Strange Toys for Strange People</div>
             </div>
           </div>
+          <SocialLinks />
           <div className={styles.footerRight}>
             Powered by Square API · Products & stock update automatically
           </div>

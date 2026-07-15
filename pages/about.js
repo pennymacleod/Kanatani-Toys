@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../styles/About.module.css';
 import homeStyles from '../styles/Home.module.css';
+import SocialLinks from '../components/SocialLinks';
 
 const HOURS = [
   { day: 'Monday',    open: null,    close: null },
@@ -35,6 +36,15 @@ export default function About() {
       <Head>
         <title>Visit Us — Kanatani Toys, Lewes</title>
         <meta name="description" content="Find Kanatani Toys at Old Needlemakers, West Street, Lewes, BN7 2NZ. Opening hours and directions." />
+        <meta property="og:title" content="Visit Us — Kanatani Toys, Lewes" />
+        <meta property="og:description" content="Find Kanatani Toys at Old Needlemakers, West Street, Lewes, BN7 2NZ. Opening hours and directions." />
+        <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
+        <meta property="og:image:width" content="1254" />
+        <meta property="og:image:height" content="1254" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://kanatanitoys.com/about" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://kanatanitoys.com/social-share.jpg" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo.png" />
         <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
@@ -155,6 +165,7 @@ export default function About() {
               <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
             </div>
           </div>
+          <SocialLinks />
           <div className={homeStyles.footerRight}>
             Old Needlemakers · West Street · Lewes · BN7 2NZ
           </div>
