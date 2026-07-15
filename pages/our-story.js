@@ -38,7 +38,7 @@ export default function OurStory() {
           </div>
           <nav className={homeStyles.nav}>
             <a href="/#shop">Shop</a>
-            <a href="/our-story" style={{ color: '#00b4ff' }}>Our Story</a>
+            <a href="/our-story" className={homeStyles.navActive}>Our Story</a>
             <a href="/about">Find Us</a>
           </nav>
           <div className={homeStyles.headerRight}>

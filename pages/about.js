@@ -63,7 +63,7 @@ export default function About() {
           <nav className={homeStyles.nav}>
             <a href="/#shop">Shop</a>
             <a href="/our-story">Our Story</a>
-            <a href="/about" style={{ color: '#00b4ff' }}>Find Us</a>
+            <a href="/about" className={homeStyles.navActive}>Find Us</a>
           </nav>
           <div className={homeStyles.headerRight}>
             <SocialLinks />

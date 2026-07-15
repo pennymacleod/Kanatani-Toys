@@ -55,17 +55,37 @@
 
 .nav {
   display: flex;
-  gap: 28px;
+  gap: 14px;
   align-items: center;
 }
 
 .nav a {
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
-  letter-spacing: 2px;
-  color: #445;
+  letter-spacing: 1.5px;
+  color: #00b4ff;
+  text-shadow: 0 0 10px rgba(0, 180, 255, 0.5);
   text-transform: uppercase;
-  transition: color 0.2s;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 180, 255, 0.25);
+  background: rgba(0, 180, 255, 0.05);
+  transition: all 0.2s;
+}
+.nav a:hover {
+  color: #ff2052;
+  text-shadow: 0 0 10px rgba(255, 32, 82, 0.5);
+  border-color: rgba(255, 32, 82, 0.35);
+  background: rgba(255, 32, 82, 0.08);
+  box-shadow: 0 0 14px rgba(255, 32, 82, 0.18);
+}
+
+.nav a.navActive {
+  color: #ff2052;
+  text-shadow: 0 0 10px rgba(255, 32, 82, 0.5);
+  border-color: rgba(255, 32, 82, 0.35);
+  background: rgba(255, 32, 82, 0.08);
 }
 
 .nav a:hover { color: #00b4ff; }
@@ -726,10 +746,15 @@
   list-style: none;
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
-  letter-spacing: 2px;
-  color: #445;
+  letter-spacing: 1.5px;
+  color: #00b4ff;
+  text-shadow: 0 0 10px rgba(0, 180, 255, 0.5);
   text-transform: uppercase;
-  transition: color 0.2s;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 180, 255, 0.25);
+  background: rgba(0, 180, 255, 0.05);
+  transition: all 0.2s;
   user-select: none;
 }
 .socialToggle::-webkit-details-marker { display: none; }
@@ -737,7 +762,13 @@
   content: '▾';
   margin-left: 6px;
 }
-.socialToggle:hover { color: #00b4ff; }
+.socialToggle:hover {
+  color: #ff2052;
+  text-shadow: 0 0 10px rgba(255, 32, 82, 0.5);
+  border-color: rgba(255, 32, 82, 0.35);
+  background: rgba(255, 32, 82, 0.08);
+  box-shadow: 0 0 14px rgba(255, 32, 82, 0.18);
+}
 .socialDropdown[open] .socialToggle::after {
   content: '▴';
 }
@@ -762,13 +793,24 @@
 .socialLink {
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
-  letter-spacing: 2px;
-  color: #445;
+  letter-spacing: 1.5px;
+  color: #00b4ff;
+  text-shadow: 0 0 10px rgba(0, 180, 255, 0.5);
   text-transform: uppercase;
   text-decoration: none;
-  transition: color 0.2s;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 180, 255, 0.25);
+  background: rgba(0, 180, 255, 0.05);
+  transition: all 0.2s;
 }
-.socialLink:hover { color: #00b4ff; }
+.socialLink:hover {
+  color: #ff2052;
+  text-shadow: 0 0 10px rgba(255, 32, 82, 0.5);
+  border-color: rgba(255, 32, 82, 0.35);
+  background: rgba(255, 32, 82, 0.08);
+  box-shadow: 0 0 14px rgba(255, 32, 82, 0.18);
+}
 
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
