@@ -113,6 +113,9 @@ export default function About() {
                 <a href="mailto:kanatanitoys@gmail.com" className={styles.email}>
                   kanatanitoys@gmail.com
                 </a>
+                <a href="tel:+447484826746" className={styles.email} style={{ display: 'block', marginTop: 6 }}>
+                  +44 7484 826746
+                </a>
               </div>
 
               {/* Hours */}
