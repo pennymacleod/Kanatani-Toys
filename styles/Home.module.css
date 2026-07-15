@@ -726,14 +726,10 @@
   list-style: none;
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
-  letter-spacing: 1.5px;
-  color: #00b4ff;
-  text-shadow: 0 0 10px rgba(0, 180, 255, 0.5);
-  padding: 8px 14px;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 180, 255, 0.25);
-  background: rgba(0, 180, 255, 0.05);
-  transition: all 0.2s;
+  letter-spacing: 2px;
+  color: #445;
+  text-transform: uppercase;
+  transition: color 0.2s;
   user-select: none;
 }
 .socialToggle::-webkit-details-marker { display: none; }
@@ -741,12 +737,7 @@
   content: '▾';
   margin-left: 6px;
 }
-.socialToggle:hover {
-  color: #ff2052;
-  border-color: rgba(255, 32, 82, 0.35);
-  background: rgba(255, 32, 82, 0.08);
-  box-shadow: 0 0 14px rgba(255, 32, 82, 0.18);
-}
+.socialToggle:hover { color: #00b4ff; }
 .socialDropdown[open] .socialToggle::after {
   content: '▴';
 }
@@ -771,23 +762,13 @@
 .socialLink {
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
-  letter-spacing: 1.5px;
-  color: #00b4ff;
-  text-shadow: 0 0 10px rgba(0, 180, 255, 0.5);
+  letter-spacing: 2px;
+  color: #445;
+  text-transform: uppercase;
   text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 180, 255, 0.25);
-  background: rgba(0, 180, 255, 0.05);
-  transition: all 0.2s;
+  transition: color 0.2s;
 }
-.socialLink:hover {
-  color: #ff2052;
-  text-shadow: 0 0 10px rgba(255, 32, 82, 0.5);
-  border-color: rgba(255, 32, 82, 0.35);
-  background: rgba(255, 32, 82, 0.08);
-  box-shadow: 0 0 14px rgba(255, 32, 82, 0.18);
-}
+.socialLink:hover { color: #00b4ff; }
 
 /* ── Responsive ────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
