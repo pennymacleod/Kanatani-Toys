@@ -41,9 +41,12 @@ export default function OurStory() {
             <a href="/our-story" style={{ color: '#00b4ff' }}>Our Story</a>
             <a href="/about">Find Us</a>
           </nav>
-          <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
-            ← Back to Shop
-          </a>
+          <div className={homeStyles.headerRight}>
+            <SocialLinks />
+            <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
+              ← Back to Shop
+            </a>
+          </div>
         </header>
 
         <div className={styles.page}>
@@ -82,7 +85,6 @@ export default function OurStory() {
               <div className={homeStyles.footerSub}>Strange Toys for Strange People</div>
             </div>
           </div>
-          <SocialLinks />
           <div className={homeStyles.footerRight}>
             Old Needlemakers · West Street · Lewes · BN7 2NZ
           </div>

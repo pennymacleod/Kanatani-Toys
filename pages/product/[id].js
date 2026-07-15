@@ -106,11 +106,14 @@ export default function ProductPage({ product, error }) {
             <a href="/our-story">Our Story</a>
             <a href="/about">Find Us</a>
           </nav>
-          <button className={homeStyles.cartBtn} onClick={() => setCartOpen(true)}>
-            <span>🛒</span>
-            <span>Basket</span>
-            {cartCount > 0 && <span className={homeStyles.cartBadge}>{cartCount}</span>}
-          </button>
+          <div className={homeStyles.headerRight}>
+            <SocialLinks />
+            <button className={homeStyles.cartBtn} onClick={() => setCartOpen(true)}>
+              <span>🛒</span>
+              <span>Basket</span>
+              {cartCount > 0 && <span className={homeStyles.cartBadge}>{cartCount}</span>}
+            </button>
+          </div>
         </header>
 
         <div className={styles.page}>
@@ -224,7 +227,6 @@ export default function ProductPage({ product, error }) {
               <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
             </div>
           </div>
-          <SocialLinks />
           <div className={homeStyles.footerRight}>Powered by Square API</div>
         </footer>
 

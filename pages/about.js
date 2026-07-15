@@ -65,9 +65,12 @@ export default function About() {
             <a href="/our-story">Our Story</a>
             <a href="/about" style={{ color: '#00b4ff' }}>Find Us</a>
           </nav>
-          <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
-            ← Back to Shop
-          </a>
+          <div className={homeStyles.headerRight}>
+            <SocialLinks />
+            <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
+              ← Back to Shop
+            </a>
+          </div>
         </header>
 
         <div className={styles.page}>
@@ -165,7 +168,6 @@ export default function About() {
               <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
             </div>
           </div>
-          <SocialLinks />
           <div className={homeStyles.footerRight}>
             Old Needlemakers · West Street · Lewes · BN7 2NZ
           </div>

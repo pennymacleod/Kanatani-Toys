@@ -70,6 +70,13 @@
 
 .nav a:hover { color: #00b4ff; }
 
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
 .cartBtn {
   display: flex;
   align-items: center;
@@ -710,44 +717,44 @@
   font-family: 'Nunito', sans-serif;
 }
 
-.footerSocial {
+.socialDropdown {
   position: relative;
 }
 
-.footerSocialToggle {
+.socialToggle {
   cursor: pointer;
   list-style: none;
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
   letter-spacing: 1.5px;
   color: #00b4ff;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 6px;
   border: 1px solid rgba(0, 180, 255, 0.25);
   background: rgba(0, 180, 255, 0.05);
   transition: all 0.2s;
   user-select: none;
 }
-.footerSocialToggle::-webkit-details-marker { display: none; }
-.footerSocialToggle::after {
+.socialToggle::-webkit-details-marker { display: none; }
+.socialToggle::after {
   content: '▾';
   margin-left: 6px;
 }
-.footerSocialToggle:hover {
+.socialToggle:hover {
   color: #ff2052;
   border-color: rgba(255, 32, 82, 0.35);
   background: rgba(255, 32, 82, 0.08);
   box-shadow: 0 0 14px rgba(255, 32, 82, 0.18);
 }
-.footerSocial[open] .footerSocialToggle::after {
+.socialDropdown[open] .socialToggle::after {
   content: '▴';
 }
 
-.footerSocialMenu {
+.socialMenu {
   position: absolute;
-  bottom: 100%;
-  left: 0;
-  margin-bottom: 8px;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -757,10 +764,10 @@
   border: 1px solid rgba(0, 180, 255, 0.2);
   background: #0a0a14;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  z-index: 5;
+  z-index: 40;
 }
 
-.footerSocialLink {
+.socialLink {
   font-family: 'Orbitron', sans-serif;
   font-size: 10px;
   letter-spacing: 1.5px;
@@ -770,7 +777,7 @@
   border-radius: 6px;
   transition: all 0.2s;
 }
-.footerSocialLink:hover {
+.socialLink:hover {
   color: #ff2052;
   background: rgba(255, 32, 82, 0.08);
 }
@@ -781,6 +788,9 @@
   .nav { display: none; }
   .headerLogo gap { gap: 8px; }
   .logoText { font-size: 14px; letter-spacing: 2px; }
+  .headerRight { gap: 8px; }
+  .socialToggle { padding: 6px 10px; font-size: 9px; }
+  .cartBtn { padding: 6px 12px; font-size: 9px; }
   .main { padding: 16px 12px 60px; }
   .grid { grid-template-columns: 1fr; gap: 12px; }
   .filterBar { padding: 0 12px; }

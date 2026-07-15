@@ -81,11 +81,14 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             <a href="/our-story">Our Story</a>
             <a href="/about">Find Us</a>
           </nav>
-          <button className={styles.cartBtn} onClick={() => setCartOpen(true)}>
-            <span>🛒</span>
-            <span>Basket</span>
-            {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
-          </button>
+          <div className={styles.headerRight}>
+            <SocialLinks />
+            <button className={styles.cartBtn} onClick={() => setCartOpen(true)}>
+              <span>🛒</span>
+              <span>Basket</span>
+              {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
+            </button>
+          </div>
         </header>
 
         <section className={styles.hero}>
@@ -177,7 +180,6 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
               <div className={styles.footerSub}>Strange Toys for Strange People</div>
             </div>
           </div>
-          <SocialLinks />
           <div className={styles.footerRight}>
             Powered by Square API · Products & stock update automatically
           </div>

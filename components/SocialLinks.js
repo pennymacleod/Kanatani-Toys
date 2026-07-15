@@ -9,16 +9,16 @@ const SOCIALS = [
 
 export default function SocialLinks() {
   return (
-    <details className={styles.footerSocial}>
-      <summary className={styles.footerSocialToggle}>Follow Us</summary>
-      <div className={styles.footerSocialMenu}>
+    <details className={styles.socialDropdown}>
+      <summary className={styles.socialToggle}>Follow Us</summary>
+      <div className={styles.socialMenu}>
         {SOCIALS.map(({ name, href }) => (
           <a
             key={name}
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.footerSocialLink}
+            className={styles.socialLink}
           >
             {name}
           </a>
