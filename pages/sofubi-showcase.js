@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import aboutStyles from '../styles/About.module.css';
@@ -6,13 +7,18 @@ import homeStyles from '../styles/Home.module.css';
 import SocialLinks from '../components/SocialLinks';
 import LegalLinks from '../components/LegalLinks';
 
+const SQUARE_VERSION = '2025-01-23';
+
 const ARTISTS = [
   {
+    slug: 'goatee',
     name: 'Goatee',
     country: 'Italy',
     flag: '🇮🇹',
     image: '/sofubi-showcase/goatee.jpg',
+    poster: '/sofubi-showcase/goatee-poster.jpg',
     imageAlt: 'Sofubi figure by Goatee — a three-eyed alien-style character with a red scarf',
+    matchKeywords: ['goatee'],
     links: [{ label: 'Instagram · @goateexdg', href: 'https://www.instagram.com/goateexdg' }],
     bio: [
       "A child of the '80s, deeply influenced by the artistic movements and creative energy of the '90s.",
@@ -21,12 +27,15 @@ const ARTISTS = [
     ],
   },
   {
+    slug: 'pepperjerry',
     name: 'Pepperjerry',
     country: 'Taiwan',
     flag: '🇹🇼',
     image: '/sofubi-showcase/pepperjerry.jpg',
+    poster: '/sofubi-showcase/pepperjerry-poster.jpg',
     imageAlt: 'Sofubi figure by Pepperjerry — Urban Devil, a red devil-style character in a yellow t-shirt and camo shorts',
     figureName: 'Urban Devil®',
+    matchKeywords: ['urban devil', 'pepperjerry'],
     links: [
       { label: 'Instagram · @urbandevilrocks', href: 'https://www.instagram.com/urbandevilrocks' },
       { label: 'urbandevilrocks.com', href: 'https://www.urbandevilrocks.com' },
@@ -40,12 +49,15 @@ const ARTISTS = [
     ],
   },
   {
+    slug: 'astrotoys',
     name: 'AstroToys',
     country: 'Germany',
     flag: '🇩🇪',
     image: '/sofubi-showcase/astrotoys.jpg',
+    poster: '/sofubi-showcase/astrotoys-poster.jpg',
     imageAlt: 'Sofubi figure by AstroToys — NitroHainer, a robotic shark-armour character in blue',
     figureName: 'NitroHainer',
+    matchKeywords: ['nitrohainer', 'astrotoys'],
     links: [{ label: 'Instagram · @astro_toys', href: 'https://www.instagram.com/astro_toys' }],
     bio: [
       'AstroToys is a Germany-based independent toy artist. Since 2019, he has been hand-sculpting original characters, creating silicone molds, and casting his own resin figures.',
@@ -58,8 +70,25 @@ const ARTISTS = [
   },
 ];
 
-export default function SofubiShowcase() {
+export default function SofubiShowcase({ productLinks }) {
   const router = useRouter();
+  const [lightboxSlug, setLightboxSlug] = useState(null);
+  const [outOfStockSlug, setOutOfStockSlug] = useState(null);
+
+  const lightboxArtist = ARTISTS.find(a => a.slug === lightboxSlug) || null;
+  const outOfStockArtist = ARTISTS.find(a => a.slug === outOfStockSlug) || null;
+
+  useEffect(() => {
+    if (!lightboxArtist && !outOfStockArtist) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setLightboxSlug(null);
+        setOutOfStockSlug(null);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [lightboxArtist, outOfStockArtist]);
 
   return (
     <>
@@ -156,10 +185,31 @@ export default function SofubiShowcase() {
                       </div>
                     </div>
                   )}
+
+                  <div className={styles.actions}>
+                    {productLinks[artist.slug]?.inStock ? (
+                      <a href={`/product/${productLinks[artist.slug].id}`} className={styles.viewProductBtn}>
+                        View Product →
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        className={styles.viewProductBtn}
+                        onClick={() => setOutOfStockSlug(artist.slug)}
+                      >
+                        View Product →
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className={styles.imageWrap}>
-                  <img src={artist.image} alt={artist.imageAlt} className={styles.image} />
+                  <img
+                    src={artist.image}
+                    alt={artist.imageAlt}
+                    className={styles.image}
+                    onClick={() => setLightboxSlug(artist.slug)}
+                  />
                 </div>
               </div>
             ))}
@@ -183,7 +233,134 @@ export default function SofubiShowcase() {
             <LegalLinks />
           </div>
         </footer>
+
+        {lightboxArtist && (
+          <div className={styles.lightboxOverlay} onClick={() => setLightboxSlug(null)}>
+            <button
+              className={styles.lightboxClose}
+              onClick={(e) => { e.stopPropagation(); setLightboxSlug(null); }}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+            <img
+              className={styles.lightboxImg}
+              src={lightboxArtist.poster}
+              alt={`${lightboxArtist.name} — Sofubi Showcase card`}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
+
+        {outOfStockArtist && (
+          <div className={styles.modalOverlay} onClick={() => setOutOfStockSlug(null)}>
+            <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+              <button
+                className={styles.modalClose}
+                onClick={() => setOutOfStockSlug(null)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+              <div className={styles.modalLabel}>OUT OF STOCK</div>
+              <h3 className={styles.modalTitle}>
+                {outOfStockArtist.figureName || outOfStockArtist.name} isn't in the shop right now
+              </h3>
+              <p className={styles.modalText}>
+                This piece isn't currently stocked at Kanatani Toys. Follow {outOfStockArtist.name}{' '}
+                to see their latest drops, or check back here — we update this page as new pieces come in.
+              </p>
+              {outOfStockArtist.links[0] && (
+                <a
+                  href={outOfStockArtist.links[0].href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.modalLink}
+                >
+                  {outOfStockArtist.links[0].label} →
+                </a>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
+}
+
+export async function getServerSideProps({ res }) {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+
+  const productLinks = {};
+  ARTISTS.forEach((a) => { productLinks[a.slug] = null; });
+
+  const token = process.env.SQUARE_ACCESS_TOKEN;
+  const locationId = process.env.SQUARE_LOCATION_ID;
+  const base = process.env.SQUARE_ENVIRONMENT === 'sandbox'
+    ? 'https://connect.squareupsandbox.com'
+    : 'https://connect.squareup.com';
+
+  if (!token || !locationId) {
+    return { props: { productLinks } };
+  }
+
+  try {
+    let allItems = [];
+    let cursor = null;
+    do {
+      const url = `${base}/v2/catalog/list?types=ITEM${cursor ? `&cursor=${cursor}` : ''}`;
+      const r = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}`, 'Square-Version': SQUARE_VERSION },
+      });
+      if (!r.ok) break;
+      const data = await r.json();
+      allItems = allItems.concat(data.objects || []);
+      cursor = data.cursor || null;
+    } while (cursor);
+
+    const matches = {};
+    const variationIds = [];
+
+    ARTISTS.forEach((artist) => {
+      const found = allItems.find((o) =>
+        o.type === 'ITEM' &&
+        o.is_deleted !== true &&
+        o.item_data?.name &&
+        artist.matchKeywords.some((kw) => o.item_data.name.toLowerCase().includes(kw))
+      );
+      if (found) {
+        const variationId = found.item_data?.variations?.[0]?.id || null;
+        matches[artist.slug] = { itemId: found.id, variationId };
+        if (variationId) variationIds.push(variationId);
+      }
+    });
+
+    let stockMap = {};
+    if (variationIds.length > 0) {
+      const invRes = await fetch(`${base}/v2/inventory/counts/batch-retrieve`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Square-Version': SQUARE_VERSION,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ catalog_object_ids: variationIds, location_ids: [locationId] }),
+      });
+      if (invRes.ok) {
+        const invData = await invRes.json();
+        (invData.counts || []).forEach((c) => {
+          stockMap[c.catalog_object_id] = (stockMap[c.catalog_object_id] || 0) + parseInt(c.quantity || 0, 10);
+        });
+      }
+    }
+
+    Object.entries(matches).forEach(([slug, m]) => {
+      const stock = m.variationId ? (stockMap[m.variationId] ?? null) : null;
+      productLinks[slug] = { id: m.itemId, inStock: stock !== 0 };
+    });
+
+    return { props: { productLinks } };
+  } catch {
+    return { props: { productLinks } };
+  }
 }
