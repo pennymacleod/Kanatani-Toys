@@ -330,11 +330,12 @@ export async function getServerSideProps({ res }) {
       .map(item => {
         const v = item.item_data?.variations?.[0];
         const stock = stockMap[v?.id] ?? null;
+        const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
         return {
           id: item.id,
           name: item.item_data.name,
           description: item.item_data?.description || '',
-          category: categoryMap[item.item_data?.category_id] || 'Other',
+          category: categoryMap[catId] || 'Other',
           price: v?.item_variation_data?.price_money?.amount || 0,
           currency: v?.item_variation_data?.price_money?.currency || 'GBP',
           stock,

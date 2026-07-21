@@ -112,7 +112,7 @@ export default async function handler(req, res) {
         const stock = stockMap[firstVariation?.id] ?? null; // null = not tracked
         const price = firstVariation?.item_variation_data?.price_money?.amount || 0;
         const currency = firstVariation?.item_variation_data?.price_money?.currency || 'GBP';
-        const catId = item.item_data?.category_id;
+        const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
 
         return {
           id: item.id,
