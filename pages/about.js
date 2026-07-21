@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import styles from '../styles/About.module.css';
 import homeStyles from '../styles/Home.module.css';
 import SocialLinks from '../components/SocialLinks';
+import SocialFeeds from '../components/SocialFeeds';
 import LegalLinks from '../components/LegalLinks';
 
 const HOURS = [
@@ -178,6 +179,13 @@ export default function About() {
               </a>
             </div>
           </div>
+
+          {/* Social feeds */}
+          <div className={styles.hero} style={{ marginTop: 56, marginBottom: 24 }}>
+            <p className={styles.eyebrow}>フォロー · FOLLOW ALONG</p>
+            <h2 className={styles.title} style={{ fontSize: 'clamp(24px, 4vw, 36px)' }}>Follow Us</h2>
+          </div>
+          <SocialFeeds />
         </div>
 
         <footer className={homeStyles.footer}>
