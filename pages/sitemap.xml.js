@@ -41,6 +41,7 @@ function buildSitemap(products) {
     { loc: `${SITE_URL}/`, priority: '1.0' },
     { loc: `${SITE_URL}/about`, priority: '0.6' },
     { loc: `${SITE_URL}/our-story`, priority: '0.5' },
+    { loc: `${SITE_URL}/sofubi-showcase`, priority: '0.5' },
   ];
 
   const productUrls = products.map(p => ({

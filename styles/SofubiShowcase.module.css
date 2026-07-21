@@ -1,0 +1,156 @@
+.intro {
+  max-width: 700px;
+  margin: 0 auto 48px;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #aab;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 32px;
+  align-items: start;
+  background: linear-gradient(145deg, #0d0d1a, #0a0a14);
+  border: 1px solid rgba(0, 180, 255, 0.1);
+  border-radius: 12px;
+  padding: 32px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: rgba(0, 180, 255, 0.25); }
+
+.cardBody { min-width: 0; }
+
+.artistLabel {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #ff2052;
+  margin-bottom: 8px;
+}
+
+.artistName {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(24px, 3.4vw, 32px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #e8e8ff;
+  margin-bottom: 12px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(0, 180, 255, 0.1);
+}
+
+.country {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #aab;
+  letter-spacing: 0.5px;
+}
+
+.flag { margin-right: 6px; }
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+.links a {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  color: #00b4ff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.links a:hover { opacity: 0.7; }
+
+.figureName {
+  display: inline-block;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: #39ff14;
+  background: rgba(57, 255, 20, 0.08);
+  border: 1px solid rgba(57, 255, 20, 0.25);
+  border-radius: 20px;
+  padding: 4px 12px;
+  margin-bottom: 16px;
+}
+
+.bio p {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #aab;
+  margin-bottom: 12px;
+}
+.bio p:last-child { margin-bottom: 0; }
+
+.figureNote {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(0, 180, 255, 0.1);
+}
+
+.figureNoteLabel {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #ff2052;
+  margin-bottom: 8px;
+}
+
+.imageWrap {
+  position: sticky;
+  top: 88px;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid rgba(0, 180, 255, 0.15);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+.outro {
+  max-width: 700px;
+  margin: 56px auto 0;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #556;
+}
+
+@media (max-width: 768px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+  .imageWrap {
+    position: static;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  .card { padding: 24px 20px; }
+}

@@ -40,6 +40,7 @@ export default function OurStory() {
           <nav className={homeStyles.nav}>
             <a href="/#shop">Shop</a>
             <a href="/our-story" className={homeStyles.navActive}>Our Story</a>
+            <a href="/sofubi-showcase">Sofubi Showcase</a>
             <a href="/about">Find Us</a>
             <a href="/#testimonials">Testimonials</a>
           </nav>

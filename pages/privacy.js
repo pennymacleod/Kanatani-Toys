@@ -31,6 +31,7 @@ export default function Privacy() {
           <nav className={homeStyles.nav}>
             <a href="/#shop">Shop</a>
             <a href="/our-story">Our Story</a>
+            <a href="/sofubi-showcase">Sofubi Showcase</a>
             <a href="/about">Find Us</a>
             <a href="/#testimonials">Testimonials</a>
           </nav>

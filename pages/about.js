@@ -66,6 +66,7 @@ export default function About() {
           <nav className={homeStyles.nav}>
             <a href="/#shop">Shop</a>
             <a href="/our-story">Our Story</a>
+            <a href="/sofubi-showcase">Sofubi Showcase</a>
             <a href="/about" className={homeStyles.navActive}>Find Us</a>
             <a href="/#testimonials">Testimonials</a>
           </nav>
