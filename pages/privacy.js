@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../styles/About.module.css';
 import homeStyles from '../styles/Home.module.css';
+import Nav from '../components/Nav';
 import SocialLinks from '../components/SocialLinks';
 import LegalLinks from '../components/LegalLinks';
 
@@ -28,13 +29,7 @@ export default function Privacy() {
               <div className={homeStyles.logoSub}>カナタニ · TOYS · LEWES</div>
             </div>
           </div>
-          <nav className={homeStyles.nav}>
-            <a href="/#shop">Shop</a>
-            <a href="/our-story">Our Story</a>
-            <a href="/sofubi-showcase">Sofubi Showcase</a>
-            <a href="/about">Find Us</a>
-            <a href="/#testimonials">Testimonials</a>
-          </nav>
+          <Nav />
           <div className={homeStyles.headerRight}>
             <SocialLinks />
             <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>

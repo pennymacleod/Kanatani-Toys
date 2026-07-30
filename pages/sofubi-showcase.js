@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import aboutStyles from '../styles/About.module.css';
 import styles from '../styles/SofubiShowcase.module.css';
 import homeStyles from '../styles/Home.module.css';
+import Nav from '../components/Nav';
 import SocialLinks from '../components/SocialLinks';
 import LegalLinks from '../components/LegalLinks';
 
@@ -119,13 +120,7 @@ export default function SofubiShowcase({ productLinks }) {
               <div className={homeStyles.logoSub}>カナタニ · TOYS · LEWES</div>
             </div>
           </div>
-          <nav className={homeStyles.nav}>
-            <a href="/#shop">Shop</a>
-            <a href="/our-story">Our Story</a>
-            <a href="/sofubi-showcase" className={homeStyles.navActive}>Sofubi Showcase</a>
-            <a href="/about">Find Us</a>
-            <a href="/#testimonials">Testimonials</a>
-          </nav>
+          <Nav active="sofubi-showcase" />
           <div className={homeStyles.headerRight}>
             <SocialLinks />
             <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>

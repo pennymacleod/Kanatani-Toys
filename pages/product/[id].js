@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Cart from '../../components/Cart';
+import Nav from '../../components/Nav';
 import SocialLinks from '../../components/SocialLinks';
 import LegalLinks from '../../components/LegalLinks';
 import styles from '../../styles/Product.module.css';
@@ -102,13 +103,7 @@ export default function ProductPage({ product, error }) {
               <div className={homeStyles.logoSub}>カナタニ · TOYS · LEWES</div>
             </div>
           </div>
-          <nav className={homeStyles.nav}>
-            <a href="/#shop">Shop</a>
-            <a href="/our-story">Our Story</a>
-            <a href="/sofubi-showcase">Sofubi Showcase</a>
-            <a href="/about">Find Us</a>
-            <a href="/#testimonials">Testimonials</a>
-          </nav>
+          <Nav />
           <div className={homeStyles.headerRight}>
             <SocialLinks />
             <button className={homeStyles.cartBtn} onClick={() => setCartOpen(true)}>

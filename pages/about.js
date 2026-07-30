@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styles from '../styles/About.module.css';
 import homeStyles from '../styles/Home.module.css';
+import Nav from '../components/Nav';
 import SocialLinks from '../components/SocialLinks';
 import SocialFeeds from '../components/SocialFeeds';
 import LegalLinks from '../components/LegalLinks';
@@ -64,13 +65,7 @@ export default function About() {
               <div className={homeStyles.logoSub}>カナタニ · TOYS · LEWES</div>
             </div>
           </div>
-          <nav className={homeStyles.nav}>
-            <a href="/#shop">Shop</a>
-            <a href="/our-story">Our Story</a>
-            <a href="/sofubi-showcase">Sofubi Showcase</a>
-            <a href="/about" className={homeStyles.navActive}>Find Us</a>
-            <a href="/#testimonials">Testimonials</a>
-          </nav>
+          <Nav active="find-us" />
           <div className={homeStyles.headerRight}>
             <SocialLinks />
             <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>

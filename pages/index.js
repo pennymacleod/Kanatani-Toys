@@ -5,6 +5,7 @@ import Cart from '../components/Cart';
 import SocialLinks from '../components/SocialLinks';
 import LegalLinks from '../components/LegalLinks';
 import Testimonials from '../components/Testimonials';
+import Nav from '../components/Nav';
 import styles from '../styles/Home.module.css';
 
 export default function Home({ initialProducts, categories, error, fetchedAt }) {
@@ -118,13 +119,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
               <div className={styles.logoSub}>カナタニ · TOYS · LEWES</div>
             </div>
           </div>
-          <nav className={styles.nav}>
-            <a href="#shop">Shop</a>
-            <a href="/our-story">Our Story</a>
-            <a href="/sofubi-showcase">Sofubi Showcase</a>
-            <a href="/about">Find Us</a>
-            <a href="#testimonials">Testimonials</a>
-          </nav>
+          <Nav home />
           <div className={styles.headerRight}>
             <SocialLinks />
             <button className={styles.cartBtn} onClick={() => setCartOpen(true)}>
