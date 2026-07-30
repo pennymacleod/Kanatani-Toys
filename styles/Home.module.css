@@ -79,6 +79,10 @@
   text-shadow: 0 0 10px rgba(255, 32, 82, 0.7);
 }
 
+.navSocial {
+  display: none;
+}
+
 .navToggle {
   display: none;
   align-items: center;
@@ -837,7 +841,15 @@
   }
   .nav a { width: 100%; padding: 10px 0; }
   .navOpen { display: flex; }
-  .navToggle { display: flex; }
+  .navSocial {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 180, 255, 0.12);
+  }
+  .navToggle { display: flex; order: 2; }
+  .headerRight .socialDropdown { display: none; }
   .headerLogo gap { gap: 8px; }
   .logoText { font-size: 14px; letter-spacing: 2px; }
   .headerRight { gap: 8px; }

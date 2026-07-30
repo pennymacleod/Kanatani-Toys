@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
+import SocialLinks from './SocialLinks';
 
 const LINKS = [
   { key: 'shop', label: 'Shop', hash: true, href: '#shop' },
@@ -25,6 +26,9 @@ export default function Nav({ active, home = false }) {
             {link.label}
           </a>
         ))}
+        <div className={styles.navSocial}>
+          <SocialLinks />
+        </div>
       </nav>
       <button
         type="button"
