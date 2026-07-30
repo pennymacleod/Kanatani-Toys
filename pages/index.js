@@ -124,7 +124,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             <SocialLinks />
             <button className={styles.cartBtn} onClick={() => setCartOpen(true)}>
               <span>🛒</span>
-              <span>Basket</span>
+              <span className={styles.cartLabel}>Basket</span>
               {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
             </button>
           </div>

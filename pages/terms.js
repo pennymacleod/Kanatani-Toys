@@ -33,7 +33,7 @@ export default function Terms() {
           <div className={homeStyles.headerRight}>
             <SocialLinks />
             <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
-              ← Back to Shop
+              ← <span className={homeStyles.cartLabel}>Back to Shop</span>
             </a>
           </div>
         </header>

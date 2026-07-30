@@ -108,7 +108,7 @@ export default function ProductPage({ product, error }) {
             <SocialLinks />
             <button className={homeStyles.cartBtn} onClick={() => setCartOpen(true)}>
               <span>🛒</span>
-              <span>Basket</span>
+              <span className={homeStyles.cartLabel}>Basket</span>
               {cartCount > 0 && <span className={homeStyles.cartBadge}>{cartCount}</span>}
             </button>
           </div>

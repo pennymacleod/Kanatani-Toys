@@ -126,6 +126,8 @@
   border-color: rgba(0, 180, 255, 0.5);
 }
 
+.cartLabel {}
+
 .cartBadge {
   background: #ff2052;
   color: #fff;
@@ -848,13 +850,14 @@
     padding-top: 10px;
     border-top: 1px solid rgba(0, 180, 255, 0.12);
   }
-  .navToggle { display: flex; order: 2; }
+  .navToggle { display: flex; order: 2; flex-shrink: 0; }
   .headerRight .socialDropdown { display: none; }
   .headerLogo gap { gap: 8px; }
   .logoText { font-size: 14px; letter-spacing: 2px; }
   .headerRight { gap: 8px; }
   .socialToggle { padding: 6px 10px; font-size: 9px; }
   .cartBtn { padding: 6px 12px; font-size: 9px; }
+  .cartLabel { display: none; }
   .main { padding: 16px 12px 60px; }
   .grid { grid-template-columns: 1fr; gap: 12px; }
   .filterBar { padding: 0 12px; }
