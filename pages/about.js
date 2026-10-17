@@ -131,7 +131,7 @@ export default function About() {
               <div className={styles.mapWrap}>
                 <iframe
                   title="Kanatani Toys location"
-                  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCdAxai6mQFAdEjuy2BwK1IhHlHrklNuVg&q=Open+Market,Marshalls+Row,Brighton,BN1+4JU"
+                  src="https://maps.google.com/maps?q=Open+Market,+Marshalls+Row,+Brighton+BN1+4JU&z=16&output=embed"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
