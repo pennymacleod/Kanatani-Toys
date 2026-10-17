@@ -35,7 +35,7 @@ export default function OurStory() {
             <img src="/logo.png" alt="Kanatani Toys" className={homeStyles.logo} />
             <div>
               <div className={homeStyles.logoText}>KANATANI</div>
-              <div className={homeStyles.logoSub}>カナタニ · TOYS · LEWES</div>
+              <div className={homeStyles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
             </div>
           </div>
           <Nav active="our-story" />
@@ -50,7 +50,7 @@ export default function OurStory() {
         <div className={styles.page}>
           {/* Hero */}
           <div className={styles.hero}>
-            <p className={styles.eyebrow}>カナタニ · LEWES · EAST SUSSEX</p>
+            <p className={styles.eyebrow}>カナタニ · BRIGHTON &amp; HOVE</p>
             <h1 className={styles.title}>Our Story</h1>
           </div>
 
@@ -58,7 +58,7 @@ export default function OurStory() {
           <div className={styles.storyPhotoWrap}>
             <img
               src="/store-front.png"
-              alt="Kanatani Toys shopfront in Lewes, East Sussex"
+              alt="Kanatani Toys shopfront"
               className={styles.storyPhoto}
             />
           </div>
@@ -84,7 +84,7 @@ export default function OurStory() {
             </div>
           </div>
           <div className={homeStyles.footerRight}>
-            Old Needlemakers · West Street · Lewes · BN7 2NZ
+            Open Market · Unit 7 · Marshalls Row · Brighton · BN1 4JU
             <LegalLinks />
           </div>
         </footer>

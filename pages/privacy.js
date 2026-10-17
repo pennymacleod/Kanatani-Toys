@@ -26,7 +26,7 @@ export default function Privacy() {
             <img src="/logo.png" alt="Kanatani Toys" className={homeStyles.logo} />
             <div>
               <div className={homeStyles.logoText}>KANATANI</div>
-              <div className={homeStyles.logoSub}>カナタニ · TOYS · LEWES</div>
+              <div className={homeStyles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
             </div>
           </div>
           <Nav />
@@ -48,7 +48,7 @@ export default function Privacy() {
             <p className={styles.legalUpdated}>Last updated: 15 July 2026</p>
 
             <h2>Who we are</h2>
-            <p>Kanatani Toys is run by Penny Macleod, trading from Old Needlemakers, West Street, Lewes, East Sussex, BN7 2NZ. For any questions about this policy or your personal data, contact us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a>. We're the data controller for the personal data described below.</p>
+            <p>Kanatani Toys is run by Penny Macleod, trading from Open Market, Unit 7, Marshalls Row, Brighton and Hove, BN1 4JU. For any questions about this policy or your personal data, contact us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a>. We're the data controller for the personal data described below.</p>
 
             <h2>What data we collect</h2>
             <p>You don't need an account to browse or buy from this site, and we don't run any contact or newsletter sign-up forms that collect your personal data directly.</p>
@@ -88,11 +88,11 @@ export default function Privacy() {
             <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
             <div>
               <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
+              <div className={homeStyles.footerSub}>Brighton · Tue–Sat + alternate Sundays</div>
             </div>
           </div>
           <div className={homeStyles.footerRight}>
-            Old Needlemakers · West Street · Lewes · BN7 2NZ
+            Open Market · Unit 7 · Marshalls Row · Brighton · BN1 4JU
             <LegalLinks />
           </div>
         </footer>

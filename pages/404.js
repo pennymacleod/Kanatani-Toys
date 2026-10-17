@@ -25,7 +25,7 @@ export default function NotFound() {
             <img src="/logo.png" alt="Kanatani Toys" className={homeStyles.logo} />
             <div>
               <div className={homeStyles.logoText}>KANATANI</div>
-              <div className={homeStyles.logoSub}>カナタニ · TOYS · LEWES</div>
+              <div className={homeStyles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
             </div>
           </div>
           <Nav />
@@ -53,11 +53,11 @@ export default function NotFound() {
             <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
             <div>
               <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
+              <div className={homeStyles.footerSub}>Brighton · Tue–Sat + alternate Sundays</div>
             </div>
           </div>
           <div className={homeStyles.footerRight}>
-            Old Needlemakers · West Street · Lewes · BN7 2NZ
+            Open Market · Unit 7 · Marshalls Row · Brighton · BN1 4JU
             <LegalLinks />
           </div>
         </footer>

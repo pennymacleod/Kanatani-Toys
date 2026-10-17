@@ -51,9 +51,9 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
     <>
       <Head>
         <title>Kanatani Toys — Strange Toys for Strange People</title>
-        <meta name="description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us in Lewes, East Sussex." />
+        <meta name="description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton." />
         <meta property="og:title" content="Kanatani Toys — Strange Toys for Strange People" />
-        <meta property="og:description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us in Lewes, East Sussex." />
+        <meta property="og:description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton." />
         <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
         <meta property="og:image:width" content="1254" />
         <meta property="og:image:height" content="1254" />
@@ -79,15 +79,18 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
               priceRange: '££',
               address: {
                 '@type': 'PostalAddress',
-                streetAddress: 'Old Needlemakers, West Street',
-                addressLocality: 'Lewes',
-                postalCode: 'BN7 2NZ',
+                streetAddress: 'Open Market, Unit 7, Marshalls Row',
+                addressLocality: 'Brighton',
+                addressRegion: 'Brighton and Hove',
+                postalCode: 'BN1 4JU',
                 addressCountry: 'GB',
               },
+              // Alternate-Sunday opening (12:00–15:00) can't be expressed in schema.org,
+              // so only the fixed Tue–Sat hours are listed here.
               openingHoursSpecification: [{
                 '@type': 'OpeningHoursSpecification',
                 dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-                opens: '10:30',
+                opens: '11:00',
                 closes: '17:00',
               }],
               sameAs: [
@@ -116,7 +119,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             <img src="/logo.png" alt="Kanatani Toys" className={styles.logo} />
             <div>
               <div className={styles.logoText}>KANATANI</div>
-              <div className={styles.logoSub}>カナタニ · TOYS · LEWES</div>
+              <div className={styles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
             </div>
           </div>
           <Nav home />
@@ -133,7 +136,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
         <section className={styles.hero}>
           <div className={styles.heroStars} aria-hidden="true" />
           <div className={styles.heroContent}>
-            <p className={styles.heroEyebrow}>カナタニ · LEWES · EAST SUSSEX</p>
+            <p className={styles.heroEyebrow}>カナタニ · BRIGHTON &amp; HOVE</p>
             <h1 className={styles.heroTitle}>Kanatani Toys</h1>
             <p className={styles.heroSub}>
               Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists from Japan and around the world. Hand-picked. Genuinely loved.
@@ -162,7 +165,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
           <span className={styles.aboutStripDivider} />
           <span className={styles.aboutStripItem}>👾 Kaiju · Sofubi · Designer Toys</span>
           <span className={styles.aboutStripDivider} />
-          <span className={styles.aboutStripItem}>📍 Old Needlemakers Lewes</span>
+          <span className={styles.aboutStripItem}>📍 Open Market, Brighton</span>
         </div>
 
         {error && (

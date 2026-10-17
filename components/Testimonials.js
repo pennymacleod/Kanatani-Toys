@@ -108,7 +108,7 @@ export default function Testimonials() {
       <div className={styles.testimonialCta}>
         <p>Had a good experience? Leave a public review on Google — it helps a lot.</p>
         <a
-          href="https://www.google.com/maps/place/Old+Needlemakers,+West+St,+Lewes+BN7+2NZ"
+          href="https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU"
           target="_blank"
           rel="noopener noreferrer"
         >

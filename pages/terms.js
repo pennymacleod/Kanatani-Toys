@@ -26,7 +26,7 @@ export default function Terms() {
             <img src="/logo.png" alt="Kanatani Toys" className={homeStyles.logo} />
             <div>
               <div className={homeStyles.logoText}>KANATANI</div>
-              <div className={homeStyles.logoSub}>カナタニ · TOYS · LEWES</div>
+              <div className={homeStyles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
             </div>
           </div>
           <Nav />
@@ -48,7 +48,7 @@ export default function Terms() {
             <p className={styles.legalUpdated}>Last updated: 15 July 2026</p>
 
             <h2>About us</h2>
-            <p>Kanatani Toys is run by Penny Macleod, trading from Old Needlemakers, West Street, Lewes, East Sussex, BN7 2NZ ("we", "us", "our"). Contact us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a>.</p>
+            <p>Kanatani Toys is run by Penny Macleod, trading from Open Market, Unit 7, Marshalls Row, Brighton and Hove, BN1 4JU ("we", "us", "our"). Contact us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a>.</p>
 
             <h2>Our products</h2>
             <p>We sell Japanese toys, art and collectibles, including vintage, second-hand and limited-run items. Because many items are vintage, one-off or hand-picked, stock is limited and availability isn't guaranteed until your order is confirmed. Product descriptions and images aim to be accurate, but vintage and second-hand items may show natural signs of age or wear, which we'll describe where relevant.</p>
@@ -85,11 +85,11 @@ export default function Terms() {
             <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
             <div>
               <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Lewes, East Sussex · Tue–Sat</div>
+              <div className={homeStyles.footerSub}>Brighton · Tue–Sat + alternate Sundays</div>
             </div>
           </div>
           <div className={homeStyles.footerRight}>
-            Old Needlemakers · West Street · Lewes · BN7 2NZ
+            Open Market · Unit 7 · Marshalls Row · Brighton · BN1 4JU
             <LegalLinks />
           </div>
         </footer>
