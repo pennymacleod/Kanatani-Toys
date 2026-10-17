@@ -74,7 +74,6 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
               name: 'Kanatani Toys',
               image: 'https://kanatanitoys.com/social-share.jpg',
               url: 'https://kanatanitoys.com',
-              telephone: '+447484826746',
               email: 'kanatanitoys@gmail.com',
               priceRange: '££',
               address: {

@@ -19,7 +19,6 @@ export default function About() {
   const nextSunday = now
     ? nextOpenSunday(now).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
     : null;
-  const [mapLoaded, setMapLoaded] = useState(false);
 
   return (
     <>
@@ -100,9 +99,6 @@ export default function About() {
                 <a href="mailto:kanatanitoys@gmail.com" className={styles.email}>
                   kanatanitoys@gmail.com
                 </a>
-                <a href="tel:+447484826746" className={styles.email} style={{ display: 'block', marginTop: 6 }}>
-                  +44 7484 826746
-                </a>
               </div>
 
               {/* Hours */}
@@ -133,28 +129,16 @@ export default function About() {
             {/* Right — map */}
             <div className={styles.mapCol}>
               <div className={styles.mapWrap}>
-                {mapLoaded ? (
-                  <iframe
-                    title="Kanatani Toys location"
-                    src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCdAxai6mQFAdEjuy2BwK1IhHlHrklNuVg&q=Open+Market,Marshalls+Row,Brighton,BN1+4JU"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  />
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setMapLoaded(true)}
-                    className={styles.mapPlaceholder}
-                  >
-                    <span>📍</span>
-                    <span>Click to load map</span>
-                    <span className={styles.mapPlaceholderNote}>Loads Google Maps — see our Privacy Policy</span>
-                  </button>
-                )}
+                <iframe
+                  title="Kanatani Toys location"
+                  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCdAxai6mQFAdEjuy2BwK1IhHlHrklNuVg&q=Open+Market,Marshalls+Row,Brighton,BN1+4JU"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
               {/* Fallback static map link */}
               <a
