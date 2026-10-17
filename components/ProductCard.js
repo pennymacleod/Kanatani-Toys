@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from '../styles/Home.module.css';
 
@@ -55,7 +56,17 @@ export default function ProductCard({ product, onAddToCart, onOpenCart }) {
       {/* Body */}
       <div className={styles.cardBody}>
         <div className={styles.category}>{product.category}</div>
-        <h3 className={styles.productName}>{product.name}</h3>
+        {/* A real link (not just the card's onClick) so crawlers, Google and the
+            Pipeliner chatbot's product detector can find every product page. */}
+        <h3 className={styles.productName}>
+          <Link
+            href={`/product/${product.id}`}
+            onClick={(e) => e.stopPropagation()}
+            style={{ color: 'inherit', textDecoration: 'none' }}
+          >
+            {product.name}
+          </Link>
+        </h3>
         {product.description && (
           <p className={styles.description}>{product.description}</p>
         )}
