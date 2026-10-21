@@ -64,7 +64,7 @@ export default function OurStory() {
       <section className="floor">
         <div className="wrap sign-off">
           <h2 className="big" style={{ fontSize: 'clamp(34px,5vw,56px)', color: 'var(--pink)', margin: 0 }}>Come and say hello</h2>
-          <p>We&apos;re open Tuesday to Saturday, 11 to 5, and every other Sunday, 12 to 2.</p>
+          <p>We&apos;re open Tuesday to Saturday, 11 to 5, and every other Sunday, 12 to 3.</p>
           <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link className="btn" href="/about" style={{ background: 'var(--gold)' }}>Find us →</Link>
             <Link className="btn" href="/#shop" style={{ background: '#fff' }}>Shop the toys</Link>

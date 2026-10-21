@@ -58,7 +58,7 @@ export default function Home({ initialProducts, categories, error }) {
                 postalCode: 'BN1 4JU',
                 addressCountry: 'GB',
               },
-              // Alternate-Sunday opening (12:00–14:00) can't be expressed in schema.org,
+              // Alternate-Sunday opening (12:00–15:00) can't be expressed in schema.org,
               // so only the fixed Tue–Sat hours are listed here.
               openingHoursSpecification: [{
                 '@type': 'OpeningHoursSpecification',
@@ -170,7 +170,7 @@ export default function Home({ initialProducts, categories, error }) {
             <div style={{ flex: 1, textAlign: 'center' }}>
               <div style={{ fontWeight: 800, letterSpacing: '.22em', color: 'var(--gold)' }}>COME AND VISIT</div>
               <div className="mid" style={{ fontSize: 44, color: '#fff', margin: '10px 0' }}>Unit 7, Brighton Open Market</div>
-              <div style={{ fontSize: 19 }}>Marshalls Row, Brighton BN1 4JU · Tue–Sat 11–5 · every other Sunday 12–2</div>
+              <div style={{ fontSize: 19 }}>Marshalls Row, Brighton BN1 4JU · Tue–Sat 11–5 · every other Sunday 12–3</div>
               <span className="tapme"><span className="arr">👉</span> Tap here to find us <span className="arr r">👈</span></span>
             </div>
             <Medallion />
