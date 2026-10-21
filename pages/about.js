@@ -1,179 +1,126 @@
 import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import styles from '../styles/About.module.css';
-import homeStyles from '../styles/Home.module.css';
-import Nav from '../components/Nav';
-import SocialLinks from '../components/SocialLinks';
-import SocialFeeds from '../components/SocialFeeds';
-import LegalLinks from '../components/LegalLinks';
-import { HOURS, isOpenNow, nextOpenSunday, shopTime } from '../lib/shop';
+import Layout, { SOCIALS } from '../components/Layout';
+import Medallion from '../components/Medallion';
+import Reviews from '../components/Reviews';
+import { HOURS, hoursFor, isOpenNow, nextOpenSunday, shopTime } from '../lib/shop';
 
-export default function About() {
-  const router = useRouter();
-  // Date-dependent values are set after mount so the statically built page
-  // never ships a stale "open now" or "next Sunday" to the browser.
+const MAPS = 'https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU';
+const DIRECTIONS = 'https://www.google.com/maps/dir/?api=1&destination=Open+Market+Marshalls+Row+Brighton+BN1+4JU';
+
+const short = (t) => {
+  const [h, m] = t.split(':').map(Number);
+  const hh = h > 12 ? h - 12 : h;
+  return m ? `${hh}.${String(m).padStart(2, '0')}` : `${hh}`;
+};
+
+export default function FindUs() {
+  // Date-dependent bits are worked out in the browser, so a cached page never
+  // shows a stale "open now".
   const [now, setNow] = useState(null);
   useEffect(() => { setNow(shopTime()); }, []);
   const open = now ? isOpenNow(now) : false;
+  const todayName = now ? HOURS[now.getDay() === 0 ? 6 : now.getDay() - 1].day : null;
   const nextSunday = now
     ? nextOpenSunday(now).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
     : null;
+  const today = now ? hoursFor(now) : null;
 
   return (
-    <>
-      <Head>
-        <title>Visit Us — Kanatani Toys, Brighton</title>
-        <meta name="description" content="Find Kanatani Toys at Open Market, Unit 7, Marshalls Row, Brighton, BN1 4JU. Opening hours and directions." />
-        <meta property="og:title" content="Visit Us — Kanatani Toys, Brighton" />
-        <meta property="og:description" content="Find Kanatani Toys at Open Market, Unit 7, Marshalls Row, Brighton, BN1 4JU. Opening hours and directions." />
-        <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta property="og:image:width" content="1254" />
-        <meta property="og:image:height" content="1254" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://kanatanitoys.com/about" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
-      </Head>
-
-      <div className={homeStyles.root}>
-        {/* Header */}
-        <header className={homeStyles.header}>
-          <div className={homeStyles.headerLogo} onClick={() => router.push('/')} style={{ cursor: 'pointer' }}>
-            <img src="/logo.png" alt="Kanatani Toys" className={homeStyles.logo} />
-            <div>
-              <div className={homeStyles.logoText}>KANATANI</div>
-              <div className={homeStyles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
-            </div>
-          </div>
-          <Nav active="find-us" />
-          <div className={homeStyles.headerRight}>
-            <SocialLinks />
-            <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
-              ← <span className={homeStyles.cartLabel}>Back to Shop</span>
-            </a>
-          </div>
-        </header>
-
-        <div className={styles.page}>
-          {/* Hero */}
-          <div className={styles.hero}>
-            <p className={styles.eyebrow}>カナタニ · BRIGHTON &amp; HOVE</p>
-            <h1 className={styles.title}>Find Us</h1>
+    <Layout
+      title="Find Us — Kanatani Toys, Brighton"
+      description="Find Kanatani Toys at Open Market, Unit 7, Marshalls Row, Brighton, BN1 4JU. Opening hours, directions and what people say about us."
+      path="/about"
+      active="findus"
+      page="findus"
+    >
+      <section className="floor">
+        <div className="wrap">
+          <div className="fu-title">
+            <span className="kicker">カナタニ · BRIGHTON</span>
+            <h1 className="big" style={{ fontSize: 96, margin: '18px 0 10px', color: 'var(--pink)' }}>Find <span style={{ color: 'var(--sky)' }}>us!</span></h1>
+            <p style={{ fontSize: 21, fontWeight: 600, margin: 0 }}>Come and meet the strange toys in person.</p>
             {now && (
-              <div className={`${styles.statusBadge} ${open ? styles.statusOpen : styles.statusClosed}`}>
-                {open ? '⬤ Open Now' : '⬤ Closed Now'}
-              </div>
+              <span className={`openbadge ${open ? 'yes' : 'no'}`}>
+                {open ? `● Open now · until ${short(today.close)}` : '● Closed right now'}
+              </span>
             )}
           </div>
-
-          <div className={styles.layout}>
-            {/* Left — info */}
-            <div className={styles.infoCol}>
-
-              {/* Address */}
-              <div className={styles.card}>
-                <div className={styles.cardLabel}>LOCATION</div>
-                <div className={styles.address}>
-                  <div>Kanatani Toys</div>
-                  <div>Open Market, Unit 7</div>
-                  <div>Marshalls Row</div>
-                  <div>Brighton &amp; Hove, BN1 4JU</div>
-                </div>
-                <a
-                  href="https://www.google.com/maps/dir/?api=1&destination=Open+Market+Unit+7+Marshalls+Row+Brighton+BN1+4JU"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.directionsBtn}
-                >
-                  Get Directions →
-                </a>
-              </div>
-
-              {/* Contact */}
-              <div className={styles.card} id="contact">
-                <div className={styles.cardLabel}>CONTACT</div>
-                <a href="mailto:kanatanitoys@gmail.com" className={styles.email}>
-                  kanatanitoys@gmail.com
-                </a>
-              </div>
-
-              {/* Hours */}
-              <div className={styles.card}>
-                <div className={styles.cardLabel}>OPENING HOURS</div>
-                <div className={styles.hours}>
-                  {HOURS.map(({ day, open: o, close: c, alternate }) => {
-                    const today = !!now && now.toLocaleDateString('en-GB', { weekday: 'long' }) === day;
-                    return (
-                      <div key={day} className={`${styles.hourRow} ${today ? styles.hourToday : ''}`}>
-                        <span className={styles.hourDay}>{day}</span>
-                        <span className={styles.hourTime}>
-                          {o ? `${o} – ${c}${alternate ? ' (every other week)' : ''}` : 'Closed'}
-                        </span>
-                      </div>
-                    );
-                  })}
-                  {nextSunday && (
-                    <div className={styles.hourRow}>
-                      <span className={styles.hourDay}>Next Sunday open</span>
-                      <span className={styles.hourTime}>{nextSunday}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Right — map */}
-            <div className={styles.mapCol}>
-              <div className={styles.mapWrap}>
-                <iframe
-                  title="Kanatani Toys location"
-                  src="https://maps.google.com/maps?q=Open+Market,+Marshalls+Row,+Brighton+BN1+4JU&z=16&output=embed"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-              {/* Fallback static map link */}
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.mapLink}
-              >
-                Open in Google Maps ↗
+          <div className="fu-grid">
+            <div className="panel">
+              <h3 style={{ background: 'var(--tardis)' }}>UNIT 7, OPEN MARKET</h3>
+              <a className="map mapl" href={MAPS} target="_blank" rel="noopener noreferrer" aria-label="Open in Google Maps" style={{ position: 'relative' }}>
+                <svg viewBox="0 0 640 430" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                  <rect width="640" height="430" fill="#EAF4EF" />
+                  <g fill="#D9E9E1">
+                    <rect x="20" y="20" width="170" height="120" rx="8" /><rect x="230" y="20" width="160" height="120" rx="8" /><rect x="430" y="20" width="190" height="120" rx="8" />
+                    <rect x="20" y="190" width="170" height="220" rx="8" /><rect x="430" y="190" width="190" height="220" rx="8" />
+                  </g>
+                  <rect x="230" y="190" width="160" height="220" rx="10" fill="#FFE38A" stroke="#141018" strokeWidth="4" />
+                  <text x="310" y="305" textAnchor="middle" fontFamily="Rubik, Inter, system-ui, sans-serif" fontWeight="900" fontSize="20" fill="#141018">OPEN MARKET</text>
+                  <g stroke="#fff" strokeWidth="26"><path d="M0 165 H640" /><path d="M210 0 V430" /><path d="M410 0 V430" /></g>
+                  <text x="520" y="171" textAnchor="middle" fontFamily="Inter" fontWeight="700" fontSize="14" fill="#6B7B74">Marshalls Row</text>
+                  <text x="204" y="300" textAnchor="middle" fontFamily="Inter" fontWeight="700" fontSize="14" fill="#6B7B74" transform="rotate(-90 204 300)">Ditchling Rd</text>
+                  <g transform="translate(310 230)">
+                    <path d="M0 0 C-30 -40 -42 -60 -42 -82 A42 42 0 1 1 42 -82 C42 -60 30 -40 0 0Z" fill="#FF1F8F" stroke="#141018" strokeWidth="5" />
+                    <clipPath id="pinc"><circle cx="0" cy="-84" r="26" /></clipPath>
+                    <circle cx="0" cy="-84" r="26" fill="#fff" />
+                    <image href="/nl/pink_head_bold.png" x="-30" y="-114" width="60" height="60" clipPath="url(#pinc)" preserveAspectRatio="xMidYMax slice" />
+                    <circle cx="0" cy="-84" r="26" fill="none" stroke="#141018" strokeWidth="4" />
+                  </g>
+                </svg>
+                <span className="opn">Open in Google Maps ↗</span>
               </a>
+              <div style={{ padding: '18px 24px', display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center', justifyContent: 'space-between', borderTop: '5px solid #141018' }}>
+                <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.5 }}>Marshalls Row, Brighton<br />BN1 4JU</div>
+                <a className="btn" href={DIRECTIONS} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--pink)', fontSize: 19 }}>Get directions →</a>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
+              <div className="panel">
+                <h3 style={{ background: 'var(--pink)' }}>OPENING HOURS</h3>
+                <ul className="hours">
+                  {HOURS.map(h => (
+                    <li key={h.day} className={todayName === h.day ? 'today' : undefined}>
+                      {h.day}
+                      {!h.open ? (
+                        <span className="pill closed">Closed</span>
+                      ) : h.alternate ? (
+                        <span className="pill sun">{short(h.open)} – {short(h.close)} · every other week</span>
+                      ) : (
+                        <span className="pill">{short(h.open)} – {short(h.close)}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                {nextSunday && (
+                  <p style={{ margin: 0, padding: '0 24px 20px', fontWeight: 700 }}>Next open Sunday: {nextSunday}</p>
+                )}
+              </div>
+              <div className="counter" style={{ padding: '26px 30px', gap: 22 }}>
+                <Medallion size={70} />
+                <div>
+                  <div style={{ fontWeight: 800, letterSpacing: '.2em', color: 'var(--gold)', fontSize: 14 }}>SAY HELLO</div>
+                  <a className="mid" href="mailto:kanatanitoys@gmail.com" style={{ display: 'block', fontSize: 26, color: '#fff', marginTop: 6 }}>kanatanitoys@gmail.com</a>
+                  <a href="tel:+447484826746" style={{ display: 'block', fontWeight: 800, marginTop: 8 }}>07484 826746</a>
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* Social feeds */}
-          <div className={styles.hero} style={{ marginTop: 56, marginBottom: 24 }}>
-            <p className={styles.eyebrow}>フォロー · FOLLOW ALONG</p>
-            <h2 className={styles.title} style={{ fontSize: 'clamp(24px, 4vw, 36px)' }}>Follow Us</h2>
-          </div>
-          <SocialFeeds />
         </div>
 
-        <footer className={homeStyles.footer}>
-          <div className={homeStyles.footerLeft}>
-            <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
-            <div>
-              <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Brighton · Tue–Sat + alternate Sundays</div>
-            </div>
+        <Reviews />
+
+        <div className="wrap">
+          <div className="socials">
+            {SOCIALS.map(s => (
+              <a key={s.name} className="soc" href={s.href} target="_blank" rel="noopener noreferrer" style={{ background: s.bg }}>
+                <span className="wlet" style={{ fontSize: 22 }}>{s.name}</span>
+                <small>{s.handle}</small>
+              </a>
+            ))}
           </div>
-          <div className={homeStyles.footerRight}>
-            Open Market · Unit 7 · Marshalls Row · Brighton · BN1 4JU
-            <LegalLinks />
-          </div>
-        </footer>
-      </div>
-    </>
+        </div>
+      </section>
+    </Layout>
   );
 }

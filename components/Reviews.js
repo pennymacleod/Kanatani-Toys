@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import styles from '../styles/Home.module.css';
 
-const REVIEWS = [
+// Real five-star Google reviews, pasted in word for word by Penny.
+// Never make up or reword a review.
+export const REVIEWS = [
   {
     quote: "Amazing shop! With the kindest and enthusiastic owner, Penny! Thank you so much for your time. I will be back for your amazing Godzilla & Gamera selections!!!! All the best and see you at the Brighton outside market!",
     author: 'Alex Hislop',
@@ -80,41 +81,35 @@ const REVIEWS = [
   },
 ];
 
+const COLOURS = ['#FF1F8F', '#2ED3E0', '#FFD21F', '#3FB7F0', '#FF7417', '#5BD34A'];
 const INITIAL_COUNT = 6;
+const GOOGLE = 'https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU';
 
-export default function Testimonials() {
+export default function Reviews() {
   const [expanded, setExpanded] = useState(false);
-  const visibleReviews = expanded ? REVIEWS : REVIEWS.slice(0, INITIAL_COUNT);
+  const shown = expanded ? REVIEWS : REVIEWS.slice(0, INITIAL_COUNT);
 
   return (
-    <section className={styles.testimonials} id="testimonials">
-      <h2 className={styles.sectionTitle}>What People Say</h2>
-      <div className={styles.testimonialGrid}>
-        {visibleReviews.map(({ quote, author }) => (
-          <div key={author} className={styles.testimonialCard}>
-            <div className={styles.testimonialStars}>★★★★★</div>
-            <p className={styles.testimonialQuote}>&ldquo;{quote}&rdquo;</p>
-            <div className={styles.testimonialAuthor}>— {author} via Google</div>
-          </div>
+    <div className="wrap revs" id="testimonials">
+      <h2 className="big" style={{ fontSize: 'clamp(34px,5vw,56px)' }}>What people say</h2>
+      <p className="sub">★★★★★ from our Google reviews</p>
+      <div className="rvgrid">
+        {shown.map(({ quote, author }, i) => (
+          <figure key={author} className="rv" style={{ '--c': COLOURS[i % COLOURS.length] }}>
+            <div className="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <blockquote>&ldquo;{quote}&rdquo;</blockquote>
+            <figcaption>{author} · Google</figcaption>
+          </figure>
         ))}
       </div>
-      {!expanded && REVIEWS.length > INITIAL_COUNT && (
-        <div className={styles.testimonialCta}>
-          <button type="button" onClick={() => setExpanded(true)} className={styles.testimonialShowMore}>
-            Show all {REVIEWS.length} reviews ▾
+      <div className="rvbtns">
+        {!expanded && REVIEWS.length > INITIAL_COUNT && (
+          <button type="button" className="btn" onClick={() => setExpanded(true)} style={{ background: 'var(--gold)' }}>
+            Show all {REVIEWS.length} reviews ↓
           </button>
-        </div>
-      )}
-      <div className={styles.testimonialCta}>
-        <p>Had a good experience? Leave a public review on Google — it helps a lot.</p>
-        <a
-          href="https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Leave a Google review →
-        </a>
+        )}
+        <a className="btn" href={GOOGLE} target="_blank" rel="noopener noreferrer" style={{ background: '#fff' }}>Leave us a Google review</a>
       </div>
-    </section>
+    </div>
   );
 }

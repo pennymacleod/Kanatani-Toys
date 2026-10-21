@@ -1,37 +1,33 @@
 import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import Cart from '../../components/Cart';
-import Nav from '../../components/Nav';
-import SocialLinks from '../../components/SocialLinks';
-import LegalLinks from '../../components/LegalLinks';
-import styles from '../../styles/Product.module.css';
-import homeStyles from '../../styles/Home.module.css';
+import Link from 'next/link';
+import Layout from '../../components/Layout';
+import { useCart, fmt } from '../../lib/cart';
 
-const fmt = (p) => `£${(p / 100).toFixed(2)}`;
+function stockText(stock) {
+  if (stock === null || stock === undefined) return 'In stock';
+  if (stock === 0) return 'Sold out';
+  if (stock === 1) return 'Last one!';
+  if (stock <= 5) return `Only ${stock} left`;
+  return 'In stock';
+}
 
 export default function ProductPage({ product, error }) {
-  const router = useRouter();
-  const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [selectedVariation, setSelectedVariation] = useState(
-    product?.allVariations?.[0] || null
-  );
+  const { add, count, setOpen } = useCart();
+  const [selected, setSelected] = useState(product?.allVariations?.[0] || null);
   const [added, setAdded] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const imageCount = product?.imageUrls?.length || 0;
-
-  const showPrevImg = () => setActiveImg(i => (i - 1 + imageCount) % imageCount);
-  const showNextImg = () => setActiveImg(i => (i + 1) % imageCount);
+  const showPrev = () => setActiveImg(i => (i - 1 + imageCount) % imageCount);
+  const showNext = () => setActiveImg(i => (i + 1) % imageCount);
 
   useEffect(() => {
     if (!lightboxOpen) return;
     const onKeyDown = (e) => {
       if (e.key === 'Escape') setLightboxOpen(false);
-      else if (e.key === 'ArrowLeft' && imageCount > 1) showPrevImg();
-      else if (e.key === 'ArrowRight' && imageCount > 1) showNextImg();
+      else if (e.key === 'ArrowLeft' && imageCount > 1) showPrev();
+      else if (e.key === 'ArrowRight' && imageCount > 1) showNext();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -39,253 +35,144 @@ export default function ProductPage({ product, error }) {
 
   if (error || !product) {
     return (
-      <div className={styles.errorPage}>
-        <h1>Product not found</h1>
-        <button onClick={() => router.push('/')}>← Back to shop</button>
-      </div>
+      <Layout title="Toy not found — Kanatani Toys" page="product" noindex>
+        <section className="floor textpage">
+          <div className="wrap">
+            <div className="sheet" style={{ textAlign: 'center' }}>
+              <img src="/nl/pink_head_bold.png" alt="" style={{ width: 160 }} />
+              <h1 className="big">Toy not found</h1>
+              <p>This toy may have found a new home already.</p>
+              <Link className="btn" href="/#shop" style={{ background: 'var(--sky)' }}>← Back to the shop</Link>
+            </div>
+          </div>
+        </section>
+      </Layout>
     );
   }
 
-  const outOfStock = selectedVariation?.stock === 0;
-  const lowStock = selectedVariation?.stock > 0 && selectedVariation?.stock <= 5;
+  const stock = selected ? selected.stock : null;
+  const outOfStock = stock === 0;
+  const price = selected?.price || product.price;
 
-  const addToCart = () => {
+  const addToBasket = () => {
     if (outOfStock) return;
-    setCart(prev => {
-      const id = selectedVariation?.id || product.id;
-      const ex = prev.find(i => i.id === id);
-      if (ex) return prev.map(i => i.id === id ? { ...i, qty: i.qty + 1 } : i);
-      return [...prev, {
-        ...product,
-        id: selectedVariation?.id || product.id,
-        price: selectedVariation?.price || product.price,
-        variationId: selectedVariation?.id || product.variationId,
-        qty: 1,
-      }];
+    add({
+      ...product,
+      id: selected?.id || product.id,
+      variationId: selected?.id || product.variationId,
+      name: product.allVariations?.length > 1 && selected?.name ? `${product.name} (${selected.name})` : product.name,
+      price,
     });
     setAdded(true);
-    setTimeout(() => setAdded(false), 1200);
+    setTimeout(() => setAdded(false), 1400);
   };
-
-  const changeQty = (id, qty) => {
-    if (qty <= 0) setCart(prev => prev.filter(i => i.id !== id));
-    else setCart(prev => prev.map(i => i.id === id ? { ...i, qty } : i));
-  };
-
-  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
 
   return (
-    <>
-      <Head>
-        <title>{product.name} — Kanatani Toys</title>
-        <meta name="description" content={product.description || product.name} />
-        <meta property="og:title" content={`${product.name} — Kanatani Toys`} />
-        <meta property="og:description" content={product.description || product.name} />
-        <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta property="og:image:width" content="1254" />
-        <meta property="og:image:height" content="1254" />
-        <meta property="og:type" content="product" />
-        <meta property="og:url" content={`https://kanatanitoys.com/product/${product.id}`} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
-      </Head>
-
-      <div className={homeStyles.root}>
-        {/* Header */}
-        <header className={homeStyles.header}>
-          <div className={homeStyles.headerLogo} onClick={() => router.push('/')} style={{ cursor: 'pointer' }}>
-            <img src="/logo.png" alt="Kanatani Toys" className={homeStyles.logo} />
-            <div>
-              <div className={homeStyles.logoText}>KANATANI</div>
-              <div className={homeStyles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
-            </div>
-          </div>
-          <Nav />
-          <div className={homeStyles.headerRight}>
-            <SocialLinks />
-            <button className={homeStyles.cartBtn} onClick={() => setCartOpen(true)}>
-              <span>🛒</span>
-              <span className={homeStyles.cartLabel}>Basket</span>
-              {cartCount > 0 && <span className={homeStyles.cartBadge}>{cartCount}</span>}
-            </button>
-          </div>
-        </header>
-
-        <div className={styles.page}>
-          {/* Back button */}
-          <button className={styles.backBtn} onClick={() => router.push('/')}>
-            ← Back to shop
-          </button>
-
-          <div className={styles.layout}>
-            {/* Images */}
-            <div className={styles.imageSection}>
+    <Layout
+      title={`${product.name} — Kanatani Toys`}
+      description={product.description || product.name}
+      path={`/product/${product.id}`}
+      ogType="product"
+      page="product"
+      active="shop"
+    >
+      <section className="floor">
+        <div className="wrap" style={{ paddingBottom: 80 }}>
+          <div className="crumb"><Link href="/#shop">← Shop</Link></div>
+          <div className="pp">
+            <div className="gallery">
               <div
-                className={styles.mainImage}
-                style={{ cursor: imageCount > 0 ? 'zoom-in' : 'default' }}
+                className="main"
                 onClick={() => imageCount > 0 && setLightboxOpen(true)}
+                role={imageCount > 0 ? 'button' : undefined}
+                tabIndex={imageCount > 0 ? 0 : undefined}
+                aria-label={imageCount > 0 ? 'Show photo full size' : undefined}
+                onKeyDown={e => { if (imageCount > 0 && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setLightboxOpen(true); } }}
               >
-                {product.imageUrls?.length > 0 ? (
-                  <img
-                    src={product.imageUrls[activeImg]}
-                    alt={product.name}
-                    onError={e => { e.target.style.display = 'none'; }}
-                  />
+                {imageCount > 0 ? (
+                  <img src={product.imageUrls[activeImg]} alt={product.name} />
                 ) : (
-                  <div className={styles.noImage}>🧸</div>
+                  <div className="ph"><img src="/nl/pink_head_bold.png" alt="" /><span>Photo coming soon</span></div>
                 )}
               </div>
-              {product.imageUrls?.length > 1 && (
-                <div className={styles.thumbnails}>
+              {imageCount > 1 && (
+                <div className="thumbs">
                   {product.imageUrls.map((url, i) => (
-                    <div
-                      key={i}
-                      className={`${styles.thumb} ${activeImg === i ? styles.thumbActive : ''}`}
-                      onClick={() => setActiveImg(i)}
-                    >
-                      <img src={url} alt={`${product.name} ${i + 1}`} />
-                    </div>
+                    <button key={i} type="button" onClick={() => setActiveImg(i)} aria-pressed={activeImg === i} aria-label={`Photo ${i + 1}`}>
+                      <img src={url} alt="" />
+                    </button>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Details */}
-            <div className={styles.details}>
-              <div className={styles.category}>{product.category}</div>
-              <h1 className={styles.name}>{product.name}</h1>
+            <div className="info">
+              {product.category && <span className="achip"><i />{product.category.toUpperCase()}</span>}
+              <h1 className="big" style={{ fontSize: 'clamp(36px,5vw,60px)', margin: '20px 0 10px', color: 'var(--pink)', lineHeight: 1.1 }}>{product.name}</h1>
+              <div className="bigprice">{fmt(price)}</div>
 
-              {/* Price */}
-              <div className={styles.priceRow}>
-                <span className={styles.price}>
-                  {fmt(selectedVariation?.price || product.price)}
-                </span>
-                {outOfStock && <span className={styles.badgeOut}>Sold Out</span>}
-                {lowStock && <span className={styles.badgeLow}>Only {selectedVariation.stock} left</span>}
+              {product.allVariations?.length > 1 && (
+                <div className="vars" role="group" aria-label="Options">
+                  {product.allVariations.map(v => (
+                    <button
+                      key={v.id}
+                      type="button"
+                      className={`var${selected?.id === v.id ? ' on' : ''}`}
+                      aria-pressed={selected?.id === v.id}
+                      onClick={() => setSelected(v)}
+                      disabled={v.stock === 0}
+                    >
+                      {v.name}{v.stock === 0 ? ' (sold out)' : ''}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div className="specs">
+                <div className="spec"><b>STOCK</b><span>{stockText(stock)}</span></div>
+                <div className="spec"><b>WHERE</b><span>Brighton shop &amp; online</span></div>
               </div>
 
-              {/* Variations */}
-              {product.allVariations?.length > 1 && (
-                <div className={styles.variations}>
-                  <div className={styles.variationLabel}>OPTIONS</div>
-                  <div className={styles.variationBtns}>
-                    {product.allVariations.map(v => (
-                      <button
-                        key={v.id}
-                        onClick={() => setSelectedVariation(v)}
-                        className={`${styles.varBtn} ${selectedVariation?.id === v.id ? styles.varBtnActive : ''}`}
-                        disabled={v.stock === 0}
-                      >
-                        {v.name}
-                        {v.stock === 0 && ' (sold out)'}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Description */}
               {product.description && (
-                <div className={styles.descriptionSection}>
-                  <div className={styles.descLabel}>DESCRIPTION</div>
-                  <p className={styles.description}>{product.description}</p>
-                </div>
+                <p style={{ fontSize: 18, lineHeight: 1.6, margin: '0 0 26px', whiteSpace: 'pre-line' }}>{product.description}</p>
               )}
 
-              {/* Add to cart */}
-              <button
-                className={`${styles.addBtn} ${added ? styles.addBtnDone : ''} ${outOfStock ? styles.addBtnDisabled : ''}`}
-                onClick={addToCart}
-                disabled={outOfStock}
-              >
-                {outOfStock ? 'Sold Out' : added ? '✓ Added to Basket' : 'Add to Basket'}
-              </button>
-
-              {cartCount > 0 && (
-                <button className={styles.viewCartBtn} onClick={() => setCartOpen(true)}>
-                  View Basket ({cartCount}) →
+              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={addToBasket}
+                  disabled={outOfStock}
+                  style={{ background: outOfStock ? '#ddd' : added ? 'var(--green)' : 'var(--pink)', color: outOfStock || added ? 'var(--ink)' : '#fff', fontSize: 22, cursor: outOfStock ? 'not-allowed' : 'pointer' }}
+                >
+                  {outOfStock ? 'Sold out' : added ? '✓ Added!' : 'Add to basket'}
                 </button>
-              )}
-
-              <p className={styles.note}>
-                Stock updates live from our Square till · Secure checkout via Square
-              </p>
+                {count > 0 && (
+                  <button type="button" className="btn" onClick={() => setOpen(true)} style={{ background: '#fff', fontSize: 22 }}>
+                    View basket ({count}) →
+                  </button>
+                )}
+              </div>
+              <p style={{ fontSize: 14, fontWeight: 700, opacity: .75, margin: '18px 0 0' }}>Stock updates live from our shop till · Secure checkout with Square</p>
             </div>
           </div>
         </div>
+      </section>
 
-        <footer className={homeStyles.footer}>
-          <div className={homeStyles.footerLeft}>
-            <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
-            <div>
-              <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Brighton · Tue–Sat + alternate Sundays</div>
-            </div>
-          </div>
-          <div className={homeStyles.footerRight}>
-            Powered by Square API
-            <LegalLinks />
-          </div>
-        </footer>
-
-        {cartOpen && (
-          <Cart
-            cart={cart}
-            onClose={() => setCartOpen(false)}
-            onChangeQty={changeQty}
-            onRemove={(id) => setCart(prev => prev.filter(i => i.id !== id))}
-          />
-        )}
-
-        {lightboxOpen && imageCount > 0 && (
-          <div className={styles.lightboxOverlay} onClick={() => setLightboxOpen(false)}>
-            <button
-              className={styles.lightboxClose}
-              onClick={(e) => { e.stopPropagation(); setLightboxOpen(false); }}
-              aria-label="Close"
-            >
-              ✕
-            </button>
-
-            {imageCount > 1 && (
-              <button
-                className={`${styles.lightboxArrow} ${styles.lightboxPrev}`}
-                onClick={(e) => { e.stopPropagation(); showPrevImg(); }}
-                aria-label="Previous image"
-              >
-                ‹
-              </button>
-            )}
-
-            <img
-              className={styles.lightboxImg}
-              src={product.imageUrls[activeImg]}
-              alt={product.name}
-              onClick={(e) => e.stopPropagation()}
-            />
-
-            {imageCount > 1 && (
-              <button
-                className={`${styles.lightboxArrow} ${styles.lightboxNext}`}
-                onClick={(e) => { e.stopPropagation(); showNextImg(); }}
-                aria-label="Next image"
-              >
-                ›
-              </button>
-            )}
-
-            {imageCount > 1 && (
-              <div className={styles.lightboxCounter}>
-                {activeImg + 1} / {imageCount}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </>
+      {lightboxOpen && imageCount > 0 && (
+        <div className="lightbox" onClick={() => setLightboxOpen(false)} role="dialog" aria-modal="true" aria-label={`${product.name} photos`}>
+          <button type="button" className="lbbtn lbclose" onClick={(e) => { e.stopPropagation(); setLightboxOpen(false); }} aria-label="Close">✕</button>
+          {imageCount > 1 && (
+            <button type="button" className="lbbtn lbprev" onClick={(e) => { e.stopPropagation(); showPrev(); }} aria-label="Previous photo">‹</button>
+          )}
+          <img src={product.imageUrls[activeImg]} alt={product.name} onClick={(e) => e.stopPropagation()} />
+          {imageCount > 1 && (
+            <button type="button" className="lbbtn lbnext" onClick={(e) => { e.stopPropagation(); showNext(); }} aria-label="Next photo">›</button>
+          )}
+          {imageCount > 1 && <div className="lbcount">{activeImg + 1} / {imageCount}</div>}
+        </div>
+      )}
+    </Layout>
   );
 }
 
@@ -344,7 +231,11 @@ export async function getServerSideProps({ params, res }) {
       id: item.id,
       name: item.item_data?.name || '',
       description: item.item_data?.description || '',
-      category: '',
+      category: (() => {
+        const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
+        const cat = relatedObjects.find(o => o.type === 'CATEGORY' && o.id === catId);
+        return cat?.category_data?.name || '';
+      })(),
       price: item.item_data?.variations?.[0]?.item_variation_data?.price_money?.amount || 0,
       currency: item.item_data?.variations?.[0]?.item_variation_data?.price_money?.currency || 'GBP',
       imageUrls: (item.item_data?.image_ids || []).map(id => imageMap[id]).filter(Boolean),

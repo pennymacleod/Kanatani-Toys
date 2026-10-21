@@ -1,51 +1,14 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import styles from '../styles/About.module.css';
-import homeStyles from '../styles/Home.module.css';
-import Nav from '../components/Nav';
-import SocialLinks from '../components/SocialLinks';
-import LegalLinks from '../components/LegalLinks';
+import Layout from '../components/Layout';
 
 export default function Terms() {
-  const router = useRouter();
-
   return (
-    <>
-      <Head>
-        <title>Terms &amp; Conditions — Kanatani Toys</title>
-        <meta name="description" content="Terms and conditions for shopping with Kanatani Toys." />
-        <meta name="robots" content="noindex" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
-      </Head>
-
-      <div className={homeStyles.root}>
-        <header className={homeStyles.header}>
-          <div className={homeStyles.headerLogo} onClick={() => router.push('/')} style={{ cursor: 'pointer' }}>
-            <img src="/logo.png" alt="Kanatani Toys" className={homeStyles.logo} />
-            <div>
-              <div className={homeStyles.logoText}>KANATANI</div>
-              <div className={homeStyles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
-            </div>
-          </div>
-          <Nav />
-          <div className={homeStyles.headerRight}>
-            <SocialLinks />
-            <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
-              ← <span className={homeStyles.cartLabel}>Back to Shop</span>
-            </a>
-          </div>
-        </header>
-
-        <div className={styles.page}>
-          <div className={styles.hero}>
-            <p className={styles.eyebrow}>カナタニ · LEGAL</p>
-            <h1 className={styles.title}>Terms &amp; Conditions</h1>
-          </div>
-
-          <div className={styles.legalContent}>
-            <p className={styles.legalUpdated}>Last updated: 15 July 2026</p>
+    <Layout title="Terms & Conditions — Kanatani Toys" description="The terms for buying from Kanatani Toys online and in our Brighton shop." path="/terms" noindex>
+      <section className="floor textpage">
+        <div className="wrap">
+          <div className="sheet">
+            <span className="kicker">カナタニ · LEGAL</span>
+            <h1 className="big">Terms &amp; Conditions</h1>
+            <p className="updated">Last updated: 15 July 2026</p>
 
             <h2>About us</h2>
             <p>Kanatani Toys is run by Penny Macleod, trading from Open Market, Unit 7, Marshalls Row, Brighton and Hove, BN1 4JU ("we", "us", "our"). Contact us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a>.</p>
@@ -79,21 +42,7 @@ export default function Terms() {
             <p>Questions about an order or these terms? Email <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a>.</p>
           </div>
         </div>
-
-        <footer className={homeStyles.footer}>
-          <div className={homeStyles.footerLeft}>
-            <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
-            <div>
-              <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Brighton · Tue–Sat + alternate Sundays</div>
-            </div>
-          </div>
-          <div className={homeStyles.footerRight}>
-            Open Market · Unit 7 · Marshalls Row · Brighton · BN1 4JU
-            <LegalLinks />
-          </div>
-        </footer>
-      </div>
-    </>
+      </section>
+    </Layout>
   );
 }

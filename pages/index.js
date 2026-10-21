@@ -1,26 +1,29 @@
-import { useState } from 'react';
-import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
-import Cart from '../components/Cart';
-import SocialLinks from '../components/SocialLinks';
-import LegalLinks from '../components/LegalLinks';
-import Testimonials from '../components/Testimonials';
-import Nav from '../components/Nav';
-import styles from '../styles/Home.module.css';
+import Medallion from '../components/Medallion';
 
-export default function Home({ initialProducts, categories, error, fetchedAt }) {
-  const [products] = useState(initialProducts || []);
+const IRASSHAI = ['い', 'ら', 'っ', 'し', 'ゃ', 'い', 'ま', 'せ'];
+
+export default function Home({ initialProducts, categories, error }) {
+  const products = initialProducts || [];
   const [activeCategory, setActiveCategory] = useState('All');
   const [search, setSearch] = useState('');
-  const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false);
+
+  // Lets other pages link to a search, e.g. /?q=hedorah#shop
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('q');
+    if (q) setSearch(q);
+  }, []);
 
   const filtered = products
     .filter(p => {
       const matchCat = activeCategory === 'All' || p.category === activeCategory;
-      const matchSearch = !search ||
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.description?.toLowerCase().includes(search.toLowerCase());
+      const q = search.trim().toLowerCase();
+      const matchSearch = !q ||
+        p.name.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q);
       return matchCat && matchSearch;
     })
     .sort((a, b) => {
@@ -31,39 +34,10 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
       return 0;
     });
 
-  const addToCart = (product) => {
-    setCart(prev => {
-      const ex = prev.find(i => i.id === product.id);
-      if (ex) return prev.map(i => i.id === product.id ? { ...i, qty: i.qty + 1 } : i);
-      return [...prev, { ...product, qty: 1 }];
-    });
-  };
-
-  const changeQty = (id, qty) => {
-    if (qty <= 0) removeFromCart(id);
-    else setCart(prev => prev.map(i => i.id === id ? { ...i, qty } : i));
-  };
-
-  const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
-  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
-
   return (
-    <>
-      <Head>
-        <title>Kanatani Toys — Strange Toys for Strange People</title>
-        <meta name="description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton." />
-        <meta property="og:title" content="Kanatani Toys — Strange Toys for Strange People" />
-        <meta property="og:description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton." />
-        <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta property="og:image:width" content="1254" />
-        <meta property="og:image:height" content="1254" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://kanatanitoys.com" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+    <Layout
+      active="shop"
+      head={(
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -84,7 +58,7 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
                 postalCode: 'BN1 4JU',
                 addressCountry: 'GB',
               },
-              // Alternate-Sunday opening (12:00–15:00) can't be expressed in schema.org,
+              // Alternate-Sunday opening (12:00–14:00) can't be expressed in schema.org,
               // so only the fixed Tue–Sat hours are listed here.
               openingHoursSpecification: [{
                 '@type': 'OpeningHoursSpecification',
@@ -106,139 +80,113 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             }),
           }}
         />
-      </Head>
-
-      <div className={styles.root}>
-        <header className={styles.header}>
-          <div
-            className={styles.headerLogo}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            style={{ cursor: 'pointer' }}
-          >
-            <img src="/logo.png" alt="Kanatani Toys" className={styles.logo} />
-            <div>
-              <div className={styles.logoText}>KANATANI</div>
-              <div className={styles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
-            </div>
-          </div>
-          <Nav home />
-          <div className={styles.headerRight}>
-            <SocialLinks />
-            <button className={styles.cartBtn} onClick={() => setCartOpen(true)}>
-              <span>🛒</span>
-              <span className={styles.cartLabel}>Basket</span>
-              {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
-            </button>
-          </div>
-        </header>
-
-        <section className={styles.hero}>
-          <div className={styles.heroStars} aria-hidden="true" />
-          <div className={styles.heroContent}>
-            <p className={styles.heroEyebrow}>カナタニ · BRIGHTON &amp; HOVE</p>
-            <h1 className={styles.heroTitle}>Kanatani Toys</h1>
-            <p className={styles.heroSub}>
-              Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists from Japan and around the world. Hand-picked. Genuinely loved.
+      )}
+    >
+      <section className="floor herosec">
+        <div className="wrap hero">
+          <div>
+            <span className="kicker">怪獣 · ソフビ · BRIGHTON</span>
+            <h1 className="big" style={{ fontSize: 88, margin: '22px 0 26px', color: 'var(--pink)' }}>
+              Strange toys<br />for <span style={{ color: 'var(--sky)' }}>strange</span><br />people
+            </h1>
+            <p style={{ fontSize: 21, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 28px' }}>
+              We specialise in Sofubi, Kaiju and vintage treasures hand-picked in Japan, plus brilliant independent artists. Come and find your new weird little friend.
             </p>
-            <div className={styles.heroActions}>
-              <a href="#shop" className={styles.heroBtnPrimary}>Browse the Shop</a>
-              <a href="/our-story" className={styles.heroBtnSecondary}>Our Story →</a>
-            </div>
-            <div className={styles.searchWrap}>
-              <span className={styles.searchIcon}>🔍</span>
-              <input
-                type="text"
-                placeholder="Search toys... おもちゃを探す"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className={styles.searchInput}
-              />
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+              <a className="btn" href="#shop" style={{ background: 'var(--sky)' }}>Shop the toys →</a>
+              <Link className="btn" href="/about" style={{ background: '#fff' }}>Visit the shop</Link>
             </div>
           </div>
-        </section>
-
-        <div className={styles.aboutStrip}>
-          <span className={styles.aboutStripItem}>🇯🇵 Hand-picked in Japan</span>
-          <span className={styles.aboutStripDivider} />
-          <span className={styles.aboutStripItem}>🎌 Independent Artists</span>
-          <span className={styles.aboutStripDivider} />
-          <span className={styles.aboutStripItem}>👾 Kaiju · Sofubi · Designer Toys</span>
-          <span className={styles.aboutStripDivider} />
-          <span className={styles.aboutStripItem}>📍 Open Market, Brighton</span>
-        </div>
-
-        {error && (
-          <div className={styles.errorBanner}>
-            ⚠ Square connection issue: {error}
-          </div>
-        )}
-
-        <div className={styles.filterBar} id="shop">
-          <div className={styles.filterTabs}>
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`${styles.filterTab} ${activeCategory === cat ? styles.filterTabActive : ''}`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          <div className={styles.productMeta}>
-            {filtered.length} products
-            {fetchedAt && <span> · synced {new Date(fetchedAt).toLocaleTimeString()}</span>}
+          <div className="heroart">
+            <div className="irasshai" aria-label="Irasshaimase">
+              {IRASSHAI.map((c, i) => <span key={i} aria-hidden="true">{c}</span>)}
+            </div>
+            <div className="welcome">WELCOME!</div>
+            <div className="circ"><img className="peeker" src="/nl/pink_head_bold.png" alt="" /></div>
           </div>
         </div>
+      </section>
 
-        <main className={styles.main}>
-          <h2 className={styles.sectionTitle}>Featured Items</h2>
-          {filtered.length === 0 ? (
-            <div className={styles.noResults}>
-              <p>🔍</p>
-              <p>No products found{search ? ` for "${search}"` : ''}.</p>
-            </div>
-          ) : (
-            <div className={styles.grid}>
-              {filtered.map(product => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onAddToCart={addToCart}
-                  cart={cart}
-                  onOpenCart={() => setCartOpen(true)}
-                />
+      <section id="shop" className="board" style={{ padding: '60px 0' }}>
+        <div className="plaque"><h2 className="mid" style={{ fontSize: 54, color: 'var(--sky)', margin: 0 }}>New in the cabinet</h2></div>
+      </section>
+
+      <section className="floor" style={{ padding: '56px 0 70px' }}>
+        <div className="wrap">
+          {error && <div className="errorbar">Sorry, we couldn't load the toys from our till just now. Please try again in a minute.</div>}
+          <div className="shopbar">
+            <div className="cats" role="group" aria-label="Filter by category">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  type="button"
+                  className={`cat${activeCategory === cat ? ' on' : ''}`}
+                  aria-pressed={activeCategory === cat}
+                  onClick={() => setActiveCategory(cat)}
+                >
+                  {cat}
+                </button>
               ))}
             </div>
-          )}
-        </main>
-
-        <Testimonials />
-
-        <footer className={styles.footer}>
-          <div className={styles.footerLeft}>
-            <img src="/logo.png" alt="" className={styles.footerLogo} />
-            <div>
-              <div className={styles.footerName}>KANATANI TOYS</div>
-              <div className={styles.footerSub}>Strange Toys for Strange People</div>
-            </div>
+            <input
+              type="search"
+              className="search"
+              placeholder="Search toys… おもちゃを探す"
+              aria-label="Search toys"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
-          <div className={styles.footerRight}>
-            Powered by Square API · Products & stock update automatically
-            <LegalLinks />
+          <div className="cabinet">
+            <p className="shopcount">{filtered.length} {filtered.length === 1 ? 'toy' : 'toys'}</p>
+            {filtered.length === 0 ? (
+              <p className="noresults">No toys found{search ? ` for "${search}"` : ''}. Try another word!</p>
+            ) : (
+              <div className="shelf">
+                {filtered.map((product, i) => (
+                  <ProductCard key={product.id} product={product} index={i} />
+                ))}
+              </div>
+            )}
           </div>
-        </footer>
+        </div>
+      </section>
 
-        {cartOpen && (
-          <Cart
-            cart={cart}
-            onClose={() => setCartOpen(false)}
-            onChangeQty={changeQty}
-            onRemove={removeFromCart}
-          />
-        )}
+      <div id="gachapromo" className="wrap" style={{ paddingBlock: '0 56px' }}>
+        <Link href="/gachapon" className="gp" style={{ background: 'var(--green)', border: '5px solid var(--ink)', borderRadius: 22, padding: '24px 28px', boxShadow: '8px 8px 0 var(--ink)', color: 'var(--ink)' }}>
+          <span className="gpt">
+            <span style={{ fontWeight: 900, letterSpacing: '.2em', fontSize: 14 }}>NEW · ガチャガチャ</span>
+            <span className="big" style={{ fontSize: 'clamp(30px,4vw,46px)', color: '#fff', display: 'block' }}>Play Kaiju Gachapon!</span>
+            <span style={{ fontWeight: 700, fontSize: 17 }}>Turn the handle, open a capsule, collect all ten kaiju.</span>
+          </span>
+          <span className="btn" style={{ background: 'var(--gold)' }}>Play →</span>
+        </Link>
       </div>
-    </>
+
+      <section id="story" className="floor" style={{ padding: '10px 0 80px' }}>
+        <div className="wrap visit">
+          <Link href="/about" className="counter" style={{ color: 'inherit' }}>
+            <Medallion />
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <div style={{ fontWeight: 800, letterSpacing: '.22em', color: 'var(--gold)' }}>COME AND VISIT</div>
+              <div className="mid" style={{ fontSize: 44, color: '#fff', margin: '10px 0' }}>Unit 7, Brighton Open Market</div>
+              <div style={{ fontSize: 19 }}>Marshalls Row, Brighton BN1 4JU · Tue–Sat 11–5 · every other Sunday 12–2</div>
+              <span className="tapme"><span className="arr">👉</span> Tap here to find us <span className="arr r">👈</span></span>
+            </div>
+            <Medallion />
+          </Link>
+          <div className="mascotcol" style={{ textAlign: 'center' }}>
+            <div className="bubble-say">Come and say hi!</div>
+            <img src="/nl/orange_bold.png" alt="" style={{ width: 190, display: 'block', margin: '0 auto' }} />
+          </div>
+        </div>
+      </section>
+
+      <div className="peekus floor" aria-hidden="true">
+        <img src="/nl/penny-hiro.png" alt="" />
+        <span className="say">Oi! Come and say hello!</span>
+      </div>
+    </Layout>
   );
 }
 

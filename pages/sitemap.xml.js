@@ -1,3 +1,5 @@
+import { ARTISTS } from '../lib/artists';
+
 const SQUARE_BASE = process.env.SQUARE_ENVIRONMENT === 'sandbox'
   ? 'https://connect.squareupsandbox.com'
   : 'https://connect.squareup.com';
@@ -42,6 +44,9 @@ function buildSitemap(products) {
     { loc: `${SITE_URL}/about`, priority: '0.6' },
     { loc: `${SITE_URL}/our-story`, priority: '0.5' },
     { loc: `${SITE_URL}/sofubi-showcase`, priority: '0.5' },
+    { loc: `${SITE_URL}/gachapon`, priority: '0.4' },
+    { loc: `${SITE_URL}/news`, priority: '0.5' },
+    ...ARTISTS.map(a => ({ loc: `${SITE_URL}/artist/${a.slug}`, priority: '0.4' })),
   ];
 
   const productUrls = products.map(p => ({
