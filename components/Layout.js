@@ -7,6 +7,7 @@ import CartDrawer from './CartDrawer';
 export const NAV = [
   { key: 'shop', label: 'Shop', href: '/#shop', bg: 'var(--pink)' },
   { key: 'showcase', label: 'Sofubi Showcase', href: '/sofubi-showcase', bg: 'var(--sky)' },
+  { key: 'tshirts', label: 'T-shirts', href: '/t-shirts', bg: 'var(--red)' },
   { key: 'story', label: 'Our Story', href: '/our-story', bg: 'var(--orange)' },
   { key: 'findus', label: 'Find Us', href: '/about', bg: 'var(--gold)', ink: true },
   { key: 'gacha', label: 'Kaiju Gachapon', href: '/gachapon', bg: 'var(--green)' },
