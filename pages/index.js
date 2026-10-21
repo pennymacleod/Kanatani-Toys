@@ -268,7 +268,10 @@ export async function getServerSideProps({ res }) {
       .filter(item => {
         if (item.is_deleted) return false;
         if (!item.item_data?.name) return false;
-        if (item.item_data?.ecom_visibility === 'HIDDEN') return false;
+        // Hidden from the website if Penny hides it, archives it, or switches
+        // off online selling for it in Square.
+        if (item.item_data?.is_archived) return false;
+        if (['HIDDEN', 'UNAVAILABLE'].includes(item.item_data?.ecom_visibility)) return false;
         if (item.item_data?.available_online === false) return false;
         return true;
       })

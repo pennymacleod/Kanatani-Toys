@@ -196,6 +196,11 @@ export async function getServerSideProps({ params, res }) {
     }
 
     const item = data.object;
+    if (item.is_deleted || item.item_data?.is_archived
+      || ['HIDDEN', 'UNAVAILABLE'].includes(item.item_data?.ecom_visibility)
+      || item.item_data?.available_online === false) {
+      return { props: { product: null, error: 'Product not found' } };
+    }
     const relatedObjects = data.related_objects || [];
 
     // Build image map from related objects
