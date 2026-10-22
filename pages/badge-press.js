@@ -12,7 +12,6 @@ const DESIGNS = [
   { src: '/nl/badges/monster-red.png', name: 'Strange monster (red)' },
   { src: '/nl/badges/logo-black.png', name: 'カナタニ logo' },
   { src: '/nl/badges/wrestler.png', name: 'Masked wrestler' },
-  { src: '/nl/badges/creature.png', name: 'Toothy creature' },
 ];
 const MUTE_KEY = 'kanatani-gacha-muted';
 const wait = (ms) => new Promise(r => setTimeout(r, ms));
@@ -127,7 +126,7 @@ export default function BadgePress() {
         </div>
 
         <div className="wrap bmix">
-          <h2 className="big" style={{ fontSize: 'clamp(30px,4.2vw,46px)' }}>You might get…</h2>
+          <h2 className="big" style={{ fontSize: 'clamp(30px,4.2vw,46px)', color: 'var(--pink)' }}>You might get…</h2>
           <div className="bgrid">
             {DESIGNS.map(d => (
               <figure key={d.src}>
