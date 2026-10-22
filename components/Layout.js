@@ -23,6 +23,8 @@ export const SOCIALS = [
 
 const SITE = 'https://kanatanitoys.com';
 
+const CONGA = ['kaiju', 'pinkyeti', 'purpledog', 'cubehead', 'orangefuzz'];
+
 export default function Layout({
   title = 'Kanatani Toys — Strange Toys for Strange People',
   description = 'Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton.',
@@ -83,8 +85,12 @@ export default function Layout({
         </header>
         <div className="walkrow">
           <div className="scallop up" />
-          {/* Hiro's little kaiju wobbling along the border */}
-          <span className="walker" aria-hidden="true"><img src="/nl/walker.png" alt="" /></span>
+          {/* Hiro's monsters doing a conga along the border */}
+          <span className="conga" aria-hidden="true">
+            {CONGA.map((c, i) => (
+              <span key={c} className={`walker w-${c}`} style={{ '--d': `${-i * 0.23}s` }}><img src={`/nl/walker${c === 'kaiju' ? '' : `-${c}`}.png`} alt="" /></span>
+            ))}
+          </span>
         </div>
 
         <main>{children}</main>
