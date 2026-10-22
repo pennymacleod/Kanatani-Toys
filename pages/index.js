@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
-import Medallion from '../components/Medallion';
 import { SHOP_TABS, TAB_PAGES, shopTab } from '../lib/categories';
 
 const IRASSHAI = ['い', 'ら', 'っ', 'し', 'ゃ', 'い', 'ま', 'せ'];
@@ -181,15 +180,13 @@ export default function Home({ initialProducts, categories, error }) {
 
       <section id="story" className="floor" style={{ padding: '10px 0 80px' }}>
         <div className="wrap visit">
-          <Link href="/about" className="counter" style={{ color: 'inherit' }}>
-            <Medallion />
+          <Link href="/about" className="counter visitbox" style={{ color: 'inherit' }}>
             <div style={{ flex: 1, textAlign: 'center' }}>
-              <div style={{ fontWeight: 800, letterSpacing: '.22em', color: 'var(--gold)' }}>COME AND VISIT</div>
+              <div className="big" style={{ fontSize: 'clamp(40px,6vw,72px)', color: 'var(--gold)', lineHeight: 1 }}>Come and visit!</div>
               <div className="mid" style={{ fontSize: 44, color: '#fff', margin: '10px 0' }}>Unit 7, Brighton Open Market</div>
               <div style={{ fontSize: 19 }}>Marshalls Row, Brighton BN1 4JU · Tue–Sat 11–5 · every other Sunday 12–3</div>
               <span className="tapme"><span className="arr">👉</span> Tap here to find us <span className="arr r">👈</span></span>
             </div>
-            <Medallion />
           </Link>
           <div className="mascotcol" style={{ textAlign: 'center' }}>
             <div className="bubble-say">Come and say hi!</div>

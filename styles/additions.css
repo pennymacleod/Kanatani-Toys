@@ -297,3 +297,15 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-news .vred{z-index:6}
 .pg-news .hero-fig img.pinky{left:-14%}
 @media (max-width:760px){.pg-news .hero-fig img.pinky{left:28%}}
+
+/* Homepage "Come and visit" box: yellow dashes march round the red panel */
+.visitbox::before{border:none;border-radius:8px;
+  background:
+    linear-gradient(90deg,var(--gold) 50%,transparent 0) 0 0/28px 4px repeat-x,
+    linear-gradient(90deg,var(--gold) 50%,transparent 0) 0 100%/28px 4px repeat-x,
+    linear-gradient(0deg,var(--gold) 50%,transparent 0) 0 0/4px 28px repeat-y,
+    linear-gradient(0deg,var(--gold) 50%,transparent 0) 100% 0/4px 28px repeat-y;
+  animation:kt-march 1.2s linear infinite}
+@keyframes kt-march{to{background-position:28px 0,-28px 100%,0 -28px,100% 28px}}
+.visitbox{padding:44px 38px}
+@media (prefers-reduced-motion:reduce){.visitbox::before{animation:none}}

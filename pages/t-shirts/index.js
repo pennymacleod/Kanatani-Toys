@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import { SHIRTS, IG } from '../../lib/tshirts';
+import { SHIRTS } from '../../lib/tshirts';
 
 export default function TShirts() {
   return (
@@ -17,7 +17,7 @@ export default function TShirts() {
             T-<span style={{ color: 'var(--sky)' }}>shirts!</span>
           </h1>
           <p style={{ fontSize: 21, fontWeight: 600, maxWidth: '32em', margin: '0 auto' }}>
-            Monsters, ghouls and creatures to wear. Available online soon, or come and try them on in the shop!
+            Monsters, ghouls and creatures to wear. Available online soon.
           </p>
         </div>
       </section>
@@ -34,10 +34,6 @@ export default function TShirts() {
                 </Link>
               ))}
             </div>
-          </div>
-          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginTop: 36 }}>
-            <Link className="btn" href="/about" style={{ background: 'var(--gold)' }}>Come and try them on →</Link>
-            <a className="btn" href={IG} target="_blank" rel="noopener noreferrer" style={{ background: '#fff' }}>Ask about sizes on Instagram</a>
           </div>
         </div>
       </section>

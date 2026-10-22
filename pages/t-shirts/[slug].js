@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import { SHIRTS, IG } from '../../lib/tshirts';
+import { SHIRTS } from '../../lib/tshirts';
 
 // One page per t-shirt, laid out like a toy's product page.
 export default function TShirtPage({ slug }) {
@@ -55,13 +55,9 @@ export default function TShirtPage({ slug }) {
               </div>
 
               <p style={{ fontSize: 18, lineHeight: 1.6, margin: '0 0 26px' }}>
-                Our {shirt.name} t-shirt is in the shop at Unit 7, Brighton Open Market. Come and try it on, or message us on Instagram to ask about sizes.
+                Our {shirt.name} t-shirt is in the shop at Unit 7, Brighton Open Market.
               </p>
 
-              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-                <Link className="btn" href="/about" style={{ background: 'var(--pink)', color: '#fff', fontSize: 20 }}>Come and try it on →</Link>
-                <a className="btn" href={IG} target="_blank" rel="noopener noreferrer" style={{ background: '#fff', fontSize: 20 }}>Ask about sizes</a>
-              </div>
               {SHIRTS.length > 1 && (
                 <p style={{ margin: '24px 0 0' }}>
                   <Link href={`/t-shirts/${next.slug}`} style={{ fontWeight: 800, textDecoration: 'underline' }}>Next t-shirt: {next.name} →</Link>
