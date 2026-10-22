@@ -81,7 +81,11 @@ export default function Layout({
             </nav>
           </div>
         </header>
-        <div className="scallop up" />
+        <div className="walkrow">
+          <div className="scallop up" />
+          {/* Hiro's little kaiju wobbling along the border */}
+          <span className="walker" aria-hidden="true"><img src="/nl/walker.png" alt="" /></span>
+        </div>
 
         <main>{children}</main>
 

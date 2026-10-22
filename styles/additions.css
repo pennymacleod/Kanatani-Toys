@@ -265,3 +265,12 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-news .duo2 .panel:has(.pk) { padding-bottom: 70px; }
 .pg-news .duo2 .panel:has(.pk) .soonnote { margin-right: 70px; }
 @media (max-width: 760px) { .pg-news .pk { width: 84px !important; bottom: -26px; right: -8px; } .pg-news .duo2 .panel:has(.pk) .soonnote { margin-right: 46px; } }
+
+/* Hiro's kaiju walking along the scallop under the nav (Layout.js) */
+.walkrow{position:relative;overflow-x:clip;overflow-y:visible;z-index:5}
+.walker{position:absolute;bottom:4px;left:100%;height:66px;pointer-events:none;animation:kt-walk 40s linear infinite}
+.walker img{display:block;height:100%;width:auto;transform-origin:50% 100%;animation:kt-wobble .7s ease-in-out infinite alternate}
+@keyframes kt-walk{from{left:100%}to{left:-100px}}
+@keyframes kt-wobble{0%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(0deg) translateY(-3px)}100%{transform:rotate(6deg) translateY(0)}}
+@media (max-width:640px){.walker{height:52px;animation-duration:22s}}
+@media (prefers-reduced-motion:reduce){.walker{animation:none;left:auto;right:6%}.walker img{animation:none}}
