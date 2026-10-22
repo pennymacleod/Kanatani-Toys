@@ -32,7 +32,8 @@ export default function Home({ initialProducts, categories, error }) {
       const bOut = b.stock === 0;
       if (aOut && !bOut) return 1;
       if (!aOut && bOut) return -1;
-      return 0;
+      // On "All": sofubi first, then merch, then other strange things.
+      return SHOP_TABS.indexOf(a.category) - SHOP_TABS.indexOf(b.category);
     });
 
   return (
@@ -144,7 +145,7 @@ export default function Home({ initialProducts, categories, error }) {
           <div className="cabinet">
             <p className="shopcount">{filtered.length} {filtered.length === 1 ? 'toy' : 'toys'}</p>
             {filtered.length === 0 ? (
-              activeCategory === 'Clothing' && !search ? (
+              activeCategory === 'Merch' && !search ? (
                 <p className="noresults">Our t-shirts will be available online soon. <Link href="/t-shirts" style={{ textDecoration: 'underline' }}>See the t-shirts →</Link></p>
               ) : (
                 <p className="noresults">No toys found{search ? ` for "${search}"` : ''}. Try another word!</p>
@@ -192,7 +193,7 @@ export default function Home({ initialProducts, categories, error }) {
 
       <div className="peekus floor" aria-hidden="true">
         <img src="/nl/penny-hiro.png" alt="" />
-        <span className="say">Oi! Come and say hello!</span>
+        <span className="say">こんにちは! Come and say hello!</span>
       </div>
     </Layout>
   );

@@ -2,15 +2,27 @@ import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { ARTISTS, CATEGORY_COLOURS } from '../../lib/artists';
 
+// What to call an artist, from their first category. Only sofubi artists
+// are part of the Sofubi Showcase; everyone else is just an artist we stock.
+const ROLE = {
+  Sofubi: 'Sofubi artist',
+  Resin: 'Resin artist',
+  '3D printed': '3D printed artist',
+  'Art prints': 'Artist',
+  Stickers: 'Sticker artist',
+  Clothing: 'Clothing designer',
+};
+
 export default function ArtistPage({ slug }) {
   const i = ARTISTS.findIndex(a => a.slug === slug);
   const a = ARTISTS[i];
   const next = ARTISTS[(i + 1) % ARTISTS.length];
   const cat = a.categories[0];
+  const role = ROLE[cat] || 'Artist';
 
   return (
     <Layout
-      title={`${a.name} · Sofubi Showcase · Kanatani Toys`}
+      title={`${a.name} · ${role} · Kanatani Toys`}
       description={a.bio}
       path={`/artist/${a.slug}`}
       active="showcase"
@@ -18,7 +30,7 @@ export default function ArtistPage({ slug }) {
     >
       <section className="floor ap">
         <div className="wrap">
-          <Link className="crumb" href="/sofubi-showcase">← All Sofubi Showcase artists</Link>
+          <Link className="crumb" href="/sofubi-showcase">← All artists</Link>
           <div className="meetbox">
             <div className="mtext">
               <div className="mhead">
@@ -44,7 +56,7 @@ export default function ArtistPage({ slug }) {
           </div>
 
           <div className="workh" id="work">
-            <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{a.name} at Kanatani</span></span>
+            <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{a.name}</span></span>
           </div>
 
           {a.work.length > 0 ? (
@@ -59,8 +71,8 @@ export default function ArtistPage({ slug }) {
             </div>
           ) : (
             <div className="wempty">
-              {a.name}&apos;s pieces are in the Sofubi Showcase cabinet at the shop. Photos are coming soon, so pop in and see them, or follow{' '}
-              <a href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>{a.handle}</a> for their latest work.
+              You&apos;ll find {a.name}&apos;s work in the cabinets or on the shelves at the shop. Pop in and see it, or follow{' '}
+              <a href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>{a.handle}</a> on Instagram for their latest work.
             </div>
           )}
 
