@@ -53,7 +53,7 @@ export default function News() {
             <div className="prow"><span className="lab" style={{ background: '#1FB6FF' }}>Where?</span><span className="ans">Osaka, then <em>Tokyo!</em></span></div>
             <div className="prow"><span className="lab" style={{ background: '#5BD34A' }}>Who?</span><span className="ans">Penny &amp; Hiro <small>(plus some very empty suitcases)</small></span></div>
             <div className="prow"><span className="lab" style={{ background: '#FF7417' }}>Why?</span><span className="ans">To dig up toy treasure, and meet artists from our <em>Sofubi Showcase!</em></span></div>
-            <div className="pnote">Everything we bring home is <b>pre-loved &amp; secondhand</b>. We don&apos;t just pop into the big shops. We go digging!</div>
+            <div className="pnote">Everything in our shop is <b>hand-picked by us</b>. We hunt high and low for interesting, crazy finds, not just what&apos;s in the big shops. We go digging!</div>
             <div className="pbig">What treasures will we find? <span>Nobody knows... that&apos;s the fun bit!</span></div>
             <img className="orangey" src="/nl/orange_bold.png" alt="" />
           </div>
