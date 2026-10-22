@@ -41,7 +41,9 @@ export default function ArtistBox({ artist, soon = false }) {
         </div>
       </div>
       <div className="burst">
-        {artist.figure && <img className="fig" src={artist.figure} alt="" loading="lazy" />}
+        {artist.cardFigure
+          ? <img className={`fig upper${artist.photoFigure ? ' photo' : ''}`} src={artist.cardFigure} alt="" loading="lazy" />
+          : artist.figure && <img className={`fig${artist.photoFigure ? ' photo' : ''}`} src={artist.figure} alt="" loading="lazy" />}
         {soon ? (
           <span className="soonb">
             {COMING.map((c, i) => (

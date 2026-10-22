@@ -115,6 +115,8 @@ Keep this section updated as things change — it's the fastest way for a new se
 - **Basket respects Square stock**: `lib/cart.js` won't let the quantity go above the item's Square stock (one-off sofubi can only be added once).
 - **Sofubi Showcase banners** (`components/ArtistBox.js`): every banner is identical (logo, then name, then country pill) and every name uses the same font size. Lines are max 12 letters (`MAX_LINE`); names that need special line breaks have a `banner` array in `lib/artists.js` (Penny chose e.g. Pepper / Jerry, Wandering / Planet / Toys). Max 3 lines.
 
+- **Artist toy cut-outs**: `figure` (full body, shown on the artist page starburst) and optional `cardFigure` (waist-up crop that fills the showcase card's starburst) in `lib/artists.js`, images in `public/nl/figures/`. `photoFigure: true` = a real photo cut-out, shown without the chunky cartoon drop-shadow. Ofuton Heaven is the first (Oct 2026); Penny will send photos for the others (best: light-box photo, or a cut-out copied straight from her iPad).
+
 ## Known tooling quirks (for future AI sessions specifically)
 
 If you're an AI assistant working on this repo via a remote device-file-bridge (rather than a local terminal with direct shell access):

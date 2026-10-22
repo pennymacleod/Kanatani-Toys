@@ -138,3 +138,10 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* Artist pages: real photos (with the shop behind) fill the square */
 .pg-artist .wshot.photo img { padding: 0; object-fit: cover; }
+
+/* Showcase cards: a cut-out photo of the toy from the waist up, filling the
+   starburst (artist.cardFigure). Real photo cut-outs (artist.photoFigure)
+   don't get the chunky cartoon shadow. */
+.pg-showcase .burst .fig.upper { top: auto; bottom: 0; height: 80%; transform: translateX(-50%); }
+.pg-showcase .burst .see { margin-bottom: 14px; }
+.burst .fig.photo { filter: none !important; }
