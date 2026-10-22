@@ -128,3 +128,4 @@ If you're an AI assistant working on this repo via a remote device-file-bridge (
 
 - **Overflow on phones**: `styles/globals.css` sets `overflow-x:hidden` on `html, body` because the Pipeliner chat widget (`pages/_document.js`) can push the page wider than the screen.
 - **Old Sofubi Showcase poster files** in `public/sofubi-showcase/` are no longer used by any page (the showcase is now the artist grid); safe to delete once Penny confirms.
+- **Border walker**: Hiro's green kaiju (`public/nl/walker.png`, cut out of his drawing) wobbles right-to-left along the scallop under the nav on every page (`.walkrow`/`.walker` in `components/Layout.js` + `styles/additions.css`). Stands still for people who turn off motion.
