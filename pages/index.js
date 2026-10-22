@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import Medallion from '../components/Medallion';
-import { SHOP_TABS, shopTab } from '../lib/categories';
+import { SHOP_TABS, TAB_PAGES, shopTab } from '../lib/categories';
 
 const IRASSHAI = ['い', 'ら', 'っ', 'し', 'ゃ', 'い', 'ま', 'せ'];
 
@@ -122,15 +122,19 @@ export default function Home({ initialProducts, categories, error }) {
           <div className="shopbar">
             <div className="cats" role="group" aria-label="Filter by category">
               {categories.map(cat => (
-                <button
-                  key={cat}
-                  type="button"
-                  className={`cat${activeCategory === cat ? ' on' : ''}`}
-                  aria-pressed={activeCategory === cat}
-                  onClick={() => setActiveCategory(cat)}
-                >
-                  {cat}
-                </button>
+                TAB_PAGES[cat] && !products.some(p => p.category === cat) ? (
+                  <Link key={cat} href={TAB_PAGES[cat]} className="cat">{cat} →</Link>
+                ) : (
+                  <button
+                    key={cat}
+                    type="button"
+                    className={`cat${activeCategory === cat ? ' on' : ''}`}
+                    aria-pressed={activeCategory === cat}
+                    onClick={() => setActiveCategory(cat)}
+                  >
+                    {cat}
+                  </button>
+                )
               ))}
             </div>
             <input
@@ -145,8 +149,8 @@ export default function Home({ initialProducts, categories, error }) {
           <div className="cabinet">
             <p className="shopcount">{filtered.length} {filtered.length === 1 ? 'toy' : 'toys'}</p>
             {filtered.length === 0 ? (
-              activeCategory === 'Merch' && !search ? (
-                <p className="noresults">Our t-shirts will be available online soon. <Link href="/t-shirts" style={{ textDecoration: 'underline' }}>See the t-shirts →</Link></p>
+              TAB_PAGES[activeCategory] && !search ? (
+                <p className="noresults">Have a look on our <Link href={TAB_PAGES[activeCategory]} style={{ textDecoration: 'underline' }}>{activeCategory} page →</Link></p>
               ) : (
                 <p className="noresults">No toys found{search ? ` for "${search}"` : ''}. Try another word!</p>
               )

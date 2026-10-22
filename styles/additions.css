@@ -258,3 +258,10 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 @keyframes mbpspin{to{rotate:360deg}}
 @keyframes mbppop{0%{transform:translateY(40px) scale(.2) rotateY(0)}60%{transform:translateY(-8px) scale(1.12) rotateY(360deg)}100%{transform:none}}
 @media (prefers-reduced-motion:reduce){.mbp .mp-lever,.mbp .mp-burst,.mbp .mp-badge{animation:none!important}}
+
+/* Kanatani News: the pink monster sits at the bottom-right of the
+   "Get the news!" box so it doesn't cover the heading. */
+.pg-news .pk { top: auto !important; bottom: -34px; right: -14px; width: 110px !important; transform: rotate(8deg); z-index: 2; }
+.pg-news .duo2 .panel:has(.pk) { padding-bottom: 70px; }
+.pg-news .duo2 .panel:has(.pk) .soonnote { margin-right: 70px; }
+@media (max-width: 760px) { .pg-news .pk { width: 84px !important; bottom: -26px; right: -8px; } .pg-news .duo2 .panel:has(.pk) .soonnote { margin-right: 46px; } }

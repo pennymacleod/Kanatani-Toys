@@ -7,12 +7,11 @@ import CartDrawer from './CartDrawer';
 export const NAV = [
   { key: 'shop', label: 'Shop', href: '/#shop', bg: 'var(--pink)' },
   { key: 'showcase', label: 'Sofubi Showcase', href: '/sofubi-showcase', bg: 'var(--sky)' },
-  { key: 'tshirts', label: 'T-shirts', href: '/t-shirts', bg: 'var(--red)' },
   { key: 'story', label: 'Our Story', href: '/our-story', bg: 'var(--orange)' },
   { key: 'findus', label: 'Find Us', href: '/about', bg: 'var(--gold)', ink: true },
+  { key: 'news', label: 'Kanatani News', href: '/news', bg: 'var(--tardis)' },
   { key: 'gacha', label: 'Kaiju Gachapon', href: '/gachapon', bg: 'var(--green)' },
   { key: 'badges', label: 'Badge Press', href: '/badge-press', bg: 'var(--orange)' },
-  { key: 'news', label: 'Kanatani News', href: '/news', bg: 'var(--tardis)' },
 ];
 
 export const SOCIALS = [

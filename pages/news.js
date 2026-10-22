@@ -11,7 +11,6 @@ const SPOTS = [
   { e: '🏮', w: 'Tiny crazy shops', c: '#1FB6FF' },
   { e: '⛩️', w: 'Flea markets', c: '#5BD34A' },
   { e: '📦', w: 'Dusty warehouses', c: '#FF7417' },
-  { e: '🏷️', w: 'Clearance sales', c: '#9B4DFF' },
   { e: '🎨', w: 'Artist meet-ups', c: '#E0262E' },
 ];
 
