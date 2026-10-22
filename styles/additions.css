@@ -142,6 +142,7 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 /* Showcase cards: a cut-out photo of the toy from the waist up, filling the
    starburst (artist.cardFigure). Real photo cut-outs (artist.photoFigure)
    don't get the chunky cartoon shadow. */
-.pg-showcase .burst .fig.upper { top: auto; bottom: 0; height: 80%; transform: translateX(-50%); }
+.pg-showcase .burst .fig.upper { top: auto; bottom: 0; height: 80%; max-width: 94%; object-fit: contain; object-position: 50% 100%; transform: translateX(-50%); }
+.pg-artist .burst .fig.photo { max-width: 92%; object-fit: contain; object-position: 50% 100%; }
 .pg-showcase .burst .see { margin-bottom: 14px; }
 .burst .fig.photo { filter: none !important; }
