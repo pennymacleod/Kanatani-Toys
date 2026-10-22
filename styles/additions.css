@@ -227,24 +227,34 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 @keyframes confetti{from{transform:rotate(var(--a)) translateY(0) scale(.3);opacity:1}80%{opacity:1}to{transform:rotate(var(--a)) translateY(calc(-1 * var(--d))) rotate(200deg) scale(1);opacity:0}}
 @media (prefers-reduced-motion:reduce){.pg-badges .confetti,.pg-badges .popped .q{animation:none}.pg-badges .confetti{display:none}}
 
-/* Basket: mystery badge nudge with a mini badge press */
-.nl-badge-nudge{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:10px 14px;background:repeating-conic-gradient(var(--gold) 0 12deg,#ffd75a 12deg 24deg);color:var(--ink);border:3px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);text-decoration:none;line-height:1.25;overflow:hidden}
-.nl-badge-nudge:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
-.mp-text{display:flex;flex-direction:column;gap:6px;background:var(--cream);border:3px solid var(--ink);border-radius:12px;padding:8px 10px}
-.mp-text b{font-weight:900;font-size:16px}
-.mp-cta{align-self:flex-start;background:var(--pink);color:#fff;font-weight:900;border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-size:14px}
-.mini-press{position:relative;flex:none;width:76px;height:72px}
-.mp-base{position:absolute;left:2px;right:2px;bottom:0;height:24px;background:var(--red);border:3px solid var(--ink);border-radius:7px}
-.mp-col{position:absolute;left:10px;bottom:18px;width:12px;height:40px;background:var(--ink);border-radius:4px 4px 0 0}
-.mp-head{position:absolute;left:6px;top:10px;width:46px;height:16px;background:var(--sky);border:3px solid var(--ink);border-radius:6px;transition:transform .15s ease-in}
-.mp-lever{position:absolute;left:40px;top:14px;width:34px;height:6px;background:var(--ink);border-radius:4px;transform-origin:0 50%;transform:rotate(-35deg);transition:transform .15s ease-in}
-.mp-knob{position:absolute;right:-8px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;background:var(--pink);border:3px solid var(--ink)}
-.mp-badge{position:absolute;left:50%;top:-14px;width:22px;height:22px;margin-left:-6px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#ffd34d 45%,var(--orange));border:2px solid var(--ink);font:900 13px/18px 'Bagel Fat One',sans-serif;text-align:center;opacity:0}
-.nl-badge-nudge:hover .mp-lever{transform:rotate(-20deg)}
-.nl-badge-nudge.pulling .mp-lever{transform:rotate(15deg)}
-.nl-badge-nudge.pulling .mp-head{transform:translateY(6px)}
-.nl-badge-nudge.pulling .mp-badge{animation:mpbadge .5s .15s ease-out both}
-.nl-badge-nudge:not(.pulling) .mp-lever{animation:mpwiggle 3s ease-in-out infinite}
+/* Basket: mini badge press game */
+.mbp{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:10px 14px;background:repeating-conic-gradient(var(--gold) 0 12deg,#ffd75a 12deg 24deg);color:var(--ink);border:3px solid var(--ink);border-radius:16px;box-shadow:4px 4px 0 var(--ink);line-height:1.25}
+.mbp-machine{appearance:none;border:0;background:none;padding:0;cursor:pointer;position:relative;flex:none;width:92px;height:92px}
+.mbp-machine:disabled{cursor:default}
+.mbp button:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.mbp .mp-base{position:absolute;left:2px;right:2px;bottom:0;height:30px;background:var(--red);border:3px solid var(--ink);border-radius:8px;display:grid;place-items:center}
+.mbp .mp-tray{position:relative;width:56px;height:14px;background:var(--gold);border:2px solid var(--ink);border-radius:4px;overflow:hidden}
+.mbp .mp-die{position:absolute;top:1px;left:6px;width:10px;height:10px;border-radius:50%;background:var(--cream);border:2px solid var(--ink);transition:left .3s}
+.mbp.s-swap .mp-die,.mbp.s-down2 .mp-die{left:34px}
+.mbp .mp-col{position:absolute;left:12px;bottom:24px;width:14px;height:50px;background:var(--ink);border-radius:4px 4px 0 0}
+.mbp .mp-head{position:absolute;left:6px;top:14px;width:56px;height:20px;background:var(--sky);border:3px solid var(--ink);border-radius:7px}
+.mbp .mp-ram{position:absolute;left:38px;top:100%;width:12px;height:6px;background:#c9c2b6;border:2px solid var(--ink);border-top:0;transition:height .12s ease-in}
+.mbp.s-down1 .mp-ram,.mbp.s-down2 .mp-ram{height:22px}
+.mbp .mp-lever{position:absolute;left:52px;top:18px;width:40px;height:7px;background:var(--ink);border-radius:4px;transform-origin:0 50%;transform:rotate(-35deg);transition:transform .12s ease-in;z-index:2}
+.mbp .mp-knob{position:absolute;right:-9px;top:50%;width:19px;height:19px;margin-top:-9.5px;border-radius:50%;background:var(--pink);border:3px solid var(--ink)}
+.mbp.s-idle .mp-lever{animation:mpwiggle 3s ease-in-out infinite}
+.mbp.s-down1 .mp-lever,.mbp.s-down2 .mp-lever{transform:rotate(18deg)}
+.mbp .mp-pop{position:absolute;left:50%;top:40%;width:0;height:0;z-index:3;pointer-events:none}
+.mbp .mp-burst{position:absolute;left:-70px;top:-70px;width:140px;height:140px;border-radius:50%;background:repeating-conic-gradient(#fff 0 10deg,transparent 10deg 20deg);-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%);animation:burstin .35s ease-out both,burstspin 3s linear infinite}
+.mbp .mp-badge{position:absolute;left:-26px;top:-26px;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0 8%,#ffd34d 30%,var(--orange) 75%);border:3px solid var(--ink);box-shadow:0 0 0 3px #fff;display:grid;place-items:center;font:400 28px/1 'Bagel Fat One',sans-serif;color:#fff;-webkit-text-stroke:1.5px var(--ink);animation:badgepop .6s cubic-bezier(.2,1.4,.4,1) both}
+.mbp .mp-text{display:flex;flex-direction:column;gap:6px;background:var(--cream);border:3px solid var(--ink);border-radius:12px;padding:8px 10px;min-width:0}
+.mbp .mp-text b{font-weight:900;font-size:16px}
+.mbp .mp-cta{appearance:none;align-self:flex-start;cursor:pointer;background:var(--pink);color:#fff;font:inherit;font-weight:900;border:2px solid var(--ink);border-radius:999px;padding:4px 12px;font-size:14px}
+.mbp .mp-cta:disabled{opacity:.75;cursor:default}
+.mbp .mp-msg{font-size:13px;font-weight:700;min-height:0}
+.mbp .mp-msg:empty{display:none}
 @keyframes mpwiggle{0%,75%,100%{transform:rotate(-35deg)}85%{transform:rotate(-15deg)}}
-@keyframes mpbadge{from{opacity:0;transform:translateY(20px) scale(.4)}to{opacity:1;transform:translateY(-14px) scale(1.2)}}
-@media (prefers-reduced-motion:reduce){.nl-badge-nudge .mp-lever,.nl-badge-nudge .mp-badge{animation:none!important}}
+@keyframes burstin{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes burstspin{to{rotate:360deg}}
+@keyframes badgepop{0%{transform:translateY(40px) scale(.2) rotateY(0)}60%{transform:translateY(-8px) scale(1.12) rotateY(360deg)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.mbp .mp-lever,.mbp .mp-burst,.mbp .mp-badge{animation:none!important}}

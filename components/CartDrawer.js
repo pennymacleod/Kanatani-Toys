@@ -1,19 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { useCart, fmt } from '../lib/cart';
+import MiniBadgePress from './MiniBadgePress';
 
 export default function CartDrawer() {
   const { cart, open, setOpen, changeQty, remove } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [pulling, setPulling] = useState(false);
-  const router = useRouter();
-  const pullLever = (e) => {
-    e.preventDefault();
-    if (pulling) return;
-    setPulling(true);
-    setTimeout(() => { setPulling(false); setOpen(false); router.push('/badge-press?from=basket'); }, 550);
-  };
+
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
   useEffect(() => {
@@ -91,15 +84,7 @@ export default function CartDrawer() {
 
         {cart.length > 0 && (
           <div className="nl-drawer-foot">
-            <a className={`nl-badge-nudge${pulling ? ' pulling' : ''}`} href="/badge-press?from=basket" onClick={pullLever}>
-              <span className="mini-press" aria-hidden="true">
-                <span className="mp-lever"><span className="mp-knob" /></span>
-                <span className="mp-col" />
-                <span className="mp-head" />
-                <span className="mp-base"><span className="mp-badge">?</span></span>
-              </span>
-              <span className="mp-text"><b>{cart.some(i => /mystery\s*badge/i.test(i.name)) ? 'Another mystery badge? £1' : 'Add a mystery badge! £1'}</b><span className="mp-cta">Pull the lever →</span></span>
-            </a>
+            <MiniBadgePress />
             <div className="nl-total"><span>Total</span><span className="price">{fmt(total)}</span></div>
             {error && <p className="nl-error">{error}</p>}
             <button type="button" className="btn" onClick={checkout} disabled={loading} style={{ background: 'var(--pink)', color: '#fff', width: '100%' }}>
