@@ -14,7 +14,6 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-        <script src="https://pipeliner.eu/api/widget?key=41d83cfdc3c2574ebe"></script>
       </body>
     </Html>
   );
