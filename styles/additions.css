@@ -279,3 +279,10 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 @keyframes kt-wobble{0%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(0deg) translateY(-3px)}100%{transform:rotate(6deg) translateY(0)}}
 @media (max-width:640px){.walker{height:50px}.walker.w-purpledog{height:38px}.conga{--t:26s;--step:3.2s}}
 @media (prefers-reduced-motion:reduce){.walker{animation:none;transform:none;left:auto;right:calc(4% + var(--i) * 70px)}.walker img{animation:none}}
+
+/* Kanatani News: the blue and yellow sunbursts slowly turn (hypnotic spin) */
+@property --spin{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes kt-spin{to{--spin:360deg}}
+.pg-news .burst{background:repeating-conic-gradient(from var(--spin) at 50% 50%,#2ED3E0 0 10deg,#FFE680 10deg 20deg);animation:kt-spin 90s linear infinite}
+.pg-news .sp{background:repeating-conic-gradient(from var(--spin) at 50% 45%,#2ED3E0 0 9deg,#FFE680 9deg 18deg);animation:kt-spin 90s linear infinite}
+@media (prefers-reduced-motion:reduce){.pg-news .burst,.pg-news .sp{animation:none}}
