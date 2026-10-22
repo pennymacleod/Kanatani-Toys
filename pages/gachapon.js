@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { sounds, revealSound } from '../lib/gachaSounds';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 
@@ -124,11 +125,16 @@ export default function Gachapon() {
   const knobRef = useRef(null);
   const dropRef = useRef(null);
   const closeRef = useRef(null);
+  const [muted, setMuted] = useState(false);
+  const mutedRef = useRef(false);
+  const sfx = (fn) => { if (!mutedRef.current) fn(); };
 
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || '[]');
       setGot(saved.filter(id => KAIJU.some(k => k.id === id)));
+      const m = localStorage.getItem('kanatani-gacha-muted') === '1';
+      setMuted(m); mutedRef.current = m;
     } catch (e) { /* storage blocked: start fresh */ }
   }, []);
 
@@ -155,10 +161,12 @@ export default function Gachapon() {
     setShake(false);
     requestAnimationFrame(() => setShake(true));
     setHint('Gacha gacha…');
+    sfx(sounds.crank);
     const k = pick();
     setPending(k);
     setTimeout(() => {
       setDropped(true);
+      sfx(sounds.drop);
       setHint('Tap your capsule to open it!');
       setBusy(false);
       dropRef.current?.focus({ preventScroll: true });
@@ -175,6 +183,15 @@ export default function Gachapon() {
     if (isNew) { setGot(list); save(list); }
     setHint(list.length === KAIJU.length ? 'You found them all! おめでとう!' : 'Turn the handle again!');
     setCard({ k, isNew });
+    sfx(sounds.pop);
+    const done = list.length === KAIJU.length && isNew;
+    setTimeout(() => sfx(() => (done ? sounds.complete() : revealSound(k.rarity))), 260);
+  };
+
+  const toggleMute = () => {
+    const m = !muted;
+    setMuted(m); mutedRef.current = m;
+    try { localStorage.setItem('kanatani-gacha-muted', m ? '1' : '0'); } catch (e) { /* ignore */ }
   };
 
   const closeCard = () => { setCard(null); knobRef.current?.focus({ preventScroll: true }); };
@@ -195,6 +212,7 @@ export default function Gachapon() {
             <h1 className="big" style={{ fontSize: 'clamp(46px,6.4vw,84px)' }}>Kaiju <span style={{ color: 'var(--sky)' }}>Gachapon!</span></h1>
             <p>Turn the handle to get a capsule, then tap it to open. Every kaiju card has its first film or show and a fun fact. Can you collect all ten?</p>
             <span className="dex">Collected <b>{got.length}</b> / {KAIJU.length}</span>
+            <button className="sound" type="button" onClick={toggleMute} aria-pressed={!muted}>{muted ? '🔇 Sound off' : '🔊 Sound on'}</button>
           </div>
           <div className={`machine${shake ? ' shake' : ''}`}>
             <div className="gprice">FREE<br />TO PLAY</div>

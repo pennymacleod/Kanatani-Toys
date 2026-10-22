@@ -162,3 +162,8 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-artist .wdm { display: block; width: 100%; box-sizing: border-box; font-size: 15px; padding: 10px 12px; border-radius: 999px; background: var(--pink); color: #fff; }
 .pg-artist .anav { justify-content: center; }
 @media (max-width: 760px) { .pg-artist .wgrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px; } .pg-artist .wdm { font-size: 13px; padding: 9px 8px; } }
+
+/* Gachapon sound toggle */
+.pg-gacha .sound{appearance:none;font:inherit;font-weight:900;cursor:pointer;border:3px solid var(--ink);border-radius:999px;padding:6px 14px;background:var(--cream);color:var(--ink);margin-left:10px;vertical-align:middle}
+.pg-gacha .sound[aria-pressed="false"]{background:var(--ink);color:var(--cream)}
+.pg-gacha .sound:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
