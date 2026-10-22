@@ -88,7 +88,7 @@ export default function Layout({
           {/* Hiro's monsters doing a conga along the border */}
           <span className="conga" aria-hidden="true">
             {CONGA.map((c, i) => (
-              <span key={c} className={`walker w-${c}`} style={{ '--d': `${-i * 0.23}s` }}><img src={`/nl/walker${c === 'kaiju' ? '' : `-${c}`}.png`} alt="" /></span>
+              <span key={c} className={`walker w-${c}`} style={{ '--d': `${-i * 0.23}s`, '--i': i }}><img src={`/nl/walker${c === 'kaiju' ? '' : `-${c}`}.png`} alt="" /></span>
             ))}
           </span>
         </div>

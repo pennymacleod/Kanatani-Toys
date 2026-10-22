@@ -268,11 +268,14 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* Hiro's monsters doing a conga along the scallop under the nav (Layout.js) */
 .walkrow{position:relative;overflow-x:clip;overflow-y:visible;z-index:5}
-.conga{position:absolute;bottom:4px;left:100%;display:flex;align-items:flex-end;gap:14px;pointer-events:none;animation:kt-walk 55s linear infinite}
-.walker{display:block;height:66px}
+/* Each monster walks on its own track: in from the right edge, out past the left
+   edge, then straight back in on the right. Staggered start times keep them in a
+   line, so it loops forever with no jump. Only transform animates (smooth on iPad). */
+.conga{position:absolute;left:0;right:0;bottom:4px;height:0;pointer-events:none;--t:44s;--step:2.4s}
+.walker{position:absolute;left:0;bottom:0;display:block;height:66px;will-change:transform;transform:translateX(100vw);animation:kt-walk var(--t) linear infinite;animation-delay:calc(var(--i) * var(--step) - var(--t) / 2)}
 .walker.w-purpledog{height:50px}
 .walker img{display:block;height:100%;width:auto;transform-origin:50% 100%;animation:kt-wobble .7s ease-in-out var(--d,0s) infinite alternate}
-@keyframes kt-walk{from{left:100%;transform:translateX(0)}to{left:0;transform:translateX(-100%)}}
+@keyframes kt-walk{from{transform:translateX(100vw)}to{transform:translateX(-140px)}}
 @keyframes kt-wobble{0%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(0deg) translateY(-3px)}100%{transform:rotate(6deg) translateY(0)}}
-@media (max-width:640px){.walker{height:50px}.walker.w-purpledog{height:38px}.conga{gap:8px;animation-duration:30s}}
-@media (prefers-reduced-motion:reduce){.conga{animation:none;left:auto;right:4%}.walker img{animation:none}}
+@media (max-width:640px){.walker{height:50px}.walker.w-purpledog{height:38px}.conga{--t:26s;--step:3.2s}}
+@media (prefers-reduced-motion:reduce){.walker{animation:none;transform:none;left:auto;right:calc(4% + var(--i) * 70px)}.walker img{animation:none}}
