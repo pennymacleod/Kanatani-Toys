@@ -94,8 +94,11 @@ export default function Home({ initialProducts, categories, error }) {
             <p style={{ fontSize: 21, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 12px' }}>
               We specialise in Sofubi, Kaiju and vintage treasures, hand-picked from Japan.
             </p>
+            <p style={{ fontSize: 19, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 12px' }}>
+              We&apos;re also proud to support so many independent artists: makers of handmade sofubi and indie art toys, whose wonderfully strange creations are showcased in our shop.
+            </p>
             <p style={{ fontSize: 19, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 28px' }}>
-              We&apos;re also a proud home for independent artists: makers of handmade sofubi and art toys, whose wonderfully strange creations are looking for new owners.
+              And all the amazing artists who show their work with us, from prints to keyrings, stickers and amazing clothes. We&apos;re so proud at Kanatani Toys to support so many amazing artists.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
               <a className="btn" href="#shop" style={{ background: 'var(--sky)' }}>Shop the toys →</a>
