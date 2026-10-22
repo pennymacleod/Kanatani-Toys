@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { useCart, fmt } from '../lib/cart';
 import { sounds } from '../lib/gachaSounds';
@@ -18,6 +19,8 @@ const wait = (ms) => new Promise(r => setTimeout(r, ms));
 
 export default function BadgePress() {
   const { add, setOpen, qtyOf } = useCart();
+  const router = useRouter();
+  const fromBasket = router.query.from === 'basket';
   const [item, setItem] = useState(undefined); // undefined = loading, null = not in Square yet
   const [step, setStep] = useState('idle');     // idle | load | press1 | swap | press2 | pop
   const [made, setMade] = useState(0);
@@ -61,6 +64,8 @@ export default function BadgePress() {
     }
     await wait(1600);
     setStep('idle');
+    // Came from the basket: take them back to it once their badge is made.
+    if (live && fromBasket) setOpen(true);
   };
 
   const price = item ? fmt(item.price) : '£1';
