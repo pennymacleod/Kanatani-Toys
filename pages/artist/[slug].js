@@ -75,7 +75,6 @@ export default function ArtistPage({ slug }) {
                   ? <div key={w.name} className="wcard">{body}</div>
                   : <Link key={w.name} className="wcard" href={`/?q=${encodeURIComponent(w.search || w.name.split(' ')[0])}#shop`}>{body}</Link>;
               })}
-              ))}
             </div>
           ) : (
             <div className="wempty">
