@@ -62,7 +62,7 @@ export default function ArtistPage({ slug }) {
               <p className="mbio">{a.bio}</p>
               <div className="mbtns">
                 <a className="btn" href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ background: '#fff', color: '#141018' }}>Instagram · {a.handle}</a>
-                <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>See their work ↓</a>
+                <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>{a.work.length > 0 ? 'See what\u2019s in the shop ↓' : 'See their work ↓'}</a>
               </div>
             </div>
             <div className="mpanel">
@@ -71,43 +71,43 @@ export default function ArtistPage({ slug }) {
           </div>
 
           <div className="workh" id="work">
-            <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{a.name}</span></span>
+            <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{a.work.length > 0 ? 'In the shop now' : a.name}</span></span>
           </div>
 
           {a.work.length > 0 && (
-            <div className="wgrid">
-              {a.work.map((w, i) => (
-                // A gallery, not a shop: tap the photo to see it big, or ask us
-                // about it on Instagram. `shop: "word"` adds a link to that toy in
-                // the online shop (only for pieces that are on Square).
-                <div key={w.name} className="wcard">
-                  <button type="button" className={`wshot${w.photo === false ? '' : ' photo'}`} onClick={() => setBig(i)} aria-label={`Show ${w.name} bigger`}>
-                    <img src={w.img} alt={w.name} loading="lazy" />
-                  </button>
-                  <div className="wname">{w.name}</div>
-                  <div className="wrow">
-                    <span className="wprice">In the shop</span>
-                    {w.shop
-                      ? <Link href={`/?q=${encodeURIComponent(w.shop)}#shop`}>Buy online →</Link>
-                      : <a href={ASK} target="_blank" rel="noopener noreferrer">Ask about it →</a>}
+            <>
+              <p className="wintro">Tap a photo to see it bigger. Want one? Send us a message and we&apos;ll tell you all about it.</p>
+              <div className="wgrid">
+                {a.work.map((w, i) => (
+                  // A gallery, not a shop. `shop: "word"` swaps the DM button for a
+                  // "Buy online" link once that piece is on Square.
+                  <div key={w.name} className="wcard">
+                    <button type="button" className={`wshot${w.photo === false ? '' : ' photo'}`} onClick={() => setBig(i)} aria-label={`Show ${w.name} bigger`}>
+                      <img src={w.img} alt={w.name} loading="lazy" />
+                    </button>
+                    <div className="wname">{w.name}</div>
+                    <div className="wbottom">
+                      <span className="wprice">In the shop</span>
+                      {w.shop
+                        ? <Link className="btn wdm" href={`/?q=${encodeURIComponent(w.shop)}#shop`}>Buy online →</Link>
+                        : <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer">💬 DM us about this</a>}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           )}
 
           <div className="wempty">
             {a.work.length > 0
-              ? <>More of {a.name}&apos;s work is in the cabinets or on the shelves at the shop. </>
-              : <>You&apos;ll find {a.name}&apos;s work in the cabinets or on the shelves at the shop. </>}
-            Pop in and see it, ask us on{' '}
-            <a href={ASK} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>Instagram</a>, or follow{' '}
-            <a href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>{a.handle}</a> for their latest work.
+              ? <>More of {a.name}&apos;s work is in the cabinets and on the shelves at Unit 7, Brighton Open Market. Pop in and say hello!</>
+              : <>You&apos;ll find {a.name}&apos;s work in the cabinets and on the shelves at Unit 7, Brighton Open Market. Pop in and say hello, or follow{' '}
+                <a href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>{a.handle}</a> for their latest work.</>}
           </div>
 
           <div className="anav">
-            <Link className="btn" href="/sofubi-showcase" style={{ background: '#fff', color: '#141018' }}>← All artists</Link>
-            <Link className="btn" href={`/artist/${next.slug}`} style={{ background: 'var(--pink)', color: '#fff' }}>Meet {next.name} →</Link>
+            <a className="btn" href={ASK} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--pink)', color: '#fff' }}>💬 DM us on Instagram</a>
+            <Link className="btn" href={`/artist/${next.slug}`} style={{ background: '#fff', color: '#141018' }}>Meet {next.name} →</Link>
           </div>
         </div>
       </section>
@@ -118,7 +118,7 @@ export default function ArtistPage({ slug }) {
           {a.work.length > 1 && <button type="button" className="lbbtn lbprev" onClick={(e) => { e.stopPropagation(); setBig(i => (i - 1 + a.work.length) % a.work.length); }} aria-label="Previous">‹</button>}
           <img src={a.work[big].img} alt={a.work[big].name} onClick={(e) => e.stopPropagation()} />
           {a.work.length > 1 && <button type="button" className="lbbtn lbnext" onClick={(e) => { e.stopPropagation(); setBig(i => (i + 1) % a.work.length); }} aria-label="Next">›</button>}
-          <div className="lbcount">{a.work[big].name}</div>
+          <div className="lbcount">{a.work[big].name}{a.work[big].jp ? ` · ${a.work[big].jp}` : ''}</div>
         </div>
       )}
     </Layout>

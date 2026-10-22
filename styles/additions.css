@@ -151,3 +151,14 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-artist .burst .fig.photo { max-width: 92%; object-fit: contain; object-position: 50% 100%; }
 .pg-showcase .burst .see { margin-bottom: 14px; }
 .burst .fig.photo { filter: none !important; }
+
+/* Artist "In the shop now" gallery: info at the top of each card,
+   "In the shop" + the pink DM button always lined up at the bottom. */
+.pg-artist .wintro { text-align: center; font-weight: 700; font-size: 17px; margin: -6px 0 22px; }
+.pg-artist .wgrid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 18px; justify-content: stretch; }
+.pg-artist .wcard { display: flex; flex-direction: column; }
+.pg-artist .wname { flex: 1 0 auto; }
+.pg-artist .wbottom { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.pg-artist .wdm { display: block; width: 100%; box-sizing: border-box; font-size: 15px; padding: 10px 12px; border-radius: 999px; background: var(--pink); color: #fff; }
+.pg-artist .anav { justify-content: center; }
+@media (max-width: 760px) { .pg-artist .wgrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px; } .pg-artist .wdm { font-size: 13px; padding: 9px 8px; } }
