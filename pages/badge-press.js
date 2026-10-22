@@ -97,7 +97,17 @@ export default function BadgePress() {
                   <span className="die die-b" />
                 </div>
               </div>
-              {step === 'pop' && <div className="reveal" aria-hidden="true"><span className="burst" /><span className="popped">?</span></div>}
+              {step === 'pop' && <div className="reveal" aria-hidden="true"><span className="burst" /><span className="popped"><svg viewBox="0 0 200 200" role="presentation">
+                    <defs>
+                      <path id="arcTop" d="M 30 100 A 70 70 0 0 1 170 100" />
+                      <path id="arcBot" d="M 26 100 A 74 74 0 0 0 174 100" />
+                    </defs>
+                    {[...Array(8)].map((_, i) => <text key={i} x="100" y="18" textAnchor="middle" className="bstar" transform={`rotate(${i * 45 + 22.5} 100 100)`}>★</text>)}
+                    <text className="arc"><textPath href="#arcTop" startOffset="50%" textAnchor="middle">RANDOM</textPath></text>
+                    <text className="q" x="100" y="128" textAnchor="middle">?</text>
+                    <text className="arc"><textPath href="#arcBot" startOffset="50%" textAnchor="middle" dominantBaseline="hanging">BADGE!</textPath></text>
+                  </svg></span>
+                  {[...Array(14)].map((_, i) => <span key={i} className="confetti" style={{ '--a': `${i * (360 / 14)}deg`, '--c': ['var(--pink)', 'var(--sky)', 'var(--green)', 'var(--gold)', 'var(--orange)'][i % 5], '--d': `${110 + (i % 3) * 40}px` }} />)}</div>}
             </div>
             <button className="btn pressbtn" type="button" onClick={press} disabled={busy || soldOut}>
               {soldOut ? 'All out for now' : busy ? 'Pressing…' : `Pull the lever · ${price}`}

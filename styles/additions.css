@@ -197,8 +197,8 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-badges .knobend{position:absolute;right:-14px;top:50%;width:34px;height:34px;margin-top:-17px;border-radius:50%;background:var(--pink);border:4px solid var(--ink)}
 .pg-badges .s-press1 .lever,.pg-badges .s-press2 .lever{transform:translate(-62%,48px) rotate(8deg)}
 .pg-badges .reveal{position:absolute;left:50%;top:44%;width:0;height:0;z-index:5;pointer-events:none}
-.pg-badges .burst{position:absolute;left:-150px;top:-150px;width:300px;height:300px;border-radius:50%;background:repeating-conic-gradient(var(--gold) 0 10deg,#fff6c9 10deg 20deg);-webkit-mask:radial-gradient(circle,#000 35%,transparent 70%);mask:radial-gradient(circle,#000 35%,transparent 70%);animation:burstin .5s ease-out both,burstspin 4s linear infinite}
-.pg-badges .popped{position:absolute;left:-75px;top:-75px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0 8%,#ffd34d 30%,var(--orange) 75%);border:6px solid var(--ink);box-shadow:0 0 0 6px #fff,0 0 40px 12px rgba(255,255,255,.9),6px 8px 0 6px var(--ink);display:grid;place-items:center;font-family:'Bagel Fat One',sans-serif;font-size:76px;color:var(--ink);animation:badgepop .8s cubic-bezier(.2,1.4,.4,1) both}
+.pg-badges .burst{position:absolute;left:-180px;top:-180px;width:360px;height:360px;border-radius:50%;background:repeating-conic-gradient(var(--gold) 0 10deg,#fff6c9 10deg 20deg);-webkit-mask:radial-gradient(circle,#000 35%,transparent 70%);mask:radial-gradient(circle,#000 35%,transparent 70%);animation:burstin .5s ease-out both,burstspin 4s linear infinite}
+.pg-badges .popped{position:absolute;left:-95px;top:-95px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff 0 8%,#ffd34d 30%,var(--orange) 75%);border:6px solid var(--ink);box-shadow:0 0 0 6px #fff,0 0 40px 12px rgba(255,255,255,.9),6px 8px 0 6px var(--ink);display:block;animation:badgepop .8s cubic-bezier(.2,1.4,.4,1) both}
 .pg-badges .popped::after{content:"";position:absolute;inset:10%;border-radius:50%;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.85) 48%,transparent 60%);animation:shine 1.2s .5s ease-in-out both}
 @keyframes badgepop{0%{transform:translateY(60px) scale(.2) rotateY(0)}60%{transform:translateY(-12px) scale(1.12) rotateY(360deg)}100%{transform:none}}
 @keyframes burstin{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
@@ -216,3 +216,13 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-badges button:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
 @media (max-width:760px){.pg-badges .bwrap{grid-template-columns:1fr;gap:30px;padding-block:36px 30px}}
 @media (prefers-reduced-motion:reduce){.pg-badges .popped,.pg-badges .burst,.pg-badges .popped::after{animation:none}.pg-badges .die,.pg-badges .ram,.pg-badges .lever{transition:none}}
+
+.pg-badges .popped svg{width:100%;height:100%;display:block;overflow:visible}
+.pg-badges .popped .arc{font-family:'Bagel Fat One',sans-serif;font-size:30px;fill:var(--pink);stroke:var(--ink);stroke-width:2.5px;paint-order:stroke;letter-spacing:2px}
+.pg-badges .popped .q{font-family:'Bagel Fat One',sans-serif;font-size:96px;fill:#fff;stroke:var(--ink);stroke-width:5px;paint-order:stroke}
+.pg-badges .popped .bstar{font-size:14px;fill:var(--tardis)}
+.pg-badges .popped .q{animation:qwobble 1s .6s ease-in-out infinite alternate;transform-origin:100px 100px;transform-box:view-box}
+@keyframes qwobble{from{rotate:-8deg}to{rotate:8deg}}
+.pg-badges .confetti{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:3px;background:var(--c);border:2px solid var(--ink);animation:confetti .9s .15s ease-out both}
+@keyframes confetti{from{transform:rotate(var(--a)) translateY(0) scale(.3);opacity:1}80%{opacity:1}to{transform:rotate(var(--a)) translateY(calc(-1 * var(--d))) rotate(200deg) scale(1);opacity:0}}
+@media (prefers-reduced-motion:reduce){.pg-badges .confetti,.pg-badges .popped .q{animation:none}.pg-badges .confetti{display:none}}
