@@ -11,6 +11,7 @@ export const NAV = [
   { key: 'story', label: 'Our Story', href: '/our-story', bg: 'var(--orange)' },
   { key: 'findus', label: 'Find Us', href: '/about', bg: 'var(--gold)', ink: true },
   { key: 'gacha', label: 'Kaiju Gachapon', href: '/gachapon', bg: 'var(--green)' },
+  { key: 'badges', label: 'Badge Press', href: '/badge-press', bg: 'var(--orange)' },
   { key: 'news', label: 'Kanatani News', href: '/news', bg: 'var(--tardis)' },
 ];
 
