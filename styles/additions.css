@@ -101,10 +101,9 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-product .buyrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin: 18px 0 22px; }
 .pg-product .buyrow .bigprice { margin: 0 !important; }
 
-/* T-shirts: tap a shirt to see it big */
-.teezoom { display: block; width: 100%; padding: 0; cursor: zoom-in; font: inherit; }
-.teezoom img { object-fit: cover; object-position: 50% 50% !important; }
-.teezoom .zoomhint { position: absolute; right: 8px; bottom: 8px; background: #fff; color: var(--ink); border: 3px solid var(--ink); border-radius: 999px; padding: 3px 10px; font-weight: 900; font-size: 12px; }
+/* T-shirts: each card opens its own page */
+.shelf.tees .card { display: block; color: var(--ink); }
+.shelf.tees .shot img { object-fit: cover !important; object-position: 50% 50% !important; }
 .shelf.tees .price span { font-size: 17px; }
 
 /* Find Us: email fits inside the red Say Hello box */
@@ -115,14 +114,17 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .revhead > div { min-width: 0; }
 .revhead .btn { font-size: 18px; flex: 0 0 auto; }
 
-/* Sofubi Showcase: every artist's top banner is the same height, tall
-   enough for three lines. Each name sits on its own lines (see
-   components/ArtistBox.js) and the text shrinks to fit the box, so long
-   names are never cut off and short names just have space around them. */
-.pg-showcase .abox.nb .atop { height: 176px; box-sizing: border-box; align-items: center; }
-.pg-showcase .abox.nb .aname { flex: 1; min-width: 0; container-type: inline-size; }
-.pg-showcase .abox.nb .an { display: flex; flex-direction: column; width: 100%; line-height: 1.08 !important; overflow: visible !important;
-  font-size: min(26px, calc((100cqw - 8px) / (var(--len) * 0.74))) !important; }
+/* Sofubi Showcase banners: all identical. Logo at the top, then the name
+   (same font size for everyone, room for three lines), then the country
+   pill at the bottom. The font size is set so the longest allowed line
+   (12 letters, see MAX_LINE in components/ArtistBox.js) fits the box, so
+   every name is fully readable and short names simply have more space. */
+.pg-showcase .abox.nb .atop { flex-direction: column; align-items: center; justify-content: flex-start; gap: 10px; padding: 16px 14px 14px; text-align: center; height: auto; }
+.pg-showcase .abox.nb .av { flex: 0 0 auto; width: 76px !important; height: 76px !important; }
+.pg-showcase .abox.nb .aname { width: 100%; align-items: center !important; gap: 10px !important; container-type: inline-size; }
+.pg-showcase .abox.nb .an { --fs: min(26px, calc((100cqw - 12px) / 8.9)); font-size: var(--fs) !important; line-height: 1.12 !important;
+  height: calc(var(--fs) * 1.12 * 3); width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: visible !important; overflow-wrap: normal !important; }
 .pg-showcase .abox.nb .an .anl { display: block; white-space: nowrap; }
 .pg-showcase .abox.nb .flag { font-size: 12px; padding: 4px 10px; white-space: nowrap; }
 

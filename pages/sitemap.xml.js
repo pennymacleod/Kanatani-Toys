@@ -1,3 +1,4 @@
+import { SHIRTS } from '../lib/tshirts';
 import { ARTISTS } from '../lib/artists';
 
 const SQUARE_BASE = process.env.SQUARE_ENVIRONMENT === 'sandbox'
@@ -47,6 +48,7 @@ function buildSitemap(products) {
     { loc: `${SITE_URL}/gachapon`, priority: '0.4' },
     { loc: `${SITE_URL}/news`, priority: '0.5' },
     { loc: `${SITE_URL}/t-shirts`, priority: '0.5' },
+    ...SHIRTS.map(t => ({ loc: `${SITE_URL}/t-shirts/${t.slug}`, priority: '0.4' })),
     ...ARTISTS.map(a => ({ loc: `${SITE_URL}/artist/${a.slug}`, priority: '0.4' })),
   ];
 
