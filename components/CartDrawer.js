@@ -82,6 +82,10 @@ export default function CartDrawer() {
 
         {cart.length > 0 && (
           <div className="nl-drawer-foot">
+            <a className="nl-badge-nudge" href="/badge-press" onClick={() => setOpen(false)}>
+              <img src="/nl/badges/creature.png" alt="" />
+              <span><b>{cart.some(i => /mystery\s*badge/i.test(i.name)) ? 'Add another mystery badge for £1?' : 'Add a mystery badge for £1?'}</b><br />Pull the lever →</span>
+            </a>
             <div className="nl-total"><span>Total</span><span className="price">{fmt(total)}</span></div>
             {error && <p className="nl-error">{error}</p>}
             <button type="button" className="btn" onClick={checkout} disabled={loading} style={{ background: 'var(--pink)', color: '#fff', width: '100%' }}>

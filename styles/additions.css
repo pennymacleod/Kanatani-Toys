@@ -226,3 +226,12 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-badges .confetti{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:3px;background:var(--c);border:2px solid var(--ink);animation:confetti .9s .15s ease-out both}
 @keyframes confetti{from{transform:rotate(var(--a)) translateY(0) scale(.3);opacity:1}80%{opacity:1}to{transform:rotate(var(--a)) translateY(calc(-1 * var(--d))) rotate(200deg) scale(1);opacity:0}}
 @media (prefers-reduced-motion:reduce){.pg-badges .confetti,.pg-badges .popped .q{animation:none}.pg-badges .confetti{display:none}}
+
+/* Basket: mystery badge nudge */
+.nl-badge-nudge{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:10px 14px;background:var(--gold);color:var(--ink);border:3px solid var(--ink);border-radius:14px;box-shadow:3px 3px 0 var(--ink);text-decoration:none;font-weight:700;line-height:1.3}
+.nl-badge-nudge img{width:48px;height:48px;flex:none;animation:nudgespin 3s ease-in-out infinite}
+.nl-badge-nudge b{font-weight:900}
+.nl-badge-nudge:hover{background:var(--orange)}
+.nl-badge-nudge:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+@keyframes nudgespin{0%,70%,100%{transform:rotate(0)}80%{transform:rotate(-14deg)}90%{transform:rotate(14deg)}}
+@media (prefers-reduced-motion:reduce){.nl-badge-nudge img{animation:none}}
