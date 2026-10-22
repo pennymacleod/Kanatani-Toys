@@ -1,3 +1,4 @@
+import { SHOP_TABS, shopTab } from '../../lib/categories';
 // pages/api/catalog.js
 // ─────────────────────────────────────────────────────────────────────────────
 // Server-side API route — runs on the server, never in the browser.
@@ -118,7 +119,7 @@ export default async function handler(req, res) {
           id: item.id,
           name: item.item_data.name,
           description: item.item_data?.description || '',
-          category: catId && categoryMap[catId] ? categoryMap[catId] : 'Other',
+          category: shopTab(categoryMap[catId], item.item_data?.name || ''),
           price,        // in pence / smallest currency unit
           currency,
           stock,        // null means inventory not tracked in Square
@@ -139,7 +140,7 @@ export default async function handler(req, res) {
       .filter(p => p.isAvailable && p.price > 0);
 
     // ── Step 5: Build category list ─────────────────────────────────────────
-    const categories = ['All', ...new Set(products.map(p => p.category))].filter(Boolean);
+    const categories = SHOP_TABS;
 
     return res.status(200).json({
       products,

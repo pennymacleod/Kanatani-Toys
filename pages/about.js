@@ -96,12 +96,11 @@ export default function FindUs() {
                   <p style={{ margin: 0, padding: '0 24px 20px', fontWeight: 700 }}>Next open Sunday: {nextSunday}</p>
                 )}
               </div>
-              <div className="counter" style={{ padding: '26px 30px', gap: 22 }}>
+              <div className="counter hello" style={{ padding: '26px 30px', gap: 22 }}>
                 <Medallion size={70} />
-                <div>
+                <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ fontWeight: 800, letterSpacing: '.2em', color: 'var(--gold)', fontSize: 14 }}>SAY HELLO</div>
-                  <a className="mid" href="mailto:kanatanitoys@gmail.com" style={{ display: 'block', fontSize: 26, color: '#fff', marginTop: 6 }}>kanatanitoys@gmail.com</a>
-                  <a href="tel:+447484826746" style={{ display: 'block', fontWeight: 800, marginTop: 8 }}>07484 826746</a>
+                  <a className="mid hello-email" href="mailto:kanatanitoys@gmail.com" style={{ display: 'block', color: '#fff', marginTop: 6 }}>kanatanitoys@gmail.com</a>
                 </div>
               </div>
             </div>

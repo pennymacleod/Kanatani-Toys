@@ -72,7 +72,7 @@ export default function CartDrawer() {
                 <div className="nl-qty">
                   <button type="button" onClick={() => changeQty(item.id, item.qty - 1)} aria-label={`One less ${item.name}`}>−</button>
                   <span>{item.qty}</span>
-                  <button type="button" onClick={() => changeQty(item.id, item.qty + 1)} aria-label={`One more ${item.name}`}>+</button>
+                  <button type="button" onClick={() => changeQty(item.id, item.qty + 1)} aria-label={`One more ${item.name}`} disabled={item.stock != null && item.qty >= item.stock} style={item.stock != null && item.qty >= item.stock ? { opacity: .35, cursor: 'not-allowed' } : undefined}>+</button>
                 </div>
               </div>
               <button type="button" className="nl-remove" onClick={() => remove(item.id)} aria-label={`Remove ${item.name}`}>✕</button>

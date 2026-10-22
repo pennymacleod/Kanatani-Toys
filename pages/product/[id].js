@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { useCart, fmt } from '../../lib/cart';
+import { shopTab } from '../../lib/categories';
 
 function stockText(stock) {
   if (stock === null || stock === undefined) return 'In stock';
@@ -12,7 +13,7 @@ function stockText(stock) {
 }
 
 export default function ProductPage({ product, error }) {
-  const { add, count, setOpen } = useCart();
+  const { add, count, setOpen, qtyOf } = useCart();
   const [selected, setSelected] = useState(product?.allVariations?.[0] || null);
   const [added, setAdded] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
@@ -54,18 +55,40 @@ export default function ProductPage({ product, error }) {
   const outOfStock = stock === 0;
   const price = selected?.price || product.price;
 
+  const lineId = selected?.id || product.id;
+  const allInBasket = stock != null && stock > 0 && qtyOf(lineId) >= stock;
+
   const addToBasket = () => {
     if (outOfStock) return;
+    if (allInBasket) { setOpen(true); return; }
     add({
       ...product,
-      id: selected?.id || product.id,
+      id: lineId,
       variationId: selected?.id || product.variationId,
       name: product.allVariations?.length > 1 && selected?.name ? `${product.name} (${selected.name})` : product.name,
       price,
+      stock,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
   };
+
+  const addLabel = outOfStock ? 'Sold out'
+    : added ? '✓ Added!'
+    : allInBasket ? (stock === 1 ? 'In your basket ✓' : 'All in your basket ✓')
+    : 'Add to basket';
+
+  const addButton = (
+    <button
+      type="button"
+      className="btn"
+      onClick={addToBasket}
+      disabled={outOfStock}
+      style={{ background: outOfStock ? '#ddd' : (added || allInBasket) ? 'var(--green)' : 'var(--pink)', color: outOfStock || added || allInBasket ? 'var(--ink)' : '#fff', fontSize: 22, cursor: outOfStock ? 'not-allowed' : 'pointer' }}
+    >
+      {addLabel}
+    </button>
+  );
 
   return (
     <Layout
@@ -109,7 +132,10 @@ export default function ProductPage({ product, error }) {
             <div className="info">
               {product.category && <span className="achip"><i />{product.category.toUpperCase()}</span>}
               <h1 className="big" style={{ fontSize: 'clamp(36px,5vw,60px)', margin: '20px 0 10px', color: 'var(--pink)', lineHeight: 1.1 }}>{product.name}</h1>
-              <div className="bigprice">{fmt(price)}</div>
+              <div className="buyrow">
+                <div className="bigprice">{fmt(price)}</div>
+                {addButton}
+              </div>
 
               {product.allVariations?.length > 1 && (
                 <div className="vars" role="group" aria-label="Options">
@@ -138,15 +164,7 @@ export default function ProductPage({ product, error }) {
               )}
 
               <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={addToBasket}
-                  disabled={outOfStock}
-                  style={{ background: outOfStock ? '#ddd' : added ? 'var(--green)' : 'var(--pink)', color: outOfStock || added ? 'var(--ink)' : '#fff', fontSize: 22, cursor: outOfStock ? 'not-allowed' : 'pointer' }}
-                >
-                  {outOfStock ? 'Sold out' : added ? '✓ Added!' : 'Add to basket'}
-                </button>
+                {addButton}
                 {count > 0 && (
                   <button type="button" className="btn" onClick={() => setOpen(true)} style={{ background: '#fff', fontSize: 22 }}>
                     View basket ({count}) →
@@ -239,7 +257,7 @@ export async function getServerSideProps({ params, res }) {
       category: (() => {
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
         const cat = relatedObjects.find(o => o.type === 'CATEGORY' && o.id === catId);
-        return cat?.category_data?.name || '';
+        return shopTab(cat?.category_data?.name, item.item_data?.name || '');
       })(),
       price: item.item_data?.variations?.[0]?.item_variation_data?.price_money?.amount || 0,
       currency: item.item_data?.variations?.[0]?.item_variation_data?.price_money?.currency || 'GBP',

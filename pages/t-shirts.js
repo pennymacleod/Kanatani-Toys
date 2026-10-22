@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 
@@ -14,6 +15,19 @@ const SHIRTS = [
 const IG = 'https://www.instagram.com/kanatani_toys';
 
 export default function TShirts() {
+  const [big, setBig] = useState(null);
+
+  useEffect(() => {
+    if (big === null) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setBig(null);
+      else if (e.key === 'ArrowLeft') setBig(i => (i - 1 + SHIRTS.length) % SHIRTS.length);
+      else if (e.key === 'ArrowRight') setBig(i => (i + 1) % SHIRTS.length);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [big]);
+
   return (
     <Layout
       title="T-shirts — Kanatani Toys"
@@ -28,7 +42,7 @@ export default function TShirts() {
             T-<span style={{ color: 'var(--sky)' }}>shirts!</span>
           </h1>
           <p style={{ fontSize: 21, fontWeight: 600, maxWidth: '32em', margin: '0 auto' }}>
-            Monsters, ghouls and creatures to wear. Come and try them on in the shop!
+            Monsters, ghouls and creatures to wear. Available online soon, or come and try them on in the shop!
           </p>
         </div>
       </section>
@@ -37,11 +51,14 @@ export default function TShirts() {
         <div className="wrap">
           <div className="cabinet">
             <div className="shelf tees">
-              {SHIRTS.map(s => (
+              {SHIRTS.map((s, i) => (
                 <div key={s.name} className="card" style={{ background: s.colour }}>
-                  <div className="shot"><img src={s.img} alt={`${s.name} t-shirt`} loading="lazy" style={{ objectFit: 'cover' }} /></div>
+                  <button type="button" className="shot teezoom" onClick={() => setBig(i)} aria-label={`Show the ${s.name} t-shirt bigger`}>
+                    <img src={s.img} alt={`${s.name} t-shirt`} loading="lazy" />
+                    <span className="zoomhint" aria-hidden="true">Tap to enlarge</span>
+                  </button>
                   <div className="name" style={{ fontSize: 20 }}>{s.name}</div>
-                  <div className="price"><span>In the shop</span></div>
+                  <div className="price"><span>Available online soon</span></div>
                 </div>
               ))}
             </div>
@@ -52,6 +69,16 @@ export default function TShirts() {
           </div>
         </div>
       </section>
+
+      {big !== null && (
+        <div className="lightbox" onClick={() => setBig(null)} role="dialog" aria-modal="true" aria-label={`${SHIRTS[big].name} t-shirt`}>
+          <button type="button" className="lbbtn lbclose" onClick={(e) => { e.stopPropagation(); setBig(null); }} aria-label="Close">✕</button>
+          <button type="button" className="lbbtn lbprev" onClick={(e) => { e.stopPropagation(); setBig(i => (i - 1 + SHIRTS.length) % SHIRTS.length); }} aria-label="Previous t-shirt">‹</button>
+          <img src={SHIRTS[big].img} alt={`${SHIRTS[big].name} t-shirt`} onClick={(e) => e.stopPropagation()} />
+          <button type="button" className="lbbtn lbnext" onClick={(e) => { e.stopPropagation(); setBig(i => (i + 1) % SHIRTS.length); }} aria-label="Next t-shirt">›</button>
+          <div className="lbcount">{SHIRTS[big].name} · available online soon</div>
+        </div>
+      )}
     </Layout>
   );
 }

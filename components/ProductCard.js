@@ -25,7 +25,8 @@ export default function ProductCard({ product, index = 0 }) {
       setJustAdded(false);
       return;
     }
-    add({ ...product, id: product.variationId || product.id });
+    const ok = add({ ...product, id: product.variationId || product.id });
+    if (!ok) { setOpen(true); return; }
     setJustAdded(true);
   };
 

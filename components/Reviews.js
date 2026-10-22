@@ -91,8 +91,13 @@ export default function Reviews() {
 
   return (
     <div className="wrap revs" id="testimonials">
-      <h2 className="big" style={{ fontSize: 'clamp(34px,5vw,56px)' }}>What people say</h2>
-      <p className="sub">★★★★★ from our Google reviews</p>
+      <div className="revhead">
+        <div>
+          <h2 className="big" style={{ fontSize: 'clamp(34px,5vw,56px)' }}>What people say</h2>
+          <p className="sub">★★★★★ from our Google reviews</p>
+        </div>
+        <a className="btn" href={GOOGLE} target="_blank" rel="noopener noreferrer" style={{ background: '#fff' }}>Leave us a Google review ↗</a>
+      </div>
       <div className="rvgrid">
         {shown.map(({ quote, author }, i) => (
           <figure key={author} className="rv" style={{ '--c': COLOURS[i % COLOURS.length] }}>
@@ -108,7 +113,6 @@ export default function Reviews() {
             Show all {REVIEWS.length} reviews ↓
           </button>
         )}
-        <a className="btn" href={GOOGLE} target="_blank" rel="noopener noreferrer" style={{ background: '#fff' }}>Leave us a Google review</a>
       </div>
     </div>
   );

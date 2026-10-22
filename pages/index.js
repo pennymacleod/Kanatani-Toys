@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
 import Medallion from '../components/Medallion';
+import { SHOP_TABS, shopTab } from '../lib/categories';
 
 const IRASSHAI = ['い', 'ら', 'っ', 'し', 'ゃ', 'い', 'ま', 'せ'];
 
@@ -89,8 +90,11 @@ export default function Home({ initialProducts, categories, error }) {
             <h1 className="big" style={{ fontSize: 88, margin: '22px 0 26px', color: 'var(--pink)' }}>
               Strange toys<br />for <span style={{ color: 'var(--sky)' }}>strange</span><br />people
             </h1>
-            <p style={{ fontSize: 21, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 28px' }}>
-              We specialise in Sofubi, Kaiju and vintage treasures hand-picked in Japan, plus brilliant independent artists. Come and find your new weird little friend.
+            <p style={{ fontSize: 21, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 12px' }}>
+              We specialise in Sofubi, Kaiju and vintage treasures, hand-picked from Japan.
+            </p>
+            <p style={{ fontSize: 19, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 28px' }}>
+              We&apos;re also a proud home for independent artists: makers of handmade sofubi and art toys, whose wonderfully strange creations are looking for new owners.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
               <a className="btn" href="#shop" style={{ background: 'var(--sky)' }}>Shop the toys →</a>
@@ -140,7 +144,11 @@ export default function Home({ initialProducts, categories, error }) {
           <div className="cabinet">
             <p className="shopcount">{filtered.length} {filtered.length === 1 ? 'toy' : 'toys'}</p>
             {filtered.length === 0 ? (
-              <p className="noresults">No toys found{search ? ` for "${search}"` : ''}. Try another word!</p>
+              activeCategory === 'Clothing' && !search ? (
+                <p className="noresults">Our t-shirts will be available online soon. <Link href="/t-shirts" style={{ textDecoration: 'underline' }}>See the t-shirts →</Link></p>
+              ) : (
+                <p className="noresults">No toys found{search ? ` for "${search}"` : ''}. Try another word!</p>
+              )
             ) : (
               <div className="shelf">
                 {filtered.map((product, i) => (
@@ -283,7 +291,7 @@ export async function getServerSideProps({ res }) {
           id: item.id,
           name: item.item_data.name,
           description: item.item_data?.description || '',
-          category: categoryMap[catId] || 'Other',
+          category: shopTab(categoryMap[catId], item.item_data.name),
           price: v?.item_variation_data?.price_money?.amount || 0,
           currency: v?.item_variation_data?.price_money?.currency || 'GBP',
           stock,
@@ -302,7 +310,7 @@ export async function getServerSideProps({ res }) {
       .filter(p => p.price > 0)
       .reverse();
 
-    const categories = ['All', ...new Set(products.map(p => p.category))];
+    const categories = SHOP_TABS;
 
     return {
       props: {
