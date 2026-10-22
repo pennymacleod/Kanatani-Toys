@@ -59,7 +59,7 @@ export default function BadgePress() {
     } else {
       setMsg('Badges are £1 in the shop. Online mystery badges are coming soon!');
     }
-    await wait(900);
+    await wait(1600);
     setStep('idle');
   };
 
@@ -97,7 +97,7 @@ export default function BadgePress() {
                   <span className="die die-b" />
                 </div>
               </div>
-              {step === 'pop' && <div className="popped" aria-hidden="true"><span>?</span></div>}
+              {step === 'pop' && <div className="reveal" aria-hidden="true"><span className="burst" /><span className="popped">?</span></div>}
             </div>
             <button className="btn pressbtn" type="button" onClick={press} disabled={busy || soldOut}>
               {soldOut ? 'All out for now' : busy ? 'Pressing…' : `Pull the lever · ${price}`}
