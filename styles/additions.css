@@ -115,10 +115,15 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .revhead > div { min-width: 0; }
 .revhead .btn { font-size: 18px; flex: 0 0 auto; }
 
-/* Sofubi Showcase: every artist's top banner is the same height,
-   whatever the length of their name */
-.pg-showcase .abox.nb .atop { height: 128px; box-sizing: border-box; align-items: center; }
-.pg-showcase .abox.nb .an { font-size: 22px !important; line-height: 1.1 !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* Sofubi Showcase: every artist's top banner is the same height, tall
+   enough for three lines. Each name sits on its own lines (see
+   components/ArtistBox.js) and the text shrinks to fit the box, so long
+   names are never cut off and short names just have space around them. */
+.pg-showcase .abox.nb .atop { height: 176px; box-sizing: border-box; align-items: center; }
+.pg-showcase .abox.nb .aname { flex: 1; min-width: 0; container-type: inline-size; }
+.pg-showcase .abox.nb .an { display: flex; flex-direction: column; width: 100%; line-height: 1.08 !important; overflow: visible !important;
+  font-size: min(26px, calc((100cqw - 8px) / (var(--len) * 0.74))) !important; }
+.pg-showcase .abox.nb .an .anl { display: block; white-space: nowrap; }
 .pg-showcase .abox.nb .flag { font-size: 12px; padding: 4px 10px; white-space: nowrap; }
 
 /* Artist pages: show the whole toy, centred in its square (iPad Safari
