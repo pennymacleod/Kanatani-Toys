@@ -135,3 +135,6 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* Shop cards: whole photo visible and centred */
 .card .shot img { object-fit: contain !important; object-position: 50% 50% !important; }
+
+/* Artist pages: real photos (with the shop behind) fill the square */
+.pg-artist .wshot.photo img { padding: 0; object-fit: cover; }

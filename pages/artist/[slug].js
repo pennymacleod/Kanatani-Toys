@@ -61,12 +61,20 @@ export default function ArtistPage({ slug }) {
 
           {a.work.length > 0 ? (
             <div className="wgrid">
-              {a.work.map(w => (
-                <Link key={w.name} className="wcard" href={`/?q=${encodeURIComponent(w.name.split(' ')[0])}#shop`}>
-                  <div className="wshot"><img src={w.img} alt="" /></div>
-                  <div className="wname">{w.name}</div>
-                  <div className="wrow"><span className="wprice">In the shop</span><span>Find it →</span></div>
-                </Link>
+              {a.work.map(w => {
+                // `photo: true` = a real photo (fills the square); otherwise a
+                // cut-out on white (shown whole). `link: false` = no shop link yet.
+                const body = (
+                  <>
+                    <div className={`wshot${w.photo ? ' photo' : ''}`}><img src={w.img} alt={w.name} /></div>
+                    <div className="wname">{w.name}</div>
+                    <div className="wrow"><span className="wprice">In the shop</span>{w.link !== false && <span>Find it →</span>}</div>
+                  </>
+                );
+                return w.link === false
+                  ? <div key={w.name} className="wcard">{body}</div>
+                  : <Link key={w.name} className="wcard" href={`/?q=${encodeURIComponent(w.search || w.name.split(' ')[0])}#shop`}>{body}</Link>;
+              })}
               ))}
             </div>
           ) : (
