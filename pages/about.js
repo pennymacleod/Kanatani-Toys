@@ -62,10 +62,10 @@ export default function FindUs() {
                   <text x="204" y="300" textAnchor="middle" fontFamily="Inter" fontWeight="700" fontSize="14" fill="#6B7B74" transform="rotate(-90 204 300)">Ditchling Rd</text>
                   <g transform="translate(310 230)">
                     <path d="M0 0 C-30 -40 -42 -60 -42 -82 A42 42 0 1 1 42 -82 C42 -60 30 -40 0 0Z" fill="#FF1F8F" stroke="#141018" strokeWidth="5" />
-                    <clipPath id="pinc"><circle cx="0" cy="-84" r="26" /></clipPath>
-                    <circle cx="0" cy="-84" r="26" fill="#fff" />
-                    <image href="/nl/pink_head_bold.png" x="-30" y="-114" width="60" height="60" clipPath="url(#pinc)" preserveAspectRatio="xMidYMax slice" />
-                    <circle cx="0" cy="-84" r="26" fill="none" stroke="#141018" strokeWidth="4" />
+                    {/* Head pops out of the top of the circle so his horn shows */}
+                    <clipPath id="pinc"><circle cx="0" cy="-84" r="24" /><rect x="-40" y="-170" width="80" height="86" /></clipPath>
+                    <circle cx="0" cy="-84" r="26" fill="#fff" stroke="#141018" strokeWidth="4" />
+                    <image href="/nl/pink_head_bold.png" x="-36" y="-142" width="72" height="77" clipPath="url(#pinc)" preserveAspectRatio="xMidYMid meet" />
                   </g>
                 </svg>
                 <span className="opn">Open in Google Maps ↗</span>
