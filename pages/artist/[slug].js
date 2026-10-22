@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { ARTISTS, CATEGORY_COLOURS } from '../../lib/artists';
@@ -13,12 +14,26 @@ const ROLE = {
   Clothing: 'Clothing designer',
 };
 
+// Instagram DM to the shop, for "ask about it" buttons.
+const ASK = 'https://ig.me/m/kanatani_toys';
+
 export default function ArtistPage({ slug }) {
   const i = ARTISTS.findIndex(a => a.slug === slug);
   const a = ARTISTS[i];
   const next = ARTISTS[(i + 1) % ARTISTS.length];
   const cat = a.categories[0];
   const role = ROLE[cat] || 'Artist';
+  const [big, setBig] = useState(null);
+  useEffect(() => {
+    if (big === null) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setBig(null);
+      else if (e.key === 'ArrowLeft') setBig(i => (i - 1 + a.work.length) % a.work.length);
+      else if (e.key === 'ArrowRight') setBig(i => (i + 1) % a.work.length);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [big, a.work.length]);
 
   return (
     <Layout
@@ -59,29 +74,36 @@ export default function ArtistPage({ slug }) {
             <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{a.name}</span></span>
           </div>
 
-          {a.work.length > 0 ? (
+          {a.work.length > 0 && (
             <div className="wgrid">
-              {a.work.map(w => {
-                // `photo: true` = a real photo (fills the square); otherwise a
-                // cut-out on white (shown whole). `link: false` = no shop link yet.
-                const body = (
-                  <>
-                    <div className={`wshot${w.photo ? ' photo' : ''}`}><img src={w.img} alt={w.name} /></div>
-                    <div className="wname">{w.name}</div>
-                    <div className="wrow"><span className="wprice">In the shop</span>{w.link !== false && <span>Find it →</span>}</div>
-                  </>
-                );
-                return w.link === false
-                  ? <div key={w.name} className="wcard">{body}</div>
-                  : <Link key={w.name} className="wcard" href={`/?q=${encodeURIComponent(w.search || w.name.split(' ')[0])}#shop`}>{body}</Link>;
-              })}
-            </div>
-          ) : (
-            <div className="wempty">
-              You&apos;ll find {a.name}&apos;s work in the cabinets or on the shelves at the shop. Pop in and see it, or follow{' '}
-              <a href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>{a.handle}</a> on Instagram for their latest work.
+              {a.work.map((w, i) => (
+                // A gallery, not a shop: tap the photo to see it big, or ask us
+                // about it on Instagram. `shop: "word"` adds a link to that toy in
+                // the online shop (only for pieces that are on Square).
+                <div key={w.name} className="wcard">
+                  <button type="button" className={`wshot${w.photo === false ? '' : ' photo'}`} onClick={() => setBig(i)} aria-label={`Show ${w.name} bigger`}>
+                    <img src={w.img} alt={w.name} loading="lazy" />
+                  </button>
+                  <div className="wname">{w.name}</div>
+                  <div className="wrow">
+                    <span className="wprice">In the shop</span>
+                    {w.shop
+                      ? <Link href={`/?q=${encodeURIComponent(w.shop)}#shop`}>Buy online →</Link>
+                      : <a href={ASK} target="_blank" rel="noopener noreferrer">Ask about it →</a>}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
+
+          <div className="wempty">
+            {a.work.length > 0
+              ? <>More of {a.name}&apos;s work is in the cabinets or on the shelves at the shop. </>
+              : <>You&apos;ll find {a.name}&apos;s work in the cabinets or on the shelves at the shop. </>}
+            Pop in and see it, ask us on{' '}
+            <a href={ASK} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>Instagram</a>, or follow{' '}
+            <a href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>{a.handle}</a> for their latest work.
+          </div>
 
           <div className="anav">
             <Link className="btn" href="/sofubi-showcase" style={{ background: '#fff', color: '#141018' }}>← All artists</Link>
@@ -89,6 +111,16 @@ export default function ArtistPage({ slug }) {
           </div>
         </div>
       </section>
+
+      {big !== null && a.work[big] && (
+        <div className="lightbox" onClick={() => setBig(null)} role="dialog" aria-modal="true" aria-label={a.work[big].name}>
+          <button type="button" className="lbbtn lbclose" onClick={(e) => { e.stopPropagation(); setBig(null); }} aria-label="Close">✕</button>
+          {a.work.length > 1 && <button type="button" className="lbbtn lbprev" onClick={(e) => { e.stopPropagation(); setBig(i => (i - 1 + a.work.length) % a.work.length); }} aria-label="Previous">‹</button>}
+          <img src={a.work[big].img} alt={a.work[big].name} onClick={(e) => e.stopPropagation()} />
+          {a.work.length > 1 && <button type="button" className="lbbtn lbnext" onClick={(e) => { e.stopPropagation(); setBig(i => (i + 1) % a.work.length); }} aria-label="Next">›</button>}
+          <div className="lbcount">{a.work[big].name}</div>
+        </div>
+      )}
     </Layout>
   );
 }

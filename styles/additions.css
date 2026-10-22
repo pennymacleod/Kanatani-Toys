@@ -137,7 +137,12 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .card .shot img { object-fit: contain !important; object-position: 50% 50% !important; }
 
 /* Artist pages: real photos (with the shop behind) fill the square */
-.pg-artist .wshot.photo img { padding: 0; object-fit: cover; }
+.pg-artist .wshot.photo img { padding: 0; object-fit: contain; background: #fff; }
+/* work photos are buttons (tap to see big) */
+.pg-artist button.wshot { display: flex; width: 100%; padding: 0; cursor: zoom-in; font: inherit; }
+.pg-artist .wcard { color: var(--ink); }
+.pg-artist .wrow a { text-decoration: underline; text-underline-offset: 3px; }
+.pg-artist .wempty { margin-top: 28px; }
 
 /* Showcase cards: a cut-out photo of the toy from the waist up, filling the
    starburst (artist.cardFigure). Real photo cut-outs (artist.photoFigure)
