@@ -211,7 +211,7 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-badges .bmix{padding-block:10px 70px}
 .pg-badges .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:18px;margin-top:18px}
 .pg-badges .bgrid figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-weight:800}
-.pg-badges .bgrid img{width:100%;max-width:150px;aspect-ratio:1;object-fit:contain;filter:drop-shadow(4px 5px 0 rgba(20,16,24,.35))}
+.pg-badges .bgrid img{width:100%;max-width:150px;aspect-ratio:1;object-fit:cover;border-radius:50%;box-shadow:0 0 0 3px var(--ink)}
 .pg-badges .small{font-weight:600;margin-top:16px}
 .pg-badges button:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
 @media (max-width:760px){.pg-badges .bwrap{grid-template-columns:1fr;gap:30px;padding-block:36px 30px}}
