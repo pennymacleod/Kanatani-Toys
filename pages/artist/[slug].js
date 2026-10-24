@@ -66,7 +66,7 @@ export default function ArtistPage({ slug }) {
               </div>
             </div>
             <div className="mpanel">
-              <div className="burst">{a.figure && <img className={`fig${a.photoFigure ? ' photo' : ''}`} src={a.figure} alt={`${a.name} figure`} />}</div>
+              <div className="burst">{a.figure && <img className={`fig${a.printFigure ? ' printfig' : a.photoFigure ? ' photo' : ''}`} src={a.figure} alt={a.printFigure ? `${a.name} print` : `${a.name} figure`} />}</div>
             </div>
           </div>
 
