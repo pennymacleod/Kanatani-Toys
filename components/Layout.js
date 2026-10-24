@@ -2,16 +2,17 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useCart } from '../lib/cart';
 import CartDrawer from './CartDrawer';
+import { useLang } from '../lib/lang';
 
 // Shared nav. Keep this the single source of truth for the menu.
 export const NAV = [
-  { key: 'shop', label: 'Shop', href: '/#shop', bg: 'var(--pink)' },
-  { key: 'showcase', label: 'Sofubi Showcase', href: '/sofubi-showcase', bg: 'var(--sky)' },
-  { key: 'story', label: 'Our Story', href: '/our-story', bg: 'var(--orange)' },
-  { key: 'findus', label: 'Find Us', href: '/about', bg: 'var(--gold)', ink: true },
-  { key: 'news', label: 'Kanatani News', href: '/news', bg: 'var(--tardis)' },
-  { key: 'gacha', label: 'Kaiju Gachapon', href: '/gachapon', bg: 'var(--green)' },
-  { key: 'badges', label: 'Badge Press', href: '/badge-press', bg: 'var(--orange)' },
+  { key: 'shop', label: 'Shop', ja: 'ショップ', href: '/#shop', bg: 'var(--pink)' },
+  { key: 'showcase', label: 'Sofubi Showcase', ja: 'ソフビ・ショーケース', href: '/sofubi-showcase', bg: 'var(--sky)' },
+  { key: 'story', label: 'Our Story', ja: '私たちについて', href: '/our-story', bg: 'var(--orange)' },
+  { key: 'findus', label: 'Find Us', ja: 'アクセス', href: '/about', bg: 'var(--gold)', ink: true },
+  { key: 'news', label: 'Kanatani News', ja: 'カナタニ・ニュース', href: '/news', bg: 'var(--tardis)' },
+  { key: 'gacha', label: 'Kaiju Gachapon', ja: '怪獣ガチャポン', href: '/gachapon', bg: 'var(--green)' },
+  { key: 'badges', label: 'Badge Press', ja: '缶バッジ・プレス', href: '/badge-press', bg: 'var(--orange)' },
 ];
 
 export const SOCIALS = [
@@ -22,6 +23,27 @@ export const SOCIALS = [
 ];
 
 const SITE = 'https://kanatanitoys.com';
+
+// Little flags for the language switch (SVG, so they show on every device).
+const FlagUK = () => (
+  <svg viewBox="0 0 60 30" width="28" height="14" aria-hidden="true">
+    <clipPath id="ukc"><path d="M0,0 v30 h60 v-30 z" /></clipPath>
+    <clipPath id="ukt"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" /></clipPath>
+    <g clipPath="url(#ukc)">
+      <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
+      <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
+      <path d="M0,0 L60,30 M60,0 L0,30" clipPath="url(#ukt)" stroke="#C8102E" strokeWidth="4" />
+      <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
+      <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" strokeWidth="6" />
+    </g>
+  </svg>
+);
+const FlagJP = () => (
+  <svg viewBox="0 0 30 20" width="21" height="14" aria-hidden="true">
+    <rect width="30" height="20" fill="#fff" />
+    <circle cx="15" cy="10" r="6" fill="#BC002D" />
+  </svg>
+);
 
 const CONGA = ['kaiju', 'pinkyeti', 'purpledog', 'cubehead', 'orangefuzz'];
 
@@ -37,6 +59,7 @@ export default function Layout({
   children,
 }) {
   const { count, setOpen } = useCart();
+  const { lang, setLang, t } = useLang();
 
   return (
     <>
@@ -63,8 +86,12 @@ export default function Layout({
         <div className="scallop" />
         <header className="night">
           <button type="button" className="basket" onClick={() => setOpen(true)} aria-label={`Open basket, ${count} item${count === 1 ? '' : 's'}`}>
-            Basket ({count})
+            {t('Basket', 'カート')} ({count})
           </button>
+          <div className="langsw" role="group" aria-label="Language / 言語">
+            <button type="button" className={lang === 'en' ? 'on' : ''} aria-pressed={lang === 'en'} onClick={() => setLang('en')}><FlagUK /> EN</button>
+            <button type="button" className={lang === 'ja' ? 'on' : ''} aria-pressed={lang === 'ja'} onClick={() => setLang('ja')}><FlagJP /> 日本語</button>
+          </div>
           <div className="wrap" style={{ paddingTop: 40 }}>
             <Link href="/" aria-label="Kanatani Toys home" style={{ display: 'block', width: 'max-content', maxWidth: '100%', margin: '0 auto' }}>
               <div className="sign"><div className="k">KANATANI</div><div className="t">TOYS</div></div>
@@ -77,7 +104,7 @@ export default function Layout({
                   aria-current={active === n.key ? 'page' : undefined}
                   style={{ background: n.bg, color: n.ink ? 'var(--ink)' : undefined }}
                 >
-                  {n.label}
+                  {t(n.label, n.ja)}
                 </Link>
               ))}
             </nav>
@@ -99,16 +126,16 @@ export default function Layout({
         <footer>
           <div className="wrap footbar">
             <span className="footlogo">KANATANI <span>TOYS</span></span>
-            <span style={{ fontWeight: 700 }}>Strange Toys for Strange People · @kanatani_toys</span>
+            <span style={{ fontWeight: 700 }}>{t('Strange Toys for Strange People', 'ストレンジな人のための、ストレンジなおもちゃ')} · @kanatani_toys</span>
           </div>
           <div className="wrap footlinks">
-            <span>Unit 7, Open Market, Marshalls Row, Brighton BN1 4JU</span>
+            <span>{t('Unit 7, Open Market, Marshalls Row, Brighton BN1 4JU', 'Unit 7, Open Market, Marshalls Row, Brighton BN1 4JU（イギリス・ブライトン）')}</span>
             <span className="footnav">
               {SOCIALS.map(s => (
                 <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer">{s.name}</a>
               ))}
-              <Link href="/privacy">Privacy</Link>
-              <Link href="/terms">Terms</Link>
+              <Link href="/privacy">{t('Privacy', 'プライバシー')}</Link>
+              <Link href="/terms">{t('Terms', '利用規約')}</Link>
             </span>
           </div>
         </footer>

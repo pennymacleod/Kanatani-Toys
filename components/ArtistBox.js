@@ -1,6 +1,9 @@
 import Link from 'next/link';
+import { useLang } from '../lib/lang';
+import { COUNTRY_JA } from '../lib/artists';
 
 const COMING = 'Coming soon!'.split('');
+const COMING_JA = '近日登場！'.split('');
 const COMING_COLOURS = ['#FF1F8F', '#1FB6FF', '#FFD21F', '#5BD34A', '#FF7417'];
 
 // Longest line (in letters) any banner may have. Every name is shown at the
@@ -27,6 +30,8 @@ function bannerLines(artist) {
 
 export default function ArtistBox({ artist, soon = false }) {
   const lines = bannerLines(artist);
+  const { lang, t } = useLang();
+  const coming = lang === 'ja' ? COMING_JA : COMING;
   const inner = (
     <>
       <div className="atop" style={{ background: artist.colour }}>
@@ -36,7 +41,7 @@ export default function ArtistBox({ artist, soon = false }) {
             {lines.map((l, i) => <span key={i} className="anl" aria-hidden="true">{l}</span>)}
           </div>
           {artist.country
-            ? <span className="flag">★ {artist.country.toUpperCase()}</span>
+            ? <span className="flag">★ {lang === 'ja' ? (COUNTRY_JA[artist.country] || artist.country) : artist.country.toUpperCase()}</span>
             : <span className="flag" style={{ visibility: 'hidden' }} aria-hidden="true">★</span>}
         </div>
       </div>
@@ -48,12 +53,12 @@ export default function ArtistBox({ artist, soon = false }) {
           : artist.figure && <img className={`fig${artist.photoFigure ? ' photo' : ''}`} src={artist.figure} alt="" loading="lazy" />}
         {soon ? (
           <span className="soonb">
-            {COMING.map((c, i) => (
+            {coming.map((c, i) => (
               <span key={i} style={{ color: c === ' ' ? undefined : COMING_COLOURS[i % COMING_COLOURS.length] }}>{c}</span>
             ))}
           </span>
         ) : (
-          <span className="see">See their work →</span>
+          <span className="see">{t('See their work →', '作品を見る →')}</span>
         )}
       </div>
     </>

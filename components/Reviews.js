@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLang } from '../lib/lang';
 
 // Real five-star Google reviews, pasted in word for word by Penny.
 // Never make up or reword a review.
@@ -86,6 +87,7 @@ const INITIAL_COUNT = 6;
 const GOOGLE = 'https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU';
 
 export default function Reviews() {
+  const { lang, t } = useLang();
   const [expanded, setExpanded] = useState(false);
   const shown = expanded ? REVIEWS : REVIEWS.slice(0, INITIAL_COUNT);
 
@@ -93,10 +95,10 @@ export default function Reviews() {
     <div className="wrap revs" id="testimonials">
       <div className="revhead">
         <div>
-          <h2 className="big" style={{ fontSize: 'clamp(34px,5vw,56px)' }}>What people say</h2>
-          <p className="sub">★★★★★ from our Google reviews</p>
+          <h2 className="big" style={{ fontSize: 'clamp(34px,5vw,56px)' }}>{t('What people say', 'お客さんの声')}</h2>
+          <p className="sub">{t('★★★★★ from our Google reviews', '★★★★★ Googleのクチコミより（英語のまま掲載しています）')}</p>
         </div>
-        <a className="btn" href={GOOGLE} target="_blank" rel="noopener noreferrer" style={{ background: '#fff' }}>Leave us a Google review ↗</a>
+        <a className="btn" href={GOOGLE} target="_blank" rel="noopener noreferrer" style={{ background: '#fff' }}>{t('Leave us a Google review ↗', 'Googleでクチコミを書く ↗')}</a>
       </div>
       <div className="rvgrid">
         {shown.map(({ quote, author }, i) => (
@@ -110,7 +112,7 @@ export default function Reviews() {
       <div className="rvbtns">
         {!expanded && REVIEWS.length > INITIAL_COUNT && (
           <button type="button" className="btn" onClick={() => setExpanded(true)} style={{ background: 'var(--gold)' }}>
-            Show all {REVIEWS.length} reviews ↓
+            {lang === 'ja' ? `クチコミを全部見る（${REVIEWS.length}件） ↓` : `Show all ${REVIEWS.length} reviews ↓`}
           </button>
         )}
       </div>

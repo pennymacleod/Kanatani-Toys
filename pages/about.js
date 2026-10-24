@@ -3,6 +3,9 @@ import Layout, { SOCIALS } from '../components/Layout';
 import Medallion from '../components/Medallion';
 import Reviews from '../components/Reviews';
 import { HOURS, hoursFor, isOpenNow, nextOpenSunday, shopTime } from '../lib/shop';
+import { useLang } from '../lib/lang';
+
+const DAY_JA = { Monday: '月曜日', Tuesday: '火曜日', Wednesday: '水曜日', Thursday: '木曜日', Friday: '金曜日', Saturday: '土曜日', Sunday: '日曜日' };
 
 const MAPS = 'https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU';
 const DIRECTIONS = 'https://www.google.com/maps/dir/?api=1&destination=Open+Market+Marshalls+Row+Brighton+BN1+4JU';
@@ -17,11 +20,12 @@ export default function FindUs() {
   // Date-dependent bits are worked out in the browser, so a cached page never
   // shows a stale "open now".
   const [now, setNow] = useState(null);
+  const { lang, t } = useLang();
   useEffect(() => { setNow(shopTime()); }, []);
   const open = now ? isOpenNow(now) : false;
   const todayName = now ? HOURS[now.getDay() === 0 ? 6 : now.getDay() - 1].day : null;
   const nextSunday = now
-    ? nextOpenSunday(now).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
+    ? nextOpenSunday(now).toLocaleDateString(lang === 'ja' ? 'ja-JP' : 'en-GB', lang === 'ja' ? { month: 'long', day: 'numeric', weekday: 'short' } : { weekday: 'long', day: 'numeric', month: 'long' })
     : null;
   const today = now ? hoursFor(now) : null;
 
@@ -37,17 +41,17 @@ export default function FindUs() {
         <div className="wrap">
           <div className="fu-title">
             <span className="kicker">カナタニ · BRIGHTON</span>
-            <h1 className="big" style={{ fontSize: 96, margin: '18px 0 10px', color: 'var(--pink)' }}>Find <span style={{ color: 'var(--sky)' }}>us!</span></h1>
-            <p style={{ fontSize: 21, fontWeight: 600, margin: 0 }}>Come and meet the strange toys in person.</p>
+            <h1 className="big" style={{ fontSize: 96, margin: '18px 0 10px', color: 'var(--pink)' }}>{lang === 'ja' ? <>アク<span style={{ color: 'var(--sky)' }}>セス！</span></> : <>Find <span style={{ color: 'var(--sky)' }}>us!</span></>}</h1>
+            <p style={{ fontSize: 21, fontWeight: 600, margin: 0 }}>{t('Come and meet the strange toys in person.', 'ストレンジなおもちゃたちに、会いに来てね。')}</p>
             {now && (
               <span className={`openbadge ${open ? 'yes' : 'no'}`}>
-                {open ? `● Open now · until ${short(today.close)}` : '● Closed right now'}
+                {open ? (lang === 'ja' ? `● 営業中 · ${short(today.close)}時まで` : `● Open now · until ${short(today.close)}`) : t('● Closed right now', '● ただいま閉店中')}
               </span>
             )}
           </div>
           <div className="fu-grid">
             <div className="panel">
-              <h3 style={{ background: 'var(--tardis)' }}>UNIT 7, OPEN MARKET</h3>
+              <h3 style={{ background: 'var(--tardis)' }}>{t('UNIT 7, OPEN MARKET', 'オープンマーケット UNIT 7')}</h3>
               <a className="map mapl" href={MAPS} target="_blank" rel="noopener noreferrer" aria-label="Open in Google Maps" style={{ position: 'relative' }}>
                 <svg viewBox="0 0 640 430" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
                   <rect width="640" height="430" fill="#EAF4EF" />
@@ -68,24 +72,24 @@ export default function FindUs() {
                     <image href="/nl/pink_head_bold.png" x="-36" y="-142" width="72" height="77" clipPath="url(#pinc)" preserveAspectRatio="xMidYMid meet" />
                   </g>
                 </svg>
-                <span className="opn">Open in Google Maps ↗</span>
+                <span className="opn">{t('Open in Google Maps ↗', 'Googleマップで開く ↗')}</span>
               </a>
               <div style={{ padding: '18px 24px', display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center', justifyContent: 'space-between', borderTop: '5px solid #141018' }}>
                 <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.5 }}>Marshalls Row, Brighton<br />BN1 4JU</div>
-                <a className="btn" href={DIRECTIONS} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--pink)', fontSize: 19 }}>Get directions →</a>
+                <a className="btn" href={DIRECTIONS} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--pink)', fontSize: 19 }}>{t('Get directions →', '行き方を見る →')}</a>
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
               <div className="panel">
-                <h3 style={{ background: 'var(--pink)' }}>OPENING HOURS</h3>
+                <h3 style={{ background: 'var(--pink)' }}>{t('OPENING HOURS', '営業時間')}</h3>
                 <ul className="hours">
                   {HOURS.map(h => (
                     <li key={h.day} className={todayName === h.day ? 'today' : undefined}>
-                      {h.day}
+                      {t(h.day, DAY_JA[h.day])}
                       {!h.open ? (
-                        <span className="pill closed">Closed</span>
+                        <span className="pill closed">{t('Closed', '定休日')}</span>
                       ) : h.alternate ? (
-                        <span className="pill sun">{short(h.open)} – {short(h.close)} · every other week</span>
+                        <span className="pill sun">{short(h.open)} – {short(h.close)} · {t('every other week', '隔週')}</span>
                       ) : (
                         <span className="pill">{short(h.open)} – {short(h.close)}</span>
                       )}
@@ -93,13 +97,13 @@ export default function FindUs() {
                   ))}
                 </ul>
                 {nextSunday && (
-                  <p style={{ margin: 0, padding: '0 24px 20px', fontWeight: 700 }}>Next open Sunday: {nextSunday}</p>
+                  <p style={{ margin: 0, padding: '0 24px 20px', fontWeight: 700 }}>{t('Next open Sunday:', '次の営業日曜日：')} {nextSunday}</p>
                 )}
               </div>
               <div className="counter hello" style={{ padding: '26px 30px', gap: 22 }}>
                 <Medallion size={70} />
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <div style={{ fontWeight: 800, letterSpacing: '.2em', color: 'var(--gold)', fontSize: 14 }}>SAY HELLO</div>
+                  <div style={{ fontWeight: 800, letterSpacing: '.2em', color: 'var(--gold)', fontSize: 14 }}>{t('SAY HELLO', 'お問い合わせ')}</div>
                   <a className="mid hello-email" href="mailto:kanatanitoys@gmail.com" style={{ display: 'block', color: '#fff', marginTop: 6 }}>kanatanitoys@gmail.com</a>
                 </div>
               </div>

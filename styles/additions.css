@@ -337,3 +337,14 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-artist .wcopied .wig { justify-self: start; margin-top: 4px; background: var(--pink); color: #fff; font-size: 15px; padding: 8px 14px; }
 .pg-artist .wcard { scroll-margin-top: 90px; }
 .pg-artist button.wdm { cursor: pointer; font-family: inherit; font-weight: inherit; }
+
+/* English / Japanese switch, top-left of the header (basket is top-right) */
+.langsw { position: absolute; left: 32px; top: 28px; z-index: 5; display: flex; background: #fff; border: 3px solid var(--ink); border-radius: 999px; box-shadow: 0 4px 0 var(--ink); overflow: hidden; }
+.langsw button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; color: var(--ink); font: 900 14px/1 'Rubik', 'Inter', sans-serif; padding: 8px 12px; cursor: pointer; }
+.langsw button + button { border-left: 3px solid var(--ink); }
+.langsw button.on { background: var(--gold); }
+.langsw svg { border: 1px solid rgba(0,0,0,.25); border-radius: 2px; flex: none; }
+@media (max-width: 700px) { .langsw { left: 10px; top: 10px; } .langsw button { font-size: 12px; padding: 6px 8px; gap: 4px; } .langsw svg { width: 20px; height: 10px; } .langsw button:last-child svg { width: 15px; height: 10px; } }
+/* Japanese text: Bagel Fat One has no Japanese letters, so big headings use Mochiy Pop One */
+html[lang="ja"] .big { font-family: 'Mochiy Pop One', 'Bagel Fat One', sans-serif; }
+html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }

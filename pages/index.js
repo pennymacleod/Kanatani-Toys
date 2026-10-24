@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
-import { SHOP_TABS, TAB_PAGES, shopTab } from '../lib/categories';
+import { SHOP_TABS, TAB_PAGES, TAB_JA, shopTab } from '../lib/categories';
+import { useLang } from '../lib/lang';
 
 const IRASSHAI = ['い', 'ら', 'っ', 'し', 'ゃ', 'い', 'ま', 'せ'];
 
@@ -10,6 +11,7 @@ export default function Home({ initialProducts, categories, error }) {
   const products = initialProducts || [];
   const [activeCategory, setActiveCategory] = useState('All');
   const [search, setSearch] = useState('');
+  const { lang, t } = useLang();
 
   // Lets other pages link to a search, e.g. /?q=hedorah#shop
   useEffect(() => {
@@ -87,21 +89,23 @@ export default function Home({ initialProducts, categories, error }) {
         <div className="wrap hero">
           <div>
             <span className="kicker">怪獣 · ソフビ · BRIGHTON</span>
-            <h1 className="big" style={{ fontSize: 88, margin: '22px 0 26px', color: 'var(--pink)' }}>
-              Strange toys<br />for <span style={{ color: 'var(--sky)' }}>strange</span><br />people
+            <h1 className="big" style={{ fontSize: lang === 'ja' ? 'clamp(38px,5.6vw,62px)' : 88, lineHeight: lang === 'ja' ? 1.3 : undefined, margin: '22px 0 26px', color: 'var(--pink)' }}>
+              {lang === 'ja'
+                ? <><span style={{ color: 'var(--sky)' }}>ストレンジ</span>な人のための<br />ストレンジなおもちゃ</>
+                : <>Strange toys<br />for <span style={{ color: 'var(--sky)' }}>strange</span><br />people</>}
             </h1>
             <p style={{ fontSize: 21, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 12px' }}>
-              We specialise in Sofubi, Kaiju and vintage treasures, hand-picked from Japan.
+              {t('We specialise in Sofubi, Kaiju and vintage treasures, hand-picked from Japan.', '日本で一つひとつ選んだソフビ、怪獣、ヴィンテージのお宝を扱っています。')}
             </p>
             <p style={{ fontSize: 19, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 12px' }}>
-              We&apos;re also proud to support so many independent artists: makers of handmade sofubi and indie art toys, whose wonderfully strange creations are showcased in our shop.
+              {t('We\u2019re also proud to support so many independent artists: makers of handmade sofubi and indie art toys, whose wonderfully strange creations are showcased in our shop.', '世界中のインディペンデント・アーティストを応援できることも、私たちの誇りです。手作りソフビやインディーのアートトイを生み出すアーティストたちの、最高にストレンジな作品をお店で紹介しています。')}
             </p>
             <p style={{ fontSize: 19, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 28px' }}>
-              And all the amazing artists who show their work with us, from prints to keyrings, stickers and amazing clothes. We&apos;re so proud at Kanatani Toys to support so many amazing artists.
+              {t('And all the amazing artists who show their work with us, from prints to keyrings, stickers and amazing clothes. We\u2019re so proud at Kanatani Toys to support so many amazing artists.', 'プリント、キーホルダー、ステッカー、素敵な洋服まで、作品を置いてくれているすべてのアーティストに感謝しています。カナタニ・トイズは、たくさんの素晴らしいアーティストを応援できることを心から誇りに思っています。')}
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-              <a className="btn" href="#shop" style={{ background: 'var(--sky)' }}>Shop the toys →</a>
-              <Link className="btn" href="/about" style={{ background: '#fff' }}>Visit the shop</Link>
+              <a className="btn" href="#shop" style={{ background: 'var(--sky)' }}>{t('Shop the toys →', 'おもちゃを見る →')}</a>
+              <Link className="btn" href="/about" style={{ background: '#fff' }}>{t('Visit the shop', 'お店に行く')}</Link>
             </div>
           </div>
           <div className="heroart">
@@ -115,17 +119,17 @@ export default function Home({ initialProducts, categories, error }) {
       </section>
 
       <section id="shop" className="board" style={{ padding: '60px 0' }}>
-        <div className="plaque"><h2 className="mid" style={{ fontSize: 54, color: 'var(--sky)', margin: 0 }}>New in the cabinet</h2></div>
+        <div className="plaque"><h2 className="mid" style={{ fontSize: 54, color: 'var(--sky)', margin: 0 }}>{t('New in the cabinet', 'ショーケースの新入荷')}</h2></div>
       </section>
 
       <section className="floor" style={{ padding: '56px 0 70px' }}>
         <div className="wrap">
-          {error && <div className="errorbar">Sorry, we couldn't load the toys from our till just now. Please try again in a minute.</div>}
+          {error && <div className="errorbar">{t('Sorry, we couldn\u2019t load the toys from our till just now. Please try again in a minute.', '申し訳ありません。ただいまレジからおもちゃを読み込めませんでした。少し経ってからもう一度お試しください。')}</div>}
           <div className="shopbar">
             <div className="cats" role="group" aria-label="Filter by category">
               {categories.map(cat => (
                 TAB_PAGES[cat] && !products.some(p => p.category === cat) ? (
-                  <Link key={cat} href={TAB_PAGES[cat]} className="cat">{cat} →</Link>
+                  <Link key={cat} href={TAB_PAGES[cat]} className="cat">{t(cat, TAB_JA[cat])} →</Link>
                 ) : (
                   <button
                     key={cat}
@@ -134,7 +138,7 @@ export default function Home({ initialProducts, categories, error }) {
                     aria-pressed={activeCategory === cat}
                     onClick={() => setActiveCategory(cat)}
                   >
-                    {cat}
+                    {t(cat, TAB_JA[cat])}
                   </button>
                 )
               ))}
@@ -149,12 +153,16 @@ export default function Home({ initialProducts, categories, error }) {
             />
           </div>
           <div className="cabinet">
-            <p className="shopcount">{filtered.length} {filtered.length === 1 ? 'toy' : 'toys'}</p>
+            <p className="shopcount">{lang === 'ja' ? `${filtered.length}点` : `${filtered.length} ${filtered.length === 1 ? 'toy' : 'toys'}`}</p>
             {filtered.length === 0 ? (
               TAB_PAGES[activeCategory] && !search ? (
-                <p className="noresults">Have a look on our <Link href={TAB_PAGES[activeCategory]} style={{ textDecoration: 'underline' }}>{activeCategory} page →</Link></p>
+                <p className="noresults">{lang === 'ja'
+                  ? <><Link href={TAB_PAGES[activeCategory]} style={{ textDecoration: 'underline' }}>{TAB_JA[activeCategory]}のページ →</Link>を見てね</>
+                  : <>Have a look on our <Link href={TAB_PAGES[activeCategory]} style={{ textDecoration: 'underline' }}>{activeCategory} page →</Link></>}</p>
               ) : (
-                <p className="noresults">No toys found{search ? ` for "${search}"` : ''}. Try another word!</p>
+                <p className="noresults">{lang === 'ja'
+                  ? `${search ? `「${search}」に` : ''}一致するおもちゃは見つかりませんでした。別の言葉で探してみてください!`
+                  : `No toys found${search ? ` for "${search}"` : ''}. Try another word!`}</p>
               )
             ) : (
               <div className="shelf">
@@ -171,10 +179,10 @@ export default function Home({ initialProducts, categories, error }) {
         <Link href="/gachapon" className="gp" style={{ background: 'var(--green)', border: '5px solid var(--ink)', borderRadius: 22, padding: '24px 28px', boxShadow: '8px 8px 0 var(--ink)', color: 'var(--ink)' }}>
           <span className="gpt">
             <span style={{ fontWeight: 900, letterSpacing: '.2em', fontSize: 14 }}>NEW · ガチャガチャ</span>
-            <span className="big" style={{ fontSize: 'clamp(30px,4vw,46px)', color: '#fff', display: 'block' }}>Play Kaiju Gachapon!</span>
-            <span style={{ fontWeight: 700, fontSize: 17 }}>Turn the handle, open a capsule, collect all ten kaiju.</span>
+            <span className="big" style={{ fontSize: 'clamp(30px,4vw,46px)', color: '#fff', display: 'block' }}>{t('Play Kaiju Gachapon!', '怪獣ガチャポンで遊ぼう!')}</span>
+            <span style={{ fontWeight: 700, fontSize: 17 }}>{t('Turn the handle, open a capsule, collect all ten kaiju.', 'ハンドルを回してカプセルを開けて、怪獣10体を全部集めよう。')}</span>
           </span>
-          <span className="btn" style={{ background: 'var(--gold)' }}>Play →</span>
+          <span className="btn" style={{ background: 'var(--gold)' }}>{t('Play →', '遊ぶ →')}</span>
         </Link>
       </div>
 
@@ -182,14 +190,14 @@ export default function Home({ initialProducts, categories, error }) {
         <div className="wrap visit">
           <Link href="/about" className="counter visitbox" style={{ color: 'inherit' }}>
             <div style={{ flex: 1, textAlign: 'center' }}>
-              <div className="big" style={{ fontSize: 'clamp(40px,6vw,72px)', color: 'var(--gold)', lineHeight: 1 }}>Come and visit!</div>
+              <div className="big" style={{ fontSize: 'clamp(40px,6vw,72px)', color: 'var(--gold)', lineHeight: 1 }}>{t('Come and visit!', '遊びに来てね!')}</div>
               <div className="mid" style={{ fontSize: 44, color: '#fff', margin: '10px 0' }}>Unit 7, Brighton Open Market</div>
-              <div style={{ fontSize: 19 }}>Marshalls Row, Brighton BN1 4JU · Tue–Sat 11–5 · every other Sunday 12–3</div>
-              <span className="tapme"><span className="arr">👉</span> Tap here to find us <span className="arr r">👈</span></span>
+              <div style={{ fontSize: 19 }}>{t('Marshalls Row, Brighton BN1 4JU · Tue–Sat 11–5 · every other Sunday 12–3', 'Marshalls Row, Brighton BN1 4JU · 火〜土 11時〜17時 · 日曜は隔週 12時〜15時')}</div>
+              <span className="tapme"><span className="arr">👉</span> {t('Tap here to find us', 'タップして行き方を見る')} <span className="arr r">👈</span></span>
             </div>
           </Link>
           <div className="mascotcol" style={{ textAlign: 'center' }}>
-            <div className="bubble-say">Come and say hi!</div>
+            <div className="bubble-say">{t('Come and say hi!', '気軽に寄ってね!')}</div>
             <img src="/nl/orange_bold.png" alt="" style={{ width: 190, display: 'block', margin: '0 auto' }} />
           </div>
         </div>
@@ -197,7 +205,7 @@ export default function Home({ initialProducts, categories, error }) {
 
       <div className="peekus floor" aria-hidden="true">
         <img src="/nl/penny-hiro.png" alt="" />
-        <span className="say">こんにちは! Come and say hello!</span>
+        <span className="say">{t('こんにちは! Come and say hello!', 'こんにちは! 遊びに来てね!')}</span>
       </div>
     </Layout>
   );
