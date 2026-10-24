@@ -44,7 +44,6 @@ export default function ArtistPage({ slug }) {
     const msg = `Hi! I'd like to ask about "${w.name}" by ${a.name}: ${link}`;
     try { navigator.clipboard?.writeText(msg).catch(() => {}); } catch (e) {}
     setCopied(w.name);
-    setTimeout(() => setCopied(c => (c === w.name ? null : c)), 6000);
   };
   useEffect(() => {
     if (big === null) return;
@@ -98,7 +97,7 @@ export default function ArtistPage({ slug }) {
 
           {a.work.length > 0 && (
             <>
-              <p className="wintro">Tap a photo to see it bigger. Want one? Tap &ldquo;DM us about this&rdquo; and we&apos;ll copy a message with a link to that photo, so just paste it into the chat.</p>
+              <p className="wintro">Tap a photo to see it bigger. Want one? Tap &ldquo;DM us about this&rdquo;: we&apos;ll copy a message with a link to that photo, then you open Instagram and paste it in.</p>
               <div className="wgrid">
                 {a.work.map((w, i) => (
                   // A gallery, not a shop. `shop: "word"` swaps the DM button for a
@@ -112,9 +111,15 @@ export default function ArtistPage({ slug }) {
                       <span className="wprice">In the shop</span>
                       {w.shop
                         ? <Link className="btn wdm" href={`/?q=${encodeURIComponent(w.shop)}#shop`}>Buy online →</Link>
-                        : <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer" onClick={() => onAsk(w)}>💬 DM us about this</a>}
+                        : <button type="button" className="btn wdm" onClick={() => onAsk(w)}>💬 DM us about this</button>}
                     </div>
-                    {copied === w.name && <div className="wcopied" role="status">Message copied! Paste it into the Instagram chat.</div>}
+                    {copied === w.name && (
+                      <div className="wcopied" role="status">
+                        <div><b>1.</b> Message copied ✓</div>
+                        <div><b>2.</b> Open Instagram and paste it in the chat:</div>
+                        <a className="btn wig" href={ASK} target="_blank" rel="noopener noreferrer">Open Instagram →</a>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

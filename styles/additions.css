@@ -333,5 +333,7 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 /* Shop cards the same size as the Sofubi Showcase artist cards: 3 across, 1 across on phones */
 .shelf { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 26px !important; }
 @media (max-width: 760px) { .shelf { grid-template-columns: 1fr !important; gap: 26px !important; } }
-.pg-artist .wcopied { margin-top: 8px; background: var(--green); color: var(--ink); border: 3px solid var(--ink); border-radius: 12px; padding: 6px 10px; font-weight: 800; font-size: 13px; }
+.pg-artist .wcopied { margin-top: 10px; background: var(--green); color: var(--ink); border: 3px solid var(--ink); border-radius: 12px; padding: 8px 10px; font-weight: 800; font-size: 14px; display: grid; gap: 4px; }
+.pg-artist .wcopied .wig { justify-self: start; margin-top: 4px; background: var(--pink); color: #fff; font-size: 15px; padding: 8px 14px; }
 .pg-artist .wcard { scroll-margin-top: 90px; }
+.pg-artist button.wdm { cursor: pointer; font-family: inherit; font-weight: inherit; }
