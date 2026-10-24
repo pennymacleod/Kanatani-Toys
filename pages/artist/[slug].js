@@ -17,6 +17,10 @@ const ROLE = {
 // Instagram DM to the shop, for "ask about it" buttons.
 const ASK = 'https://ig.me/m/kanatani_toys';
 
+// Each gallery photo gets its own link (#piece-name) that opens it big, so the
+// DM we copy for the customer shows Penny exactly which piece they mean.
+const pieceId = (name) => 'p-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 export default function ArtistPage({ slug }) {
   const i = ARTISTS.findIndex(a => a.slug === slug);
   const a = ARTISTS[i];
@@ -24,6 +28,24 @@ export default function ArtistPage({ slug }) {
   const cat = a.categories[0];
   const role = ROLE[cat] || 'Artist';
   const [big, setBig] = useState(null);
+  const [copied, setCopied] = useState(null);
+
+  // Open the photo a DM link points at (e.g. /artist/goatee#p-neurami).
+  useEffect(() => {
+    const h = decodeURIComponent(window.location.hash.slice(1));
+    const n = a.work.findIndex(w => pieceId(w.name) === h);
+    if (n >= 0) setBig(n);
+  }, [slug]);
+
+  // Instagram can't take a photo or message from a website, so copy a
+  // message with a link to the photo; the customer pastes it into the DM.
+  const onAsk = (w) => {
+    const link = `${window.location.origin}/artist/${a.slug}#${pieceId(w.name)}`;
+    const msg = `Hi! I'd like to ask about "${w.name}" by ${a.name}: ${link}`;
+    try { navigator.clipboard?.writeText(msg).catch(() => {}); } catch (e) {}
+    setCopied(w.name);
+    setTimeout(() => setCopied(c => (c === w.name ? null : c)), 6000);
+  };
   useEffect(() => {
     if (big === null) return;
     const onKey = (e) => {
@@ -76,12 +98,12 @@ export default function ArtistPage({ slug }) {
 
           {a.work.length > 0 && (
             <>
-              <p className="wintro">Tap a photo to see it bigger. Want one? Send us a message and we&apos;ll tell you all about it.</p>
+              <p className="wintro">Tap a photo to see it bigger. Want one? Tap &ldquo;DM us about this&rdquo; and we&apos;ll copy a message with a link to that photo, so just paste it into the chat.</p>
               <div className="wgrid">
                 {a.work.map((w, i) => (
                   // A gallery, not a shop. `shop: "word"` swaps the DM button for a
                   // "Buy online" link once that piece is on Square.
-                  <div key={w.name} className="wcard">
+                  <div key={w.name} className="wcard" id={pieceId(w.name)}>
                     <button type="button" className={`wshot${w.photo === false ? '' : ' photo'}`} onClick={() => setBig(i)} aria-label={`Show ${w.name} bigger`}>
                       <img src={w.img} alt={w.name} loading="lazy" />
                     </button>
@@ -90,8 +112,9 @@ export default function ArtistPage({ slug }) {
                       <span className="wprice">In the shop</span>
                       {w.shop
                         ? <Link className="btn wdm" href={`/?q=${encodeURIComponent(w.shop)}#shop`}>Buy online →</Link>
-                        : <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer">💬 DM us about this</a>}
+                        : <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer" onClick={() => onAsk(w)}>💬 DM us about this</a>}
                     </div>
+                    {copied === w.name && <div className="wcopied" role="status">Message copied! Paste it into the Instagram chat.</div>}
                   </div>
                 ))}
               </div>
