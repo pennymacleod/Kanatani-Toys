@@ -318,3 +318,5 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .burst .fig.printfig { filter: none !important; width: auto; max-width: 80%; object-fit: contain; border: 6px solid #fff; border-radius: 4px; box-shadow: 6px 6px 0 rgba(20,16,24,.85); background: #fff; }
 .pg-showcase .burst .fig.printfig { top: 22px; bottom: auto; height: calc(100% - 110px); transform: translateX(-50%) rotate(-3deg); }
 .pg-artist .burst .fig.printfig { top: 24px; bottom: auto; height: calc(100% - 60px); max-width: 86%; border-width: 8px; transform: translateX(-50%) rotate(-2deg); }
+/* Wide photo cut-outs without a card crop (e.g. a pair of earrings) fit inside the card. */
+.pg-showcase .burst .fig.photo:not(.upper) { max-width: 92%; object-fit: contain; object-position: 50% 50%; }
