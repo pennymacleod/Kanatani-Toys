@@ -47,6 +47,7 @@ function buildSitemap(products) {
     { loc: `${SITE_URL}/sofubi-showcase`, priority: '0.5' },
     { loc: `${SITE_URL}/gachapon`, priority: '0.4' },
     { loc: `${SITE_URL}/badge-press`, priority: '0.4' },
+    { loc: `${SITE_URL}/hero-capsule`, priority: '0.4' },
     { loc: `${SITE_URL}/news`, priority: '0.5' },
     { loc: `${SITE_URL}/t-shirts`, priority: '0.5' },
     ...SHIRTS.map(t => ({ loc: `${SITE_URL}/t-shirts/${t.slug}`, priority: '0.4' })),

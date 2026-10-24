@@ -348,3 +348,56 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 /* Japanese text: Bagel Fat One has no Japanese letters, so big headings use Mochiy Pop One */
 html[lang="ja"] .big { font-family: 'Mochiy Pop One', 'Bagel Fat One', sans-serif; }
 html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
+
+/* ── Hero Beam Capsule page ───────────────────────────────────────── */
+.pg-hero .hwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:56px 40px}
+.pg-hero .hintro h1{margin:18px 0 22px;color:var(--pink);line-height:1.08!important}
+.pg-hero .hintro p{font-size:19px;line-height:1.6;font-weight:600;max-width:32em;margin:0 0 16px}
+.pg-hero .brow{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:6px 0 14px}
+.pg-hero .hprice{display:inline-block;background:#fff;border:4px solid var(--ink);border-radius:14px;padding:6px 18px;font:900 30px Rubik,sans-serif;box-shadow:5px 5px 0 var(--ink)}
+.pg-hero .sound{appearance:none;font:inherit;font-weight:900;cursor:pointer;border:3px solid var(--ink);border-radius:999px;padding:6px 14px;background:var(--cream);color:var(--ink)}
+.pg-hero .sound[aria-pressed="false"]{background:var(--ink);color:var(--cream)}
+.pg-hero .harea{display:flex;flex-direction:column;align-items:center;gap:14px}
+.pg-hero .hint{font-weight:800;text-align:center;margin:0}
+.hscene{position:relative;width:100%;max-width:500px;height:620px;border:6px solid var(--ink);border-radius:26px;overflow:hidden;box-shadow:12px 12px 0 var(--ink);background:linear-gradient(#1A3FA6 0%,#3a2a8c 55%,#FF1F8F 100%)}
+.hstars{position:absolute;inset:0;background-image:radial-gradient(#fff 1.2px,transparent 1.5px);background-size:46px 46px;opacity:.5}
+.hcity{position:absolute;left:0;right:0;bottom:0;width:100%;height:150px}
+.hcity .kaiju{animation:stomp 2.4s ease-in-out infinite;transform-origin:70px 150px}
+@keyframes stomp{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(2deg)}}
+.hbeam{position:absolute;bottom:250px;width:60px;height:520px;transform-origin:50% 100%;opacity:.28;background:linear-gradient(to top,#fff,transparent)}
+.hbeam.l{left:60px;animation:sweepL 4s ease-in-out infinite}.hbeam.r{right:60px;animation:sweepR 4s ease-in-out infinite}
+@keyframes sweepL{0%,100%{transform:rotate(-24deg)}50%{transform:rotate(-6deg)}}
+@keyframes sweepR{0%,100%{transform:rotate(24deg)}50%{transform:rotate(6deg)}}
+.hsign{position:absolute;top:22px;left:50%;transform:translateX(-50%);background:var(--cream);border:5px solid var(--ink);border-radius:16px;padding:8px 18px;font:900 24px Rubik,sans-serif;white-space:nowrap;box-shadow:5px 5px 0 var(--ink);z-index:2}
+.hsign b{color:var(--red)}
+.hmachine{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);width:270px;z-index:2}
+.hdome{height:200px;border:6px solid var(--ink);border-radius:130px 130px 18px 18px;background:radial-gradient(circle at 35% 30%,#ffffffcc,#bfe9ff66 40%,#9fd6ff33 70%);position:relative;overflow:hidden}
+.hcap{position:absolute;width:52px;height:52px;border-radius:50%;border:4px solid var(--ink);background:linear-gradient(var(--c) 50%,#fff 50%)}
+.s-charge .hcap{animation:rattle .15s linear infinite}
+@keyframes rattle{0%{transform:translate(0,0)}25%{transform:translate(3px,-3px)}50%{transform:translate(-2px,2px)}75%{transform:translate(2px,3px)}100%{transform:translate(0,0)}}
+.hbody{margin-top:-6px;height:250px;border:6px solid var(--ink);border-radius:18px;position:relative;background:linear-gradient(90deg,#d9dde3 0 18%,var(--red) 18% 30%,#eef1f4 30% 70%,var(--red) 70% 82%,#d9dde3 82%)}
+.hpanel{position:absolute;left:50%;top:22px;transform:translateX(-50%);width:170px;height:62px;background:var(--ink);border-radius:12px;color:var(--green);font:900 15px Rubik,sans-serif;display:flex;align-items:center;justify-content:center;letter-spacing:2px;border:3px solid #fff}
+.s-beam .hpanel{color:var(--gold);animation:blink .2s steps(2) infinite}
+@keyframes blink{50%{opacity:.3}}
+.hbtn{position:absolute;left:50%;top:102px;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 35%,#ff7a6b,var(--red) 60%,#8e1d16);border:6px solid var(--ink);box-shadow:0 7px 0 var(--ink);color:#fff;font:900 15px Rubik,sans-serif;line-height:1.1;transition:transform .08s,box-shadow .08s}
+.hbtn:hover:not(:disabled){filter:brightness(1.08)}
+.hbtn:disabled{cursor:default}
+.s-charge .hbtn,.s-beam .hbtn{transform:translateX(-50%) translateY(6px);box-shadow:0 1px 0 var(--ink)}
+.hbtn:focus-visible{outline:4px solid var(--gold);outline-offset:4px}
+.hchute{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:110px;height:34px;background:var(--ink);border-radius:0 0 30px 30px}
+.hrays{display:none;position:absolute;left:50%;top:62%;width:900px;height:900px;margin:-450px 0 0 -450px;background:repeating-conic-gradient(#F2B70555 0 6deg,transparent 6deg 18deg);border-radius:50%}
+.s-beam .hrays{display:block;animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hflash{display:none;position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(circle at 50% 62%,#fff 0,#fff8 18%,#F2B70533 45%,transparent 70%)}
+.s-beam .hflash{display:block;animation:flash .35s ease-in-out infinite alternate}
+@keyframes flash{from{opacity:.4}to{opacity:1}}
+.s-beam .hbeam{opacity:.6}
+.hpop{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#141018aa;padding:20px}
+.hbigcap{width:180px;height:180px;border-radius:50%;border:8px solid var(--ink);background:linear-gradient(var(--pink) 50%,#fff 50%);box-shadow:0 0 0 12px var(--gold),0 0 60px 30px #fff8;position:relative;animation:popin .5s cubic-bezier(.2,1.6,.4,1)}
+.hbigcap:after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 100px Rubik,sans-serif;color:var(--ink)}
+@keyframes popin{from{transform:scale(.2) translateY(160px)}to{transform:scale(1) translateY(0)}}
+.hcard{margin-top:26px;background:var(--cream);border:5px solid var(--ink);border-radius:18px;padding:16px 20px;text-align:center;box-shadow:6px 6px 0 var(--ink);max-width:380px}
+.hcard .t{font:900 24px Rubik,sans-serif}.hcard .s{font-size:15px;font-weight:700;margin:6px 0 12px}
+.hcardbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){.hcity .kaiju,.hbeam,.s-charge .hcap,.s-beam .hrays,.s-beam .hflash,.s-beam .hpanel,.hbigcap{animation:none!important}}
+@media (max-width:860px){.pg-hero .hwrap{grid-template-columns:1fr;gap:28px;padding-block:36px 30px}.hscene{height:560px}.hsign{font-size:19px;padding:6px 12px}}
