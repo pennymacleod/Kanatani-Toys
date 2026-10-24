@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useCart } from '../lib/cart';
 import { sounds } from '../lib/gachaSounds';
+import { useLang } from '../lib/lang';
 
 // A small badge press that lives inside the basket. Pulling the lever plays the
 // press animation and adds the Square item named "Mystery Badge" to the basket
@@ -12,7 +13,8 @@ export default function MiniBadgePress() {
   const { add, cart } = useCart();
   const [item, setItem] = useState(cachedItem);
   const [step, setStep] = useState('idle'); // idle | down1 | swap | down2 | pop
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState(null); // [English, Japanese]
+  const { t } = useLang();
   const alive = useRef(true);
 
   useEffect(() => {
@@ -33,16 +35,16 @@ export default function MiniBadgePress() {
 
   const pull = async () => {
     if (busy) return;
-    setMsg('');
+    setMsg(null);
     setStep('down1'); sfx(sounds.clunk); await wait(300);
     setStep('swap'); sfx(sounds.slide); await wait(380);
     setStep('down2'); sfx(sounds.clunk); await wait(300);
     setStep('pop'); sfx(sounds.ping);
     if (item) {
       const ok = add({ ...item, id: item.variationId || item.id, name: 'Mystery Badge' });
-      setMsg(ok ? 'Mystery badge added! 🎉' : 'That\'s all our badges for now!');
+      setMsg(ok ? ['Mystery badge added! 🎉', 'ミステリー缶バッジを追加しました！🎉'] : ['That\'s all our badges for now!', '缶バッジは今あるだけで全部です！']);
     } else {
-      setMsg('Mystery badges online are coming soon! They\'re £1 in the shop.');
+      setMsg(['Mystery badges online are coming soon! They\'re £1 in the shop.', 'オンラインのミステリー缶バッジはもうすぐ登場！店頭では£1です。']);
     }
     await wait(1400);
     if (alive.current) setStep('idle');
@@ -50,7 +52,7 @@ export default function MiniBadgePress() {
 
   return (
     <div className={`mbp s-${step}`}>
-      <button type="button" className="mbp-machine" onClick={pull} disabled={busy} aria-label="Pull the lever to add a mystery badge for £1">
+      <button type="button" className="mbp-machine" onClick={pull} disabled={busy} aria-label={t('Pull the lever to add a mystery badge for £1', 'レバーを引いて£1のミステリー缶バッジを追加')}>
         <span className="mp-lever"><span className="mp-knob" /></span>
         <span className="mp-col" />
         <span className="mp-head"><span className="mp-ram" /></span>
@@ -63,9 +65,9 @@ export default function MiniBadgePress() {
         )}
       </button>
       <div className="mp-text">
-        <b>{hasOne ? 'Another mystery badge? £1' : 'Add a mystery badge! £1'}</b>
-        <button type="button" className="mp-cta" onClick={pull} disabled={busy}>{busy ? 'Pressing…' : 'Pull the lever!'}</button>
-        <span className="mp-msg" aria-live="polite">{msg}</span>
+        <b>{hasOne ? t('Another mystery badge? £1', 'ミステリー缶バッジをもう1個？ £1') : t('Add a mystery badge! £1', 'ミステリー缶バッジを追加！ £1')}</b>
+        <button type="button" className="mp-cta" onClick={pull} disabled={busy}>{busy ? t('Pressing…', 'プレス中…') : t('Pull the lever!', 'レバーを引く！')}</button>
+        <span className="mp-msg" aria-live="polite">{msg ? t(msg[0], msg[1]) : ''}</span>
       </div>
     </div>
   );

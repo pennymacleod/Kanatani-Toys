@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { SHIRTS } from '../../lib/tshirts';
+import { useLang } from '../../lib/lang';
 
 // One page per t-shirt, laid out like a toy's product page.
 export default function TShirtPage({ slug }) {
@@ -9,6 +10,7 @@ export default function TShirtPage({ slug }) {
   const shirt = SHIRTS[i];
   const next = SHIRTS[(i + 1) % SHIRTS.length];
   const [big, setBig] = useState(false);
+  const { lang, t } = useLang();
 
   useEffect(() => {
     if (!big) return;
@@ -27,7 +29,7 @@ export default function TShirtPage({ slug }) {
     >
       <section className="floor">
         <div className="wrap" style={{ paddingBottom: 80 }}>
-          <div className="crumb"><Link href="/t-shirts">← All t-shirts</Link></div>
+          <div className="crumb"><Link href="/t-shirts">{t('← All t-shirts', '← Tシャツ一覧')}</Link></div>
           <div className="pp">
             <div className="gallery">
               <div
@@ -35,7 +37,7 @@ export default function TShirtPage({ slug }) {
                 onClick={() => setBig(true)}
                 role="button"
                 tabIndex={0}
-                aria-label="Show photo full size"
+                aria-label={t('Show photo full size', '写真を大きく見る')}
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setBig(true); } }}
               >
                 <img src={shirt.img} alt={`${shirt.name} t-shirt`} />
@@ -43,24 +45,26 @@ export default function TShirtPage({ slug }) {
             </div>
 
             <div className="info">
-              <span className="achip"><i />CLOTHING</span>
+              <span className="achip"><i />{t('CLOTHING', '洋服')}</span>
               <h1 className="big" style={{ fontSize: 'clamp(36px,5vw,60px)', margin: '20px 0 10px', color: 'var(--pink)', lineHeight: 1.1 }}>{shirt.name}</h1>
               <div className="buyrow">
-                <div className="bigprice" style={{ fontSize: 26 }}>Available online soon</div>
+                <div className="bigprice" style={{ fontSize: 26 }}>{t('Available online soon', 'オンライン販売はもうすぐ')}</div>
               </div>
 
               <div className="specs">
-                <div className="spec"><b>STOCK</b><span>In the shop now</span></div>
-                <div className="spec"><b>WHERE</b><span>Brighton shop · online soon</span></div>
+                <div className="spec"><b>{t('STOCK', '在庫')}</b><span>{t('In the shop now', '店頭にあります')}</span></div>
+                <div className="spec"><b>{t('WHERE', '販売場所')}</b><span>{t('Brighton shop · online soon', 'ブライトンのお店 · オンラインはもうすぐ')}</span></div>
               </div>
 
               <p style={{ fontSize: 18, lineHeight: 1.6, margin: '0 0 26px' }}>
-                Our {shirt.name} t-shirt is in the shop at Unit 7, Brighton Open Market.
+                {lang === 'ja'
+                  ? `「${shirt.name}」Tシャツは、ブライトン・オープンマーケットのUnit 7で販売中です。`
+                  : `Our ${shirt.name} t-shirt is in the shop at Unit 7, Brighton Open Market.`}
               </p>
 
               {SHIRTS.length > 1 && (
                 <p style={{ margin: '24px 0 0' }}>
-                  <Link href={`/t-shirts/${next.slug}`} style={{ fontWeight: 800, textDecoration: 'underline' }}>Next t-shirt: {next.name} →</Link>
+                  <Link href={`/t-shirts/${next.slug}`} style={{ fontWeight: 800, textDecoration: 'underline' }}>{t('Next t-shirt:', '次のTシャツ：')} {next.name} →</Link>
                 </p>
               )}
             </div>
@@ -70,7 +74,7 @@ export default function TShirtPage({ slug }) {
 
       {big && (
         <div className="lightbox" onClick={() => setBig(false)} role="dialog" aria-modal="true" aria-label={`${shirt.name} t-shirt`}>
-          <button type="button" className="lbbtn lbclose" onClick={(e) => { e.stopPropagation(); setBig(false); }} aria-label="Close">✕</button>
+          <button type="button" className="lbbtn lbclose" onClick={(e) => { e.stopPropagation(); setBig(false); }} aria-label={t('Close', '閉じる')}>✕</button>
           <img src={shirt.img} alt={`${shirt.name} t-shirt`} onClick={(e) => e.stopPropagation()} />
         </div>
       )}

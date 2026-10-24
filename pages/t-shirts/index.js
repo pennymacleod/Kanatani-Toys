@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { SHIRTS } from '../../lib/tshirts';
+import { useLang } from '../../lib/lang';
 
 export default function TShirts() {
+  const { lang, t } = useLang();
   return (
     <Layout
       title="T-shirts — Kanatani Toys"
@@ -12,12 +14,12 @@ export default function TShirts() {
     >
       <section className="floor">
         <div className="wrap" style={{ textAlign: 'center', paddingTop: 56 }}>
-          <span className="kicker">Tシャツ · MONSTER TEES</span>
+          <span className="kicker">{t('Tシャツ · MONSTER TEES', 'Tシャツ · モンスターTシャツ')}</span>
           <h1 className="big" style={{ fontSize: 'clamp(50px,8vw,104px)', margin: '18px 0 16px', color: 'var(--pink)' }}>
-            T-<span style={{ color: 'var(--sky)' }}>shirts!</span>
+            {lang === 'ja' ? <>T<span style={{ color: 'var(--sky)' }}>シャツ！</span></> : <>T-<span style={{ color: 'var(--sky)' }}>shirts!</span></>}
           </h1>
           <p style={{ fontSize: 21, fontWeight: 600, maxWidth: '32em', margin: '0 auto' }}>
-            Monsters, ghouls and creatures to wear. Available online soon.
+            {t('Monsters, ghouls and creatures to wear. Available online soon.', 'モンスター、グール、クリーチャーを着よう。オンライン販売はもうすぐ。')}
           </p>
         </div>
       </section>
@@ -30,7 +32,7 @@ export default function TShirts() {
                 <Link key={s.slug} href={`/t-shirts/${s.slug}`} className="card" style={{ background: s.colour }}>
                   <div className="shot"><img src={s.img} alt={`${s.name} t-shirt`} loading="lazy" /></div>
                   <div className="name" style={{ fontSize: 20 }}>{s.name}</div>
-                  <div className="price"><span>Available online soon</span></div>
+                  <div className="price"><span>{t('Available online soon', 'オンライン販売はもうすぐ')}</span></div>
                 </Link>
               ))}
             </div>

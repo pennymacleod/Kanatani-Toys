@@ -2,11 +2,25 @@ import { useEffect, useRef, useState } from 'react';
 import { sounds, revealSound } from '../lib/gachaSounds';
 import Link from 'next/link';
 import Layout from '../components/Layout';
+import { useLang } from '../lib/lang';
+
+// Messages under the machine, in both languages.
+const HINTS = {
+  turn: ['Turn the handle!', 'ハンドルを回してね！'],
+  tap: ['Tap your capsule to open it!', 'カプセルをタップして開けてね！'],
+  gacha: ['Gacha gacha…', 'ガチャガチャ…'],
+  all: ['You found them all! おめでとう!', '全部集めたね！おめでとう！'],
+  again: ['Turn the handle again!', 'もう一回ハンドルを回してね！'],
+};
+const RARITY_JA = { 'SUPER RARE': 'スーパーレア', RARE: 'レア', COMMON: 'ノーマル' };
 
 // Ten kaiju to collect. Add `img` (a file in public/nl/) to show a photo of the figure.
 const KAIJU = [
   {
     "id": "godzilla",
+    "debut_ja": "『ゴジラ』",
+    "studio_ja": "東宝映画",
+    "fact_ja": "日本語の名前「ゴジラ」は、「ゴリラ」と「クジラ」を組み合わせたものです。",
     "en": "Godzilla",
     "jp": "ゴジラ",
     "debut": "Gojira",
@@ -17,6 +31,9 @@ const KAIJU = [
   },
   {
     "id": "mothra",
+    "debut_ja": "『モスラ』",
+    "studio_ja": "東宝映画",
+    "fact_ja": "モスラは「怪獣の女王」と呼ばれています。巨大な卵から幼虫として生まれ、やがて巨大な蛾に変身します。ゴジラ以外のどの怪獣よりもたくさんの映画に出演しています。",
     "en": "Mothra",
     "jp": "モスラ",
     "debut": "Mothra",
@@ -27,6 +44,9 @@ const KAIJU = [
   },
   {
     "id": "gamera",
+    "debut_ja": "『大怪獣ガメラ』",
+    "studio_ja": "大映映画",
+    "fact_ja": "ガメラは手足を甲羅の中に引っ込めて、その穴からジェットを噴射して空を飛びます。日本では11月27日が「ガメラの日」です。",
     "en": "Gamera",
     "jp": "ガメラ",
     "debut": "Gamera, the Giant Monster",
@@ -37,6 +57,9 @@ const KAIJU = [
   },
   {
     "id": "hedorah",
+    "debut_ja": "『ゴジラ対ヘドラ』",
+    "studio_ja": "東宝映画",
+    "fact_ja": "公害を食べる公害怪獣。名前は日本語の「ヘドロ」から来ています。",
     "en": "Hedorah",
     "jp": "ヘドラ",
     "debut": "Godzilla vs. Hedorah",
@@ -48,6 +71,9 @@ const KAIJU = [
   },
   {
     "id": "ghidorah",
+    "debut_ja": "『三大怪獣 地球最大の決戦』",
+    "studio_ja": "東宝映画",
+    "fact_ja": "日本神話の八つの頭を持つ大蛇、ヤマタノオロチがモデル。頭を7つや8つにする案もありましたが、最終的に3つに決まりました。",
     "en": "King Ghidorah",
     "jp": "キングギドラ",
     "debut": "Ghidorah, the Three-Headed Monster",
@@ -58,6 +84,9 @@ const KAIJU = [
   },
   {
     "id": "garamon",
+    "debut_ja": "『ウルトラQ』第13話",
+    "studio_ja": "テレビシリーズ",
+    "fact_ja": "ガラモンの鳴き声は、実はセミの鳴き声。侵略してきたセミ人間に作られたからです。",
     "en": "Garamon",
     "jp": "ガラモン",
     "debut": "Ultra Q, episode 13",
@@ -68,6 +97,9 @@ const KAIJU = [
   },
   {
     "id": "baltan",
+    "debut_ja": "『ウルトラマン』第2話",
+    "studio_ja": "テレビシリーズ",
+    "fact_ja": "「宇宙忍者」と呼ばれ、不気味な笑い声で有名。ウルトラマンの敵の中で一番人気とよく言われます。",
     "en": "Alien Baltan",
     "jp": "バルタン星人",
     "debut": "Ultraman, episode 2",
@@ -78,6 +110,9 @@ const KAIJU = [
   },
   {
     "id": "metron",
+    "debut_ja": "『ウルトラセブン』第8話",
+    "studio_ja": "テレビシリーズ",
+    "fact_ja": "タバコに小さな赤い結晶体を仕込んで、人々を凶暴にしました。小さなアパートでちゃぶ台を挟んでヒーローと向かい合うシーンが有名です。",
     "en": "Alien Metron",
     "jp": "メトロン星人",
     "debut": "Ultraseven, episode 8",
@@ -88,6 +123,9 @@ const KAIJU = [
   },
   {
     "id": "redking",
+    "debut_ja": "『ウルトラマン』第8話",
+    "studio_ja": "テレビシリーズ",
+    "fact_ja": "レッドキングは、小さなピグモンとまったく同じ回でデビューしました。",
     "en": "Red King",
     "jp": "レッドキング",
     "debut": "Ultraman, episode 8",
@@ -98,6 +136,9 @@ const KAIJU = [
   },
   {
     "id": "pigmon",
+    "debut_ja": "『ウルトラマン』第8話",
+    "studio_ja": "テレビシリーズ",
+    "fact_ja": "ピグモンの着ぐるみは、『ウルトラQ』のガラモンの着ぐるみを塗り直したもの。一体で二度おいしい！",
     "en": "Pigmon",
     "jp": "ピグモン",
     "debut": "Ultraman, episode 8",
@@ -120,7 +161,8 @@ export default function Gachapon() {
   const [dropped, setDropped] = useState(false);
   const [busy, setBusy] = useState(false);
   const [shake, setShake] = useState(false);
-  const [hint, setHint] = useState('Turn the handle!');
+  const [hint, setHint] = useState('turn');
+  const { lang, t } = useLang();
   const [card, setCard] = useState(null);
   const knobRef = useRef(null);
   const dropRef = useRef(null);
@@ -155,19 +197,19 @@ export default function Gachapon() {
   };
 
   const turn = () => {
-    if (pending) { setHint('Tap your capsule to open it!'); return; }
+    if (pending) { setHint('tap'); return; }
     setBusy(true);
     setTurns(t => t + 1);
     setShake(false);
     requestAnimationFrame(() => setShake(true));
-    setHint('Gacha gacha…');
+    setHint('gacha');
     sfx(sounds.crank);
     const k = pick();
     setPending(k);
     setTimeout(() => {
       setDropped(true);
       sfx(sounds.drop);
-      setHint('Tap your capsule to open it!');
+      setHint('tap');
       setBusy(false);
       dropRef.current?.focus({ preventScroll: true });
     }, 950);
@@ -181,7 +223,7 @@ export default function Gachapon() {
     const isNew = !got.includes(k.id);
     const list = isNew ? [...got, k.id] : got;
     if (isNew) { setGot(list); save(list); }
-    setHint(list.length === KAIJU.length ? 'You found them all! おめでとう!' : 'Turn the handle again!');
+    setHint(list.length === KAIJU.length ? 'all' : 'again');
     setCard({ k, isNew });
     sfx(sounds.pop);
     const done = list.length === KAIJU.length && isNew;
@@ -195,7 +237,7 @@ export default function Gachapon() {
   };
 
   const closeCard = () => { setCard(null); knobRef.current?.focus({ preventScroll: true }); };
-  const reset = () => { setGot([]); save([]); setHint('Turn the handle!'); };
+  const reset = () => { setGot([]); save([]); setHint('turn'); };
 
   return (
     <Layout
@@ -208,14 +250,14 @@ export default function Gachapon() {
       <section className="floor">
         <div className="wrap gwrap">
           <div className="gintro">
-            <span className="kicker">ガチャガチャ · KAIJU CAPSULES</span>
-            <h1 className="big" style={{ fontSize: 'clamp(46px,6.4vw,84px)' }}>Kaiju <span style={{ color: 'var(--sky)' }}>Gachapon!</span></h1>
-            <p>Turn the handle to get a capsule, then tap it to open. Every kaiju card has its first film or show and a fun fact. Can you collect all ten?</p>
-            <span className="dex">Collected <b>{got.length}</b> / {KAIJU.length}</span>
-            <button className="sound" type="button" onClick={toggleMute} aria-pressed={!muted}>{muted ? '🔇 Sound off' : '🔊 Sound on'}</button>
+            <span className="kicker">{t('ガチャガチャ · KAIJU CAPSULES', 'ガチャガチャ · 怪獣カプセル')}</span>
+            <h1 className="big" style={{ fontSize: 'clamp(46px,6.4vw,84px)' }}>{lang === 'ja' ? <>怪獣<span style={{ color: 'var(--sky)' }}>ガチャポン！</span></> : <>Kaiju <span style={{ color: 'var(--sky)' }}>Gachapon!</span></>}</h1>
+            <p>{t('Turn the handle to get a capsule, then tap it to open. Every kaiju card has its first film or show and a fun fact. Can you collect all ten?', 'ハンドルを回してカプセルをゲットしたら、タップして開けよう。怪獣カードには、初登場の映画や番組と、おもしろ豆知識がのっています。10体全部集められるかな？')}</p>
+            <span className="dex">{lang === 'ja' ? <>コレクション <b>{got.length}</b> / {KAIJU.length}</> : <>Collected <b>{got.length}</b> / {KAIJU.length}</>}</span>
+            <button className="sound" type="button" onClick={toggleMute} aria-pressed={!muted}>{muted ? t('🔇 Sound off', '🔇 サウンドオフ') : t('🔊 Sound on', '🔊 サウンドオン')}</button>
           </div>
           <div className={`machine${shake ? ' shake' : ''}`}>
-            <div className="gprice">FREE<br />TO PLAY</div>
+            <div className="gprice">{lang === 'ja' ? <>無料で<br />遊べる</> : <>FREE<br />TO PLAY</>}</div>
             <div className="dome" aria-hidden="true">
               {DOME.map((c, i) => (
                 <span key={i} className="cap" style={{ left: `${c.left}%`, top: `${c.top}%`, '--c': c.c, transform: `rotate(${c.rot}deg)` }} />
@@ -224,42 +266,42 @@ export default function Gachapon() {
             <div className="body">
               <div className="plate"><div className="jp">カナタニ怪獣ガチャ</div><div className="en">KANATANI KAIJU GACHAPON</div></div>
               <div className="controls">
-                <button ref={knobRef} className="knob" type="button" aria-label="Turn the handle" onClick={turn} disabled={busy} style={{ transform: `rotate(${turns * 360}deg)` }} />
+                <button ref={knobRef} className="knob" type="button" aria-label={t('Turn the handle', 'ハンドルを回す')} onClick={turn} disabled={busy} style={{ transform: `rotate(${turns * 360}deg)` }} />
                 <div className="chute">
                   <div className="flap" />
                   <button
                     ref={dropRef}
                     className={`drop${dropped ? ' in' : ''}`}
                     type="button"
-                    aria-label="Open your capsule"
+                    aria-label={t('Open your capsule', 'カプセルを開ける')}
                     onClick={open}
                     style={pending ? { '--c': colourFor(pending) } : undefined}
                   />
                 </div>
               </div>
-              <div className="hint" aria-live="polite">{hint}</div>
+              <div className="hint" aria-live="polite">{t(...HINTS[hint])}</div>
             </div>
             <div className="feet" aria-hidden="true"><span /><span /></div>
           </div>
         </div>
 
         <div className="wrap coll">
-          <h2 className="big" style={{ fontSize: 'clamp(32px,4.5vw,48px)' }}>Your kaiju collection</h2>
+          <h2 className="big" style={{ fontSize: 'clamp(32px,4.5vw,48px)' }}>{t('Your kaiju collection', 'あなたの怪獣コレクション')}</h2>
           <div className="slots">
             {KAIJU.map((k, i) => got.includes(k.id) ? (
               <button key={k.id} className="slot" type="button" onClick={() => setCard({ k, isNew: false })} style={{ background: colourFor(k) }}>
                 {k.img && <img src={k.img} alt="" style={{ height: '55%', objectFit: 'contain' }} />}
                 <span className="sj">{k.jp}</span>
-                <span className="se">{k.en}</span>
+                <span className="se">{lang === 'ja' ? k.jp : k.en}</span>
               </button>
             ) : (
-              <div key={k.id} className="slot locked" aria-label="Not found yet">
+              <div key={k.id} className="slot locked" aria-label={t('Not found yet', 'まだ見つかっていません')}>
                 <span className="sj">?</span>
                 <span className="se">No. {i + 1}</span>
               </div>
             ))}
           </div>
-          <button className="reset" type="button" onClick={reset}>Start my collection again</button>
+          <button className="reset" type="button" onClick={reset}>{t('Start my collection again', 'コレクションを最初からやり直す')}</button>
         </div>
       </section>
 
@@ -267,7 +309,7 @@ export default function Gachapon() {
         <div className="overlay" onClick={(e) => { if (e.target === e.currentTarget) closeCard(); }}>
           <div className="kcard" role="dialog" aria-modal="true" aria-labelledby="kn" style={{ '--c': colourFor(card.k) }}>
             <div className="ktop">
-              <span className="rar">★ {card.k.rarity}</span>
+              <span className="rar">★ {t(card.k.rarity, RARITY_JA[card.k.rarity])}</span>
               <span className="num">No. {KAIJU.indexOf(card.k) + 1} / {KAIJU.length}</span>
               {card.k.img ? (
                 <div className="kphoto has"><img src={card.k.img} alt={`${card.k.en} sofubi in our shop`} /></div>
@@ -276,12 +318,12 @@ export default function Gachapon() {
               )}
             </div>
             <div className="kbody">
-              <h3 className="kname" id="kn">{card.k.en}{card.isNew && <span className="newb">NEW!</span>}</h3>
-              <div className="kmeta"><span>First seen: {card.k.debut}</span><span>{card.k.year}</span><span>{card.k.studio}</span></div>
-              <div className="kfact"><b>FUN FACT</b>{card.k.fact}</div>
+              <h3 className="kname" id="kn">{lang === 'ja' ? card.k.jp : card.k.en}{card.isNew && <span className="newb">{t('NEW!', 'ゲット！')}</span>}</h3>
+              <div className="kmeta"><span>{t('First seen:', '初登場：')} {t(card.k.debut, card.k.debut_ja)}</span><span>{lang === 'ja' ? `${card.k.year}年` : card.k.year}</span><span>{t(card.k.studio, card.k.studio_ja)}</span></div>
+              <div className="kfact"><b>{t('FUN FACT', 'おもしろ豆知識')}</b>{t(card.k.fact, card.k.fact_ja)}</div>
               <div className="kbtns">
-                <Link className="btn" href={`/?q=${encodeURIComponent(card.k.en)}#shop`} style={{ background: 'var(--pink)' }}>Look for {card.k.en} toys →</Link>
-                <button ref={closeRef} className="btn" type="button" onClick={closeCard} style={{ background: '#fff' }}>Keep playing</button>
+                <Link className="btn" href={`/?q=${encodeURIComponent(card.k.en)}#shop`} style={{ background: 'var(--pink)' }}>{lang === 'ja' ? `${card.k.jp}のおもちゃを探す →` : `Look for ${card.k.en} toys →`}</Link>
+                <button ref={closeRef} className="btn" type="button" onClick={closeCard} style={{ background: '#fff' }}>{t('Keep playing', '続けて遊ぶ')}</button>
               </div>
             </div>
           </div>

@@ -3,15 +3,16 @@ import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import { useCart, fmt } from '../lib/cart';
 import { sounds } from '../lib/gachaSounds';
+import { useLang } from '../lib/lang';
 
 // Mystery badge press. The press finds the Square item called "Mystery Badge"
 // by name, so once Penny adds it in Square (£1, with stock) it starts adding
 // badges to the basket automatically. Until then it plays as a demo.
 const DESIGNS = [
-  { src: '/nl/badges/monster-black.png', name: 'Strange monster (black)' },
-  { src: '/nl/badges/monster-red.png', name: 'Strange monster (red)' },
-  { src: '/nl/badges/logo-black.png', name: 'カナタニ logo' },
-  { src: '/nl/badges/wrestler.png', name: 'Masked wrestler' },
+  { src: '/nl/badges/monster-black.png', name: 'Strange monster (black)', ja: 'ストレンジモンスター（黒）' },
+  { src: '/nl/badges/monster-red.png', name: 'Strange monster (red)', ja: 'ストレンジモンスター（赤）' },
+  { src: '/nl/badges/logo-black.png', name: 'カナタニ logo', ja: 'カナタニ ロゴ' },
+  { src: '/nl/badges/wrestler.png', name: 'Masked wrestler', ja: '覆面レスラー' },
 ];
 const MUTE_KEY = 'kanatani-gacha-muted';
 const wait = (ms) => new Promise(r => setTimeout(r, ms));
@@ -23,7 +24,9 @@ export default function BadgePress() {
   const [item, setItem] = useState(undefined); // undefined = loading, null = not in Square yet
   const [step, setStep] = useState('idle');     // idle | load | press1 | swap | press2 | pop
   const [made, setMade] = useState(0);
-  const [msg, setMsg] = useState('Pull the lever to make a mystery badge!');
+  // Messages are [English, Japanese] pairs.
+  const [msg, setMsg] = useState(['Pull the lever to make a mystery badge!', 'レバーを引いて、ミステリー缶バッジを作ろう！']);
+  const { lang, t } = useLang();
   const [muted, setMuted] = useState(false);
   const mutedRef = useRef(false);
   const busy = step !== 'idle';
@@ -48,18 +51,20 @@ export default function BadgePress() {
 
   const press = async () => {
     if (busy || soldOut) return;
-    setMsg('Loading the shell…');
+    setMsg(['Loading the shell…', 'バッジのパーツをセット中…']);
     setStep('load'); sfx(sounds.slide); await wait(550);
-    setStep('press1'); sfx(sounds.clunk); setMsg('Squeeze!'); await wait(450);
-    setStep('swap'); sfx(sounds.slide); setMsg('Swap the die…'); await wait(550);
-    setStep('press2'); sfx(sounds.clunk); setMsg('And squeeze again!'); await wait(450);
+    setStep('press1'); sfx(sounds.clunk); setMsg(['Squeeze!', 'ギュッ！']); await wait(450);
+    setStep('swap'); sfx(sounds.slide); setMsg(['Swap the die…', '型を入れ替えて…']); await wait(550);
+    setStep('press2'); sfx(sounds.clunk); setMsg(['And squeeze again!', 'もう一回ギュッ！']); await wait(450);
     setStep('pop'); sfx(sounds.ping);
     setMade(n => n + 1);
     if (live) {
       const ok = add({ ...item, id: item.variationId || item.id, name: 'Mystery Badge' });
-      setMsg(ok ? 'A mystery badge is in your basket! It\'s a surprise until it arrives.' : 'That\'s all the badges we have for now!');
+      setMsg(ok
+        ? ['A mystery badge is in your basket! It\'s a surprise until it arrives.', 'ミステリー缶バッジがカートに入りました！届くまでのお楽しみ！']
+        : ['That\'s all the badges we have for now!', '缶バッジは今あるだけで全部です！']);
     } else {
-      setMsg('Badges are £1 in the shop. Online mystery badges are coming soon!');
+      setMsg(['Badges are £1 in the shop. Online mystery badges are coming soon!', '缶バッジは店頭で£1です。オンラインのミステリー缶バッジはもうすぐ登場！']);
     }
     await wait(1600);
     setStep('idle');
@@ -80,12 +85,14 @@ export default function BadgePress() {
       <section className="floor">
         <div className="wrap bwrap">
           <div className="bintro">
-            <span className="kicker">缶バッジ · MYSTERY BADGES</span>
-            <h1 className="big" style={{ fontSize: 'clamp(46px,6.4vw,84px)' }}>Badge <span style={{ color: 'var(--orange)' }}>Press!</span></h1>
-            <p>Pull the lever and our badge press makes you a mystery Kanatani badge, {price} each. Make as many as you like. Which design you get stays a surprise until your parcel arrives.</p>
+            <span className="kicker">{t('缶バッジ · MYSTERY BADGES', '缶バッジ · ミステリー缶バッジ')}</span>
+            <h1 className="big" style={{ fontSize: 'clamp(46px,6.4vw,84px)' }}>{lang === 'ja' ? <>缶バッジ<span style={{ color: 'var(--orange)' }}>プレス！</span></> : <>Badge <span style={{ color: 'var(--orange)' }}>Press!</span></>}</h1>
+            <p>{lang === 'ja'
+              ? `レバーを引くと、バッジプレス機がカナタニのミステリー缶バッジを作ります。1個${price}、いくつでも作れます。どのデザインが届くかは、荷物が届くまでのお楽しみ！`
+              : `Pull the lever and our badge press makes you a mystery Kanatani badge, ${price} each. Make as many as you like. Which design you get stays a surprise until your parcel arrives.`}</p>
             <div className="brow">
-              {made > 0 && <span className="dex">Pressed <b>{made}</b></span>}
-              <button className="sound" type="button" onClick={toggleMute} aria-pressed={!muted}>{muted ? '🔇 Sound off' : '🔊 Sound on'}</button>
+              {made > 0 && <span className="dex">{lang === 'ja' ? <>作った数 <b>{made}</b></> : <>Pressed <b>{made}</b></>}</span>}
+              <button className="sound" type="button" onClick={toggleMute} aria-pressed={!muted}>{muted ? t('🔇 Sound off', '🔇 サウンドオフ') : t('🔊 Sound on', '🔊 サウンドオン')}</button>
             </div>
           </div>
 
@@ -114,28 +121,28 @@ export default function BadgePress() {
                   {[...Array(14)].map((_, i) => <span key={i} className="confetti" style={{ '--a': `${i * (360 / 14)}deg`, '--c': ['var(--pink)', 'var(--sky)', 'var(--green)', 'var(--gold)', 'var(--orange)'][i % 5], '--d': `${110 + (i % 3) * 40}px` }} />)}</div>}
             </div>
             <button className="btn pressbtn" type="button" onClick={press} disabled={busy || soldOut}>
-              {soldOut ? 'All out for now' : busy ? 'Pressing…' : `Pull the lever · ${price}`}
+              {soldOut ? t('All out for now', '今は品切れです') : busy ? t('Pressing…', 'プレス中…') : t(`Pull the lever · ${price}`, `レバーを引く · ${price}`)}
             </button>
-            <p className="hint" aria-live="polite">{msg}</p>
+            <p className="hint" aria-live="polite">{t(msg[0], msg[1])}</p>
             {live && inBasket > 0 && (
               <button className="viewbasket" type="button" onClick={() => setOpen(true)}>
-                {inBasket} mystery badge{inBasket > 1 ? 's' : ''} in your basket · View basket →
+                {lang === 'ja' ? `カートにミステリー缶バッジ${inBasket}個 · カートを見る →` : `${inBasket} mystery badge${inBasket > 1 ? 's' : ''} in your basket · View basket →`}
               </button>
             )}
           </div>
         </div>
 
         <div className="wrap bmix">
-          <h2 className="big" style={{ fontSize: 'clamp(30px,4.2vw,46px)', color: 'var(--pink)' }}>You might get…</h2>
+          <h2 className="big" style={{ fontSize: 'clamp(30px,4.2vw,46px)', color: 'var(--pink)' }}>{t('You might get…', 'こんなデザインが届くかも…')}</h2>
           <div className="bgrid">
             {DESIGNS.map(d => (
               <figure key={d.src}>
                 <img src={d.src} alt={d.name} loading="lazy" />
-                <figcaption>{d.name}</figcaption>
+                <figcaption>{t(d.name, d.ja)}</figcaption>
               </figure>
             ))}
           </div>
-          <p className="small">Designs change as we make new ones. We pick yours at random when we pack your order.</p>
+          <p className="small">{t('Designs change as we make new ones. We pick yours at random when we pack your order.', 'デザインは新作ができるたびに変わります。ご注文を梱包するときに、ランダムで選びます。')}</p>
         </div>
       </section>
     </Layout>
