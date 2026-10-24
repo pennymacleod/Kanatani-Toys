@@ -349,55 +349,86 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 html[lang="ja"] .big { font-family: 'Mochiy Pop One', 'Bagel Fat One', sans-serif; }
 html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
 
-/* ── Hero Beam Capsule page ───────────────────────────────────────── */
+/* ── Hero Beam Capsule page (monster battle) ─────────────────────── */
 .pg-hero .hwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center;padding-block:56px 40px}
 .pg-hero .hintro h1{margin:18px 0 22px;color:var(--pink);line-height:1.08!important}
 .pg-hero .hintro p{font-size:19px;line-height:1.6;font-weight:600;max-width:32em;margin:0 0 16px}
 .pg-hero .brow{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:6px 0 14px}
 .pg-hero .hprice{display:inline-block;background:#fff;border:4px solid var(--ink);border-radius:14px;padding:6px 18px;font:900 30px Rubik,sans-serif;box-shadow:5px 5px 0 var(--ink)}
+.pg-hero .dex{background:var(--ink);color:var(--gold);border-radius:999px;padding:6px 14px;font-weight:800}
 .pg-hero .sound{appearance:none;font:inherit;font-weight:900;cursor:pointer;border:3px solid var(--ink);border-radius:999px;padding:6px 14px;background:var(--cream);color:var(--ink)}
 .pg-hero .sound[aria-pressed="false"]{background:var(--ink);color:var(--cream)}
 .pg-hero .harea{display:flex;flex-direction:column;align-items:center;gap:14px}
-.pg-hero .hint{font-weight:800;text-align:center;margin:0}
-.hscene{position:relative;width:100%;max-width:500px;height:620px;border:6px solid var(--ink);border-radius:26px;overflow:hidden;box-shadow:12px 12px 0 var(--ink);background:linear-gradient(#1A3FA6 0%,#3a2a8c 55%,#FF1F8F 100%)}
+.pg-hero .hint{font-weight:800;text-align:center;margin:0;max-width:30em}
+.hscene{position:relative;width:100%;max-width:520px;height:620px;border:6px solid var(--ink);border-radius:26px;overflow:hidden;box-shadow:12px 12px 0 var(--ink);background:linear-gradient(#1A3FA6 0%,#3a2a8c 55%,#FF1F8F 100%)}
+.s-fight.hscene{background:linear-gradient(#2a1650 0%,#6b1a4a 55%,#D8352A 100%)}
+.s-boom.hscene{animation:shake .4s linear 3}
+@keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-8px,4px)}40%{transform:translate(7px,-5px)}60%{transform:translate(-6px,-3px)}80%{transform:translate(5px,6px)}}
 .hstars{position:absolute;inset:0;background-image:radial-gradient(#fff 1.2px,transparent 1.5px);background-size:46px 46px;opacity:.5}
-.hcity{position:absolute;left:0;right:0;bottom:0;width:100%;height:150px}
-.hcity .kaiju{animation:stomp 2.4s ease-in-out infinite;transform-origin:70px 150px}
-@keyframes stomp{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(2deg)}}
+.hcity{position:absolute;left:0;right:0;bottom:0;width:100%;height:120px;z-index:1}
+.s-fight .hwin rect{animation:flick .3s steps(2) infinite}
+@keyframes flick{50%{opacity:.2}}
 .hbeam{position:absolute;bottom:250px;width:60px;height:520px;transform-origin:50% 100%;opacity:.28;background:linear-gradient(to top,#fff,transparent)}
 .hbeam.l{left:60px;animation:sweepL 4s ease-in-out infinite}.hbeam.r{right:60px;animation:sweepR 4s ease-in-out infinite}
+.s-fight .hbeam{background:linear-gradient(to top,#ff5a4a,transparent);animation-duration:1.2s}
 @keyframes sweepL{0%,100%{transform:rotate(-24deg)}50%{transform:rotate(-6deg)}}
 @keyframes sweepR{0%,100%{transform:rotate(24deg)}50%{transform:rotate(6deg)}}
-.hsign{position:absolute;top:22px;left:50%;transform:translateX(-50%);background:var(--cream);border:5px solid var(--ink);border-radius:16px;padding:8px 18px;font:900 24px Rubik,sans-serif;white-space:nowrap;box-shadow:5px 5px 0 var(--ink);z-index:2}
+.hsign{position:absolute;top:18px;left:50%;transform:translateX(-50%);background:var(--cream);border:5px solid var(--ink);border-radius:16px;padding:6px 16px;font:900 22px Rubik,sans-serif;white-space:nowrap;box-shadow:5px 5px 0 var(--ink);z-index:5}
 .hsign b{color:var(--red)}
-.hmachine{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);width:270px;z-index:2}
-.hdome{height:200px;border:6px solid var(--ink);border-radius:130px 130px 18px 18px;background:radial-gradient(circle at 35% 30%,#ffffffcc,#bfe9ff66 40%,#9fd6ff33 70%);position:relative;overflow:hidden}
-.hcap{position:absolute;width:52px;height:52px;border-radius:50%;border:4px solid var(--ink);background:linear-gradient(var(--c) 50%,#fff 50%)}
-.s-charge .hcap{animation:rattle .15s linear infinite}
+/* monster stomps in from the right */
+.hmon{position:absolute;width:220px;height:220px;bottom:70px;right:-230px;z-index:2;filter:drop-shadow(6px 6px 0 rgba(20,16,24,.6))}
+.s-fight .hmon{animation:monin 1.2s ease-out forwards,bob .5s ease-in-out 1.2s infinite}
+.s-beam .hmon{right:10px;animation:hit .12s linear infinite}
+.s-boom .hmon{right:10px;animation:fly .9s ease-in forwards}
+@keyframes monin{to{right:10px}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+@keyframes hit{0%,100%{transform:translate(0,0);filter:brightness(1.6)}50%{transform:translate(6px,-3px);filter:brightness(2.4)}}
+@keyframes fly{to{transform:translate(260px,-420px) rotate(540deg) scale(.2);opacity:0}}
+.hmonname{position:absolute;right:16px;top:96px;z-index:5;background:var(--red);color:#fff;border:4px solid var(--ink);border-radius:12px;padding:4px 12px;font:900 18px Rubik,sans-serif;transform:rotate(4deg);animation:pulse .5s ease-in-out infinite alternate}
+@keyframes pulse{to{transform:rotate(-3deg) scale(1.08)}}
+/* the machine sits on the left and fires across */
+.hmachine{position:absolute;left:24px;bottom:22px;width:200px;z-index:3}
+.hcannon{position:absolute;right:-34px;top:52px;width:58px;height:34px;background:linear-gradient(#eef1f4,#9aa3ad);border:5px solid var(--ink);border-radius:8px 18px 18px 8px}
+.hdome{height:150px;border:6px solid var(--ink);border-radius:100px 100px 16px 16px;background:radial-gradient(circle at 35% 30%,#ffffffcc,#bfe9ff66 40%,#9fd6ff33 70%);position:relative;overflow:hidden}
+.hcap{position:absolute;width:44px;height:44px;border-radius:50%;border:4px solid var(--ink);background:linear-gradient(var(--c) 50%,#fff 50%)}
+.s-fight .hcap{animation:rattle .15s linear infinite}
 @keyframes rattle{0%{transform:translate(0,0)}25%{transform:translate(3px,-3px)}50%{transform:translate(-2px,2px)}75%{transform:translate(2px,3px)}100%{transform:translate(0,0)}}
-.hbody{margin-top:-6px;height:250px;border:6px solid var(--ink);border-radius:18px;position:relative;background:linear-gradient(90deg,#d9dde3 0 18%,var(--red) 18% 30%,#eef1f4 30% 70%,var(--red) 70% 82%,#d9dde3 82%)}
-.hpanel{position:absolute;left:50%;top:22px;transform:translateX(-50%);width:170px;height:62px;background:var(--ink);border-radius:12px;color:var(--green);font:900 15px Rubik,sans-serif;display:flex;align-items:center;justify-content:center;letter-spacing:2px;border:3px solid #fff}
-.s-beam .hpanel{color:var(--gold);animation:blink .2s steps(2) infinite}
+.hbody{margin-top:-6px;height:240px;border:6px solid var(--ink);border-radius:16px;position:relative;background:linear-gradient(90deg,#d9dde3 0 16%,var(--red) 16% 28%,#eef1f4 28% 72%,var(--red) 72% 84%,#d9dde3 84%)}
+.hpanel{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:150px;height:46px;background:var(--ink);border-radius:10px;color:var(--green);font:900 14px Rubik,sans-serif;display:flex;align-items:center;justify-content:center;letter-spacing:1px;border:3px solid #fff}
+.s-beam .hpanel,.s-boom .hpanel{color:var(--gold);animation:blink .2s steps(2) infinite}
 @keyframes blink{50%{opacity:.3}}
-.hbtn{position:absolute;left:50%;top:102px;transform:translateX(-50%);width:96px;height:96px;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 35%,#ff7a6b,var(--red) 60%,#8e1d16);border:6px solid var(--ink);box-shadow:0 7px 0 var(--ink);color:#fff;font:900 15px Rubik,sans-serif;line-height:1.1;transition:transform .08s,box-shadow .08s}
-.hbtn:hover:not(:disabled){filter:brightness(1.08)}
+.hmeter{position:absolute;left:50%;top:68px;transform:translateX(-50%);width:150px;height:18px;border:3px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden}
+.hmeter span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--gold),var(--red));transition:width .1s}
+.hbtn{position:absolute;left:50%;top:98px;transform:translateX(-50%);width:100px;height:100px;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 35% 35%,#ff7a6b,var(--red) 60%,#8e1d16);border:6px solid var(--ink);box-shadow:0 7px 0 var(--ink);color:#fff;font:900 14px Rubik,sans-serif;line-height:1.1;padding:4px}
+.hbtn:active:not(:disabled){transform:translateX(-50%) translateY(6px);box-shadow:0 1px 0 var(--ink)}
+.s-fight .hbtn{animation:throb .4s ease-in-out infinite alternate}
+@keyframes throb{to{filter:brightness(1.25);box-shadow:0 7px 0 var(--ink),0 0 24px 8px #ff5a4a}}
 .hbtn:disabled{cursor:default}
-.s-charge .hbtn,.s-beam .hbtn{transform:translateX(-50%) translateY(6px);box-shadow:0 1px 0 var(--ink)}
 .hbtn:focus-visible{outline:4px solid var(--gold);outline-offset:4px}
-.hchute{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);width:110px;height:34px;background:var(--ink);border-radius:0 0 30px 30px}
-.hrays{display:none;position:absolute;left:50%;top:62%;width:900px;height:900px;margin:-450px 0 0 -450px;background:repeating-conic-gradient(#F2B70555 0 6deg,transparent 6deg 18deg);border-radius:50%}
-.s-beam .hrays{display:block;animation:spin 3s linear infinite}
+.hchute{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);width:90px;height:26px;background:var(--ink);border-radius:0 0 24px 24px}
+/* the beam */
+.hzap{position:absolute;z-index:4;left:250px;bottom:322px;height:28px;width:0;border-radius:999px;background:linear-gradient(90deg,#fff,var(--sky) 30%,#fff 60%,var(--gold));box-shadow:0 0 24px 10px #9fe3ff,0 0 60px 20px #fff8;animation:zap .35s ease-out forwards;transform-origin:left center;transform:rotate(42deg)}
+@keyframes zap{to{width:210px}}
+.hrays{display:none;position:absolute;left:50%;top:55%;width:900px;height:900px;margin:-450px 0 0 -450px;background:repeating-conic-gradient(#F2B70555 0 6deg,transparent 6deg 18deg);border-radius:50%}
+.s-beam .hrays,.s-boom .hrays{display:block;animation:spin 3s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hflash{display:none;position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(circle at 50% 62%,#fff 0,#fff8 18%,#F2B70533 45%,transparent 70%)}
-.s-beam .hflash{display:block;animation:flash .35s ease-in-out infinite alternate}
-@keyframes flash{from{opacity:.4}to{opacity:1}}
-.s-beam .hbeam{opacity:.6}
-.hpop{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#141018aa;padding:20px}
-.hbigcap{width:180px;height:180px;border-radius:50%;border:8px solid var(--ink);background:linear-gradient(var(--pink) 50%,#fff 50%);box-shadow:0 0 0 12px var(--gold),0 0 60px 30px #fff8;position:relative;animation:popin .5s cubic-bezier(.2,1.6,.4,1)}
-.hbigcap:after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 100px Rubik,sans-serif;color:var(--ink)}
-@keyframes popin{from{transform:scale(.2) translateY(160px)}to{transform:scale(1) translateY(0)}}
-.hcard{margin-top:26px;background:var(--cream);border:5px solid var(--ink);border-radius:18px;padding:16px 20px;text-align:center;box-shadow:6px 6px 0 var(--ink);max-width:380px}
-.hcard .t{font:900 24px Rubik,sans-serif}.hcard .s{font-size:15px;font-weight:700;margin:6px 0 12px}
+.hflash{display:none;position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(circle at 70% 55%,#fff 0,#fff8 18%,#F2B70533 45%,transparent 70%)}
+.s-beam .hflash{display:block;animation:flash .2s ease-in-out infinite alternate}
+@keyframes flash{from{opacity:.3}to{opacity:1}}
+/* KA-BOOM */
+.hboom{position:absolute;z-index:5;right:-10px;bottom:150px;width:290px;height:290px;animation:boom .5s cubic-bezier(.2,1.8,.4,1)}
+.hboom svg{width:100%;height:100%}
+.hboom .kb{font:900 38px Rubik,sans-serif;fill:var(--red);stroke:#141018;stroke-width:3px;paint-order:stroke}
+@keyframes boom{from{transform:scale(.1) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
+.hstar{position:absolute;left:50%;top:50%;font-size:30px;color:var(--c);-webkit-text-stroke:2px #141018;animation:starfly .9s ease-out forwards}
+@keyframes starfly{from{transform:translate(-50%,-50%) rotate(var(--a)) translateY(0)}to{transform:translate(-50%,-50%) rotate(var(--a)) translateY(-190px);opacity:0}}
+/* reward */
+.hpop{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#141018aa;padding:20px}
+.hbigcap{width:170px;height:170px;border-radius:50%;border:8px solid var(--ink);background:linear-gradient(var(--pink) 50%,#fff 50%);box-shadow:0 0 0 12px var(--gold),0 0 60px 30px #fff8;position:relative;animation:popin .6s cubic-bezier(.2,1.6,.4,1)}
+.hbigcap:after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 96px Rubik,sans-serif;color:var(--ink)}
+@keyframes popin{from{transform:scale(.2) translate(-200px,200px)}to{transform:scale(1) translate(0,0)}}
+.hcard{margin-top:26px;background:var(--cream);border:5px solid var(--ink);border-radius:18px;padding:16px 20px;text-align:center;box-shadow:6px 6px 0 var(--ink);max-width:390px}
+.hcard .t{font:900 22px Rubik,sans-serif}.hcard .s{font-size:15px;font-weight:700;margin:6px 0 12px}
 .hcardbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-@media (prefers-reduced-motion:reduce){.hcity .kaiju,.hbeam,.s-charge .hcap,.s-beam .hrays,.s-beam .hflash,.s-beam .hpanel,.hbigcap{animation:none!important}}
-@media (max-width:860px){.pg-hero .hwrap{grid-template-columns:1fr;gap:28px;padding-block:36px 30px}.hscene{height:560px}.hsign{font-size:19px;padding:6px 12px}}
+@media (prefers-reduced-motion:reduce){.hscene *,.hscene{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+@media (max-width:860px){.pg-hero .hwrap{grid-template-columns:1fr;gap:28px;padding-block:36px 30px}.hscene{height:580px}.hsign{font-size:17px;padding:5px 10px}.hmon{width:170px;height:170px}.hmachine{left:14px}}
