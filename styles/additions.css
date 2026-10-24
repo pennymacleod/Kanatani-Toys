@@ -320,3 +320,14 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 .pg-artist .burst .fig.printfig { top: 24px; bottom: auto; height: calc(100% - 60px); max-width: 86%; border-width: 8px; transform: translateX(-50%) rotate(-2deg); }
 /* Wide photo cut-outs without a card crop (e.g. a pair of earrings) fit inside the card. */
 .pg-showcase .burst .fig.photo:not(.upper) { max-width: 92%; object-fit: contain; object-position: 50% 50%; }
+
+/* Showcase cards: the "See their work" button sits at the very bottom of the
+   starburst and the toy sits above it, so the button never covers a face. */
+.pg-showcase .burst { padding-bottom: 12px; }
+.pg-showcase .burst .see { margin-bottom: 0; }
+.pg-showcase .burst .fig.upper { bottom: 56px; height: calc(100% - 66px); }
+.pg-showcase .burst .fig.photo:not(.upper) { top: 10px; bottom: 56px; height: calc(100% - 66px); }
+.pg-showcase .burst .fig.printfig { top: 14px; height: calc(100% - 84px); }
+/* Figures cut off at the bottom of the photo (e.g. a person from the chest up)
+   sit flush on the bottom edge of the artist-page starburst. */
+.pg-artist .burst .fig.flush { top: auto; bottom: 0; height: calc(100% - 16px); max-width: 96%; object-position: 50% 100%; }
