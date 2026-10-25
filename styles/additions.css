@@ -370,3 +370,7 @@ html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
   box-shadow:0 0 0 3px rgba(255,255,255,.55);text-shadow:none;
   -webkit-mask-image:radial-gradient(circle at 30% 40%,#000 55%,rgba(0,0,0,.75) 70%,#000 85%);
   mix-blend-mode:multiply}
+
+/* Artist pages: the toy sits in the middle of the starburst panel (Oct 2026,
+   Penny). Prints keep their own framing and "flush" cut-offs stay on the bottom edge. */
+.pg-artist .mpanel .burst .fig:not(.printfig):not(.flush) { top: 50%; bottom: auto; height: 82%; max-width: 88%; object-fit: contain; object-position: 50% 50%; transform: translate(-50%, -50%); }
