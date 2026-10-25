@@ -95,6 +95,7 @@ export default function ArtistPage({ slug }) {
               <p className="mbio">{t(a.bio, a.bio_ja)}</p>
               <div className="mbtns">
                 <a className="btn" href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ background: '#fff', color: '#141018' }}>Instagram · {a.handle}</a>
+                {a.website && <a className="btn" href={a.website} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--sky)', color: '#141018' }}>{t('Website ↗', 'ウェブサイト ↗')}</a>}
                 <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>{a.work.length > 0 ? t('See what\u2019s in the shop ↓', 'お店にある作品を見る ↓') : t('See their work ↓', '作品を見る ↓')}</a>
               </div>
             </div>
