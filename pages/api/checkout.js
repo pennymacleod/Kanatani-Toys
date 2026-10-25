@@ -72,7 +72,7 @@ export default async function handler(req, res) {
         checkout_options: {
           redirect_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/order-complete`,
           ask_for_shipping_address: true,
-          ...(postage != null && postage > 0 ? { shipping_fee: { name: 'UK postage', charge: { amount: postage, currency: 'GBP' } } } : {}),
+          ...(postage != null && postage > 0 ? { shipping_fee: { name: 'UK postage (Royal Mail Tracked 48)', charge: { amount: postage, currency: 'GBP' } } } : {}),
         },
       }),
     });

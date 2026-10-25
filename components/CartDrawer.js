@@ -95,7 +95,7 @@ export default function CartDrawer() {
               <p><b>🇬🇧 We post to UK addresses only.</b> Outside the UK? Email us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a> and we'll sort it out for you.</p>
               <label><input type="checkbox" checked={ukOk} onChange={e => { setUkOk(e.target.checked); setError(''); }} /> My delivery address is in the UK</label>
             </div>
-            {postage != null && <div className="nl-sub"><span>UK postage</span><span>{postage === 0 ? 'Free' : fmt(postage)}</span></div>}
+            {postage != null && <div className="nl-sub"><span>UK postage (tracked)</span><span>{postage === 0 ? 'Free' : fmt(postage)}</span></div>}
             <div className="nl-total"><span>Total</span><span className="price">{fmt(total)}</span></div>
             {error && <p className="nl-error">{error}</p>}
             <button type="button" className="btn" onClick={checkout} disabled={loading || !ukOk} style={{ background: 'var(--pink)', color: '#fff', width: '100%' }}>
