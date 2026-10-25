@@ -13,7 +13,6 @@ export const NAV = [
   { key: 'news', label: 'Kanatani News', ja: 'カナタニ・ニュース', href: '/news', bg: 'var(--tardis)' },
   { key: 'gacha', label: 'Kaiju Gachapon', ja: '怪獣ガチャポン', href: '/gachapon', bg: 'var(--green)' },
   { key: 'badges', label: 'Badge Press', ja: '缶バッジ・プレス', href: '/badge-press', bg: 'var(--orange)' },
-  { key: 'hero', label: 'Hero Capsule', ja: 'ヒーローカプセル', href: '/hero-capsule', bg: 'var(--red)' },
 ];
 
 export const SOCIALS = [

@@ -350,33 +350,5 @@ html[lang="ja"] .big { font-family: 'Mochiy Pop One', 'Bagel Fat One', sans-seri
 html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
 
 /* ── Hero Capsule page (platform game) ──────────────────────────── */
-.pg-hero .hwrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:44px;align-items:center;padding-block:56px 40px}
-.pg-hero .hintro h1{margin:18px 0 22px;color:var(--pink);line-height:1.08!important}
-.pg-hero .hintro p{font-size:19px;line-height:1.6;font-weight:600;max-width:32em;margin:0 0 16px}
-.pg-hero .brow{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:6px 0 14px}
-.pg-hero .hprice{display:inline-block;background:#fff;border:4px solid var(--ink);border-radius:14px;padding:6px 18px;font:900 30px Rubik,sans-serif;box-shadow:5px 5px 0 var(--ink)}
-.pg-hero .dex{background:var(--ink);color:var(--gold);border-radius:999px;padding:6px 14px;font-weight:800}
-.pg-hero .sound{appearance:none;font:inherit;font-weight:900;cursor:pointer;border:3px solid var(--ink);border-radius:999px;padding:6px 14px;background:var(--cream);color:var(--ink)}
-.pg-hero .sound[aria-pressed="false"]{background:var(--ink);color:var(--cream)}
-.pg-hero .harea{display:flex;flex-direction:column;align-items:center;gap:14px}
-.pg-hero .hint{font-weight:800;text-align:center;margin:0;min-height:1.4em}
-.hgame{position:relative;width:100%;max-width:600px;aspect-ratio:560/420;border:6px solid var(--ink);border-radius:22px;overflow:hidden;box-shadow:12px 12px 0 var(--ink);background:#1A3FA6}
-.hgame canvas{display:block;width:100%;height:100%;touch-action:manipulation;cursor:pointer}
-.hhearts{position:absolute;top:10px;left:12px;font-size:28px;color:var(--pink);-webkit-text-stroke:2px var(--ink);letter-spacing:4px}
-.hhearts .gone{color:transparent}
-.hover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:18px;text-align:center;background:linear-gradient(#1A3FA6dd,#FF1F8Fdd)}
-.hover .ht{font:900 clamp(24px,4vw,36px) 'Bagel Fat One',Rubik,sans-serif;color:#fff;-webkit-text-stroke:2px var(--ink);text-shadow:4px 4px 0 var(--ink)}
-.hover .hs{background:var(--cream);border:4px solid var(--ink);border-radius:14px;padding:10px 14px;font-weight:800;max-width:420px}
-.hpick{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
-.hpick button{appearance:none;cursor:pointer;background:var(--cream);border:5px solid var(--ink);border-radius:18px;padding:12px 16px 10px;box-shadow:0 6px 0 var(--ink);display:flex;flex-direction:column;align-items:center;gap:6px;font:900 17px Rubik,sans-serif;transition:transform .1s}
-.hpick button:hover{transform:translateY(-4px) rotate(-2deg)}
-.hpick img{height:110px;width:auto}
-.hcardbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.hbigcap{width:110px;height:110px;border-radius:50%;border:7px solid var(--ink);background:linear-gradient(var(--pink) 50%,#fff 50%);box-shadow:0 0 0 9px var(--gold),0 0 40px 20px #fff8;position:relative;animation:popin .6s cubic-bezier(.2,1.6,.4,1)}
-.hbigcap:after{content:"?";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 62px Rubik,sans-serif;color:var(--ink)}
-@keyframes popin{from{transform:scale(.2)}to{transform:scale(1)}}
-.hbig{appearance:none;cursor:pointer;width:min(100%,320px);padding:16px;border-radius:999px;border:6px solid var(--ink);background:radial-gradient(circle at 35% 30%,#ff7a6b,var(--red) 60%,#8e1d16);color:#fff;font:900 28px 'Bagel Fat One',Rubik,sans-serif;letter-spacing:1px;box-shadow:0 8px 0 var(--ink);touch-action:manipulation;user-select:none}
-.hbig:active{transform:translateY(6px);box-shadow:0 2px 0 var(--ink)}
-.hbig:focus-visible{outline:4px solid var(--gold);outline-offset:4px}
 @media (prefers-reduced-motion:reduce){.hbigcap,.hpick button{animation:none!important;transition:none!important}}
 @media (max-width:860px){.pg-hero .hwrap{grid-template-columns:1fr;gap:26px;padding-block:34px 30px}}
