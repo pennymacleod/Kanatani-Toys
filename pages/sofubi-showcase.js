@@ -10,8 +10,11 @@ export default function SofubiShowcase() {
   const [cat, setCat] = useState('All');
   const { lang, t } = useLang();
   const match = (a) => cat === 'All' || a.categories.includes(cat);
-  const shown = ARTISTS.filter(match);
-  const soon = COMING_SOON.filter(match);
+  // On "All", group artists in tab order: Sofubi, Resin, 3D printed, Art prints, Stickers, Clothing.
+  const rank = (a) => Math.min(...a.categories.map(c => { const i = CATEGORIES.indexOf(c); return i < 0 ? 99 : i; }));
+  const byTab = (list) => list.map((a, i) => [a, i]).sort((x, y) => rank(x[0]) - rank(y[0]) || x[1] - y[1]).map(x => x[0]);
+  const shown = byTab(ARTISTS.filter(match));
+  const soon = byTab(COMING_SOON.filter(match));
 
   return (
     <Layout
