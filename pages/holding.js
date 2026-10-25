@@ -21,6 +21,7 @@ export default function Holding() {
           <b>Come and see us in the shop</b>
           <span>Unit 7, Brighton Open Market, Marshalls Row, Brighton BN1 4JU</span>
           <span>Tuesday to Saturday 11–5, and every other Sunday 12–3</span>
+          <a className="map" href="https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU" target="_blank" rel="noopener noreferrer">📍 Find us on Google Maps</a>
         </div>
         <a className="btn" href="https://www.instagram.com/kanatani_toys" target="_blank" rel="noopener noreferrer">Message us on Instagram @kanatani_toys</a>
         <p className="small">Want to order something? Send us a message and we'll sort it out for you.</p>
@@ -40,6 +41,8 @@ export default function Holding() {
         .lead { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.5; max-width: 30em; }
         .card { background: #1A3FA6; color: #FFF4D6; border: 5px solid #141018; border-radius: 18px; box-shadow: 6px 6px 0 #141018; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; width: 100%; box-sizing: border-box; }
         .card b { font: 400 22px 'Bagel Fat One', Rubik, sans-serif; color: #F2B705; }
+        .map { align-self: center; margin-top: 6px; background: #F2B705; color: #141018; text-decoration: none; font: 900 16px Rubik, sans-serif; border: 3px solid #141018; border-radius: 999px; padding: 8px 18px; }
+        .map:focus-visible { outline: 4px solid #3FB7F0; outline-offset: 3px; }
         .btn { display: inline-block; background: #FF1F8F; color: #fff; text-decoration: none; font: 900 17px Rubik, sans-serif; border: 4px solid #141018; border-radius: 999px; padding: 12px 22px; box-shadow: 0 6px 0 #141018; }
         .btn:focus-visible { outline: 4px solid #3FB7F0; outline-offset: 3px; }
         .small { margin: 0; font-size: 14px; font-weight: 600; }
