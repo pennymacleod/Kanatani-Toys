@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 
   // UK addresses only for now; overseas customers message us instead.
   if (!ukConfirmed) {
-    return res.status(400).json({ error: 'We can only post to UK addresses at the moment. Outside the UK? Message us on Instagram @kanatani_toys and we\'ll sort it out.' });
+    return res.status(400).json({ error: 'We can only post to UK addresses at the moment. Outside the UK? Email us at kanatanitoys@gmail.com and we\'ll sort it out.' });
   }
 
   if (!cartItems || cartItems.length === 0) {

@@ -92,7 +92,7 @@ export default function CartDrawer() {
           <div className="nl-drawer-foot">
             <MiniBadgePress />
             <div className="nl-uk">
-              <p><b>🇬🇧 We post to UK addresses only.</b> Outside the UK? Message us on Instagram <a href="https://ig.me/m/kanatani_toys" target="_blank" rel="noopener noreferrer">@kanatani_toys</a> and we'll sort it out for you.</p>
+              <p><b>🇬🇧 We post to UK addresses only.</b> Outside the UK? Email us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a> and we'll sort it out for you.</p>
               <label><input type="checkbox" checked={ukOk} onChange={e => { setUkOk(e.target.checked); setError(''); }} /> My delivery address is in the UK</label>
             </div>
             {postage != null && <div className="nl-sub"><span>UK postage</span><span>{postage === 0 ? 'Free' : fmt(postage)}</span></div>}
