@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   const ORDERS_PAUSED = true;
   if (ORDERS_PAUSED) {
     return res.status(503).json({
-      error: 'Online orders are paused for a few days while we sort out postage. Please pop into the shop or message us on Instagram @kanatani_toys to order. Sorry!',
+      error: 'Online orders are paused for a few days while we sort out postage. Please pop into the shop or email us at kanatanitoys@gmail.com to order. Sorry!',
     });
   }
 

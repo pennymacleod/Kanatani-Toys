@@ -24,7 +24,7 @@ export default function Holding() {
           <a className="map" href="https://www.google.com/maps/search/?api=1&query=Kanatani+Toys+Open+Market+Marshalls+Row+Brighton+BN1+4JU" target="_blank" rel="noopener noreferrer">📍 Find us on Google Maps</a>
         </div>
         <a className="btn" href="https://www.instagram.com/kanatani_toys" target="_blank" rel="noopener noreferrer">Message us on Instagram @kanatani_toys</a>
-        <p className="small">Want to order something? Send us a message and we'll sort it out for you.</p>
+        <p className="small">Want to order something? Email us at <a href="mailto:kanatanitoys@gmail.com" style={{ color: '#141018', fontWeight: 800 }}>kanatanitoys@gmail.com</a> and we'll sort it out for you.</p>
       </main>
       <style jsx global>{`
         html, body { margin: 0; background: #EFB10C; }
