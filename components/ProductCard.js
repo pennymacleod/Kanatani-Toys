@@ -35,8 +35,8 @@ export default function ProductCard({ product, index = 0 }) {
 
   return (
     <div
-      className="card"
-      style={{ background: COLOURS[index % COLOURS.length], opacity: outOfStock ? 0.7 : 1 }}
+      className={`card${outOfStock ? ' sold' : ''}`}
+      style={{ background: COLOURS[index % COLOURS.length] }}
     >
       <Link href={`/product/${product.id}`} className="shot" style={{ display: 'block' }} tabIndex={-1} aria-hidden="true">
         {product.imageUrls?.[0] ? (
@@ -44,7 +44,8 @@ export default function ProductCard({ product, index = 0 }) {
         ) : (
           <div className="ph"><img src="/nl/pink_head_bold.png" alt="" /><span>{t('Photo coming soon', '写真は準備中')}</span></div>
         )}
-        {tag && <span className="tag">{tag}</span>}
+        {tag && !outOfStock && <span className="tag">{tag}</span>}
+        {outOfStock && <span className="soldstamp" aria-label={t('Sold', '売り切れ')}>{t('SOLD', '売切')}</span>}
       </Link>
       {product.category && product.category !== 'Other' && <div className="maker">{t(product.category, TAB_JA[product.category])}</div>}
       <div className="name"><Link href={`/product/${product.id}`}>{product.name}</Link></div>

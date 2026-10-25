@@ -360,3 +360,13 @@ html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
 .nl-uk label{display:flex;gap:8px;align-items:center;font-weight:800;cursor:pointer}
 .nl-uk input{width:20px;height:20px;accent-color:var(--pink)}
 .nl-sub{display:flex;justify-content:space-between;font-weight:700;margin-bottom:4px}
+
+/* Sold toys: faded, with a big red rubber-stamp SOLD across the photo */
+.card.sold .shot img{filter:grayscale(.65) opacity(.55)}
+.card.sold .name,.card.sold .price,.card.sold .maker{opacity:.6}
+.soldstamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-14deg);z-index:2;pointer-events:none;
+  font:400 clamp(34px,5vw,54px)/1 'Bagel Fat One','Mochiy Pop One',Rubik,sans-serif;letter-spacing:4px;color:#D8352A;
+  padding:6px 18px 8px;border:6px solid #D8352A;border-radius:12px;background:rgba(255,255,255,.55);
+  box-shadow:0 0 0 3px rgba(255,255,255,.55);text-shadow:none;
+  -webkit-mask-image:radial-gradient(circle at 30% 40%,#000 55%,rgba(0,0,0,.75) 70%,#000 85%);
+  mix-blend-mode:multiply}
