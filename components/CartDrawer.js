@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useCart, fmt } from '../lib/cart';
 import MiniBadgePress from './MiniBadgePress';
+import { postageFor } from '../lib/postage';
 
 export default function CartDrawer() {
   const { cart, open, setOpen, changeQty, remove } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [ukOk, setUkOk] = useState(false);
 
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const postage = postageFor(subtotal);
+  const total = subtotal + (postage || 0);
 
   useEffect(() => {
     if (!open) return;
@@ -19,6 +23,7 @@ export default function CartDrawer() {
   if (!open) return null;
 
   const checkout = async () => {
+    if (!ukOk) { setError('Please tick the box to confirm your delivery address is in the UK.'); return; }
     setLoading(true);
     setError('');
     try {
@@ -26,6 +31,7 @@ export default function CartDrawer() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ukConfirmed: true,
           cartItems: cart.map(i => ({
             variationId: i.variationId,
             name: i.name,
@@ -85,9 +91,14 @@ export default function CartDrawer() {
         {cart.length > 0 && (
           <div className="nl-drawer-foot">
             <MiniBadgePress />
+            <div className="nl-uk">
+              <p><b>🇬🇧 We post to UK addresses only.</b> Outside the UK? Message us on Instagram <a href="https://ig.me/m/kanatani_toys" target="_blank" rel="noopener noreferrer">@kanatani_toys</a> and we'll sort it out for you.</p>
+              <label><input type="checkbox" checked={ukOk} onChange={e => { setUkOk(e.target.checked); setError(''); }} /> My delivery address is in the UK</label>
+            </div>
+            {postage != null && <div className="nl-sub"><span>UK postage</span><span>{postage === 0 ? 'Free' : fmt(postage)}</span></div>}
             <div className="nl-total"><span>Total</span><span className="price">{fmt(total)}</span></div>
             {error && <p className="nl-error">{error}</p>}
-            <button type="button" className="btn" onClick={checkout} disabled={loading} style={{ background: 'var(--pink)', color: '#fff', width: '100%' }}>
+            <button type="button" className="btn" onClick={checkout} disabled={loading || !ukOk} style={{ background: 'var(--pink)', color: '#fff', width: '100%' }}>
               {loading ? 'Opening checkout…' : 'Checkout securely →'}
             </button>
             <p className="nl-small">Secure payment with Square</p>

@@ -11,6 +11,8 @@ const SQUARE_BASE = process.env.SQUARE_ENVIRONMENT === 'sandbox'
 
 const SQUARE_VERSION = '2025-01-23';
 
+import { postageFor } from '../../lib/postage';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -25,7 +27,12 @@ export default async function handler(req, res) {
     });
   }
 
-  const { cartItems } = req.body; // [{ variationId, name, price, qty }]
+  const { cartItems, ukConfirmed } = req.body; // [{ variationId, name, price, qty }]
+
+  // UK addresses only for now; overseas customers message us instead.
+  if (!ukConfirmed) {
+    return res.status(400).json({ error: 'We can only post to UK addresses at the moment. Outside the UK? Message us on Instagram @kanatani_toys and we\'ll sort it out.' });
+  }
 
   if (!cartItems || cartItems.length === 0) {
     return res.status(400).json({ error: 'Cart is empty' });
@@ -33,6 +40,10 @@ export default async function handler(req, res) {
 
   const token = process.env.SQUARE_ACCESS_TOKEN;
   const locationId = process.env.SQUARE_LOCATION_ID;
+
+  // Postage is worked out here from the item prices, not trusted from the browser.
+  const subtotal = cartItems.reduce((t, i) => t + (Number(i.price) || 0) * (Number(i.qty) || 0), 0);
+  const postage = postageFor(subtotal);
 
   try {
     const lineItems = cartItems.map(item => ({
@@ -61,6 +72,7 @@ export default async function handler(req, res) {
         checkout_options: {
           redirect_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/order-complete`,
           ask_for_shipping_address: true,
+          ...(postage != null && postage > 0 ? { shipping_fee: { name: 'UK postage', charge: { amount: postage, currency: 'GBP' } } } : {}),
         },
       }),
     });

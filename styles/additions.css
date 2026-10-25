@@ -352,3 +352,11 @@ html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
 /* ── Hero Capsule page (platform game) ──────────────────────────── */
 @media (prefers-reduced-motion:reduce){.hbigcap,.hpick button{animation:none!important;transition:none!important}}
 @media (max-width:860px){.pg-hero .hwrap{grid-template-columns:1fr;gap:26px;padding-block:34px 30px}}
+
+/* Basket: UK-only postage notice */
+.nl-uk{background:var(--cream);color:var(--ink);border:3px solid var(--ink);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:14px;line-height:1.4}
+.nl-uk p{margin:0 0 8px}
+.nl-uk a{color:var(--ink);font-weight:800}
+.nl-uk label{display:flex;gap:8px;align-items:center;font-weight:800;cursor:pointer}
+.nl-uk input{width:20px;height:20px;accent-color:var(--pink)}
+.nl-sub{display:flex;justify-content:space-between;font-weight:700;margin-bottom:4px}
