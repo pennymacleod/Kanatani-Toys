@@ -374,3 +374,7 @@ html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
 /* Artist pages: the toy sits in the middle of the starburst panel (Oct 2026,
    Penny). Prints keep their own framing and "flush" cut-offs stay on the bottom edge. */
 .pg-artist .mpanel .burst .fig:not(.printfig):not(.flush) { top: 50%; bottom: auto; height: 82%; max-width: 88%; object-fit: contain; object-position: 50% 50%; transform: translate(-50%, -50%); }
+/* Artist pages: the starburst behind the toy turns slowly, same speed as the News page.
+   Only on the artist's own page, not the Sofubi Showcase cards. */
+.pg-artist .mpanel .burst{background:repeating-conic-gradient(from var(--spin) at 50% 50%,#2ED3E0 0 10deg,#FFE680 10deg 20deg);animation:kt-spin 90s linear infinite}
+@media (prefers-reduced-motion:reduce){.pg-artist .mpanel .burst{animation:none}}
