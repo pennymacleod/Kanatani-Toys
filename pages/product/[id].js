@@ -1,3 +1,4 @@
+import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
@@ -228,7 +229,7 @@ export async function getServerSideProps({ params, res }) {
     });
 
     // Get inventory for all variations
-    const locationId = process.env.SQUARE_LOCATION_ID;
+    const locationId = SQUARE_LOCATION_ID;
     const variationIds = item.item_data?.variations?.map(v => v.id) || [];
     let stockMap = {};
 

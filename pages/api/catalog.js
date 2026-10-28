@@ -1,3 +1,4 @@
+import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
 import { SHOP_TABS, shopTab } from '../../lib/categories';
 // pages/api/catalog.js
 // ─────────────────────────────────────────────────────────────────────────────
@@ -19,7 +20,7 @@ export default async function handler(req, res) {
   }
 
   const token = process.env.SQUARE_ACCESS_TOKEN;
-  const locationId = process.env.SQUARE_LOCATION_ID;
+  const locationId = SQUARE_LOCATION_ID;
 
   if (!token || !locationId) {
     return res.status(500).json({

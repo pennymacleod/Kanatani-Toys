@@ -1,3 +1,4 @@
+import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
 // pages/api/checkout.js
 // ─────────────────────────────────────────────────────────────────────────────
 // Creates a Square Payment Link for the cart items.
@@ -39,7 +40,7 @@ export default async function handler(req, res) {
   }
 
   const token = process.env.SQUARE_ACCESS_TOKEN;
-  const locationId = process.env.SQUARE_LOCATION_ID;
+  const locationId = SQUARE_LOCATION_ID;
 
   // Postage is worked out here from the item prices, not trusted from the browser.
   const subtotal = cartItems.reduce((t, i) => t + (Number(i.price) || 0) * (Number(i.qty) || 0), 0);

@@ -1,3 +1,4 @@
+import { SQUARE_LOCATION_ID } from '../lib/squareLocation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
@@ -219,7 +220,7 @@ export async function getServerSideProps({ res }) {
 
   try {
     const token = process.env.SQUARE_ACCESS_TOKEN;
-    const locationId = process.env.SQUARE_LOCATION_ID;
+    const locationId = SQUARE_LOCATION_ID;
     const env = process.env.SQUARE_ENVIRONMENT || 'production';
     const base = env === 'sandbox'
       ? 'https://connect.squareupsandbox.com'
