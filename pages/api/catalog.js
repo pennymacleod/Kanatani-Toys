@@ -1,4 +1,5 @@
 import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
+import { isHiddenProduct, soldOutAt } from '../../lib/productRules';
 import { SHOP_TABS, shopTab } from '../../lib/categories';
 // pages/api/catalog.js
 // ─────────────────────────────────────────────────────────────────────────────
@@ -109,11 +110,11 @@ export default async function handler(req, res) {
 
     // ── Step 4: Build clean product list ────────────────────────────────────
     const products = items
-      .filter(item => item.item_data?.name) // skip unnamed items
+      .filter(item => item.item_data?.name && !isHiddenProduct(item.item_data.name)) // skip unnamed + hand-hidden items
       .map(item => {
         const variations = item.item_data?.variations || [];
         const firstVariation = variations[0];
-        const stock = stockMap[firstVariation?.id] ?? null; // null = not tracked
+        const stock = soldOutAt(firstVariation, locationId) ? 0 : (stockMap[firstVariation?.id] ?? null); // null = not tracked
         const price = firstVariation?.item_variation_data?.price_money?.amount || 0;
         const currency = firstVariation?.item_variation_data?.price_money?.currency || 'GBP';
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
@@ -135,7 +136,7 @@ export default async function handler(req, res) {
             id: v.id,
             name: v.item_variation_data?.name,
             price: v.item_variation_data?.price_money?.amount || price,
-            stock: stockMap[v.id] ?? null,
+            stock: soldOutAt(v, locationId) ? 0 : (stockMap[v.id] ?? null),
           })),
           isAvailable: item.item_data?.is_deleted !== true,
         };

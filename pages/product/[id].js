@@ -1,4 +1,5 @@
 import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
+import { isHiddenProduct, soldOutAt } from '../../lib/productRules';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
@@ -217,7 +218,8 @@ export async function getServerSideProps({ params, res }) {
     const item = data.object;
     if (item.is_deleted || item.item_data?.is_archived
       || ['HIDDEN', 'UNAVAILABLE'].includes(item.item_data?.ecom_visibility)
-      || item.item_data?.available_online === false) {
+      || item.item_data?.available_online === false
+      || isHiddenProduct(item.item_data?.name)) {
       return { props: { product: null, error: 'Product not found' } };
     }
     const relatedObjects = data.related_objects || [];
@@ -271,7 +273,7 @@ export async function getServerSideProps({ params, res }) {
         id: v.id,
         name: v.item_variation_data?.name,
         price: v.item_variation_data?.price_money?.amount || 0,
-        stock: stockMap[v.id] ?? null,
+        stock: soldOutAt(v, locationId) ? 0 : (stockMap[v.id] ?? null),
       })),
     };
 

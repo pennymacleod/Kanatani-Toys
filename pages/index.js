@@ -1,4 +1,5 @@
 import { SQUARE_LOCATION_ID } from '../lib/squareLocation';
+import { isHiddenProduct, soldOutAt } from '../lib/productRules';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
@@ -298,11 +299,12 @@ export async function getServerSideProps({ res }) {
         if (item.item_data?.is_archived) return false;
         if (['HIDDEN', 'UNAVAILABLE'].includes(item.item_data?.ecom_visibility)) return false;
         if (item.item_data?.available_online === false) return false;
+        if (isHiddenProduct(item.item_data?.name)) return false;
         return true;
       })
       .map(item => {
         const v = item.item_data?.variations?.[0];
-        const stock = stockMap[v?.id] ?? null;
+        const stock = soldOutAt(v, locationId) ? 0 : (stockMap[v?.id] ?? null);
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
         return {
           id: item.id,
@@ -320,7 +322,7 @@ export async function getServerSideProps({ res }) {
             id: vv.id,
             name: vv.item_variation_data?.name,
             price: vv.item_variation_data?.price_money?.amount || 0,
-            stock: stockMap[vv.id] ?? null,
+            stock: soldOutAt(vv, locationId) ? 0 : (stockMap[vv.id] ?? null),
           })),
         };
       })
