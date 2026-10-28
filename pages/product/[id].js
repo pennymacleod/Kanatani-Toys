@@ -246,7 +246,10 @@ export async function getServerSideProps({ params, res }) {
       if (invR.ok) {
         const invData = await invR.json();
         (invData.counts || []).forEach(c => {
-          stockMap[c.catalog_object_id] = (stockMap[c.catalog_object_id] || 0) + parseInt(c.quantity || 0, 10);
+          // Only IN_STOCK counts are sellable. Stock removed as damaged/lost/waste
+          // comes back as other states and must not be added back on.
+          const q = c.state && c.state !== 'IN_STOCK' ? 0 : parseInt(c.quantity || 0, 10);
+          stockMap[c.catalog_object_id] = (stockMap[c.catalog_object_id] || 0) + q;
         });
       }
     }
