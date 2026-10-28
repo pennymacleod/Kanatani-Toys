@@ -1,4 +1,5 @@
 import { SHIRTS } from '../lib/tshirts';
+import { isHidden } from '../lib/hidden';
 import { ARTISTS } from '../lib/artists';
 
 const SQUARE_BASE = process.env.SQUARE_ENVIRONMENT === 'sandbox'
@@ -53,13 +54,15 @@ function buildSitemap(products) {
     ...ARTISTS.map(a => ({ loc: `${SITE_URL}/artist/${a.slug}`, priority: '0.4' })),
   ];
 
+  const visible = staticUrls.filter(u => !isHidden(u.loc.replace(SITE_URL, '') || '/'));
+
   const productUrls = products.map(p => ({
     loc: `${SITE_URL}/product/${p.id}`,
     lastmod: p.updatedAt,
     priority: '0.8',
   }));
 
-  const urls = [...staticUrls, ...productUrls];
+  const urls = [...visible, ...productUrls];
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

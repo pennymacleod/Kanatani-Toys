@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useCart } from '../lib/cart';
 import CartDrawer from './CartDrawer';
 import { useLang } from '../lib/lang';
+import { isHidden } from '../lib/hidden';
 
 // Shared nav. Keep this the single source of truth for the menu.
 export const NAV = [
@@ -97,7 +98,7 @@ export default function Layout({
               <div className="sign"><div className="k">KANATANI</div><div className="t">TOYS</div></div>
             </Link>
             <nav aria-label="Main">
-              {NAV.map(n => (
+              {NAV.filter(n => !isHidden(n.href)).map(n => (
                 <Link
                   key={n.key}
                   href={n.href}

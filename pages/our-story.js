@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { isHidden } from '../lib/hidden';
 import Layout from '../components/Layout';
 import { useLang } from '../lib/lang';
 
@@ -58,7 +59,7 @@ export default function OurStory() {
             <p>{t('We\u2019re lucky to connect with lots of amazing independent artists who specialise in Sofubi, and we love showcasing their crazy creations in the shop. We want to give the strange and the weird a home here in Brighton.', 'ありがたいことに、ソフビを専門とする素晴らしいインディペンデント・アーティストたちとたくさんつながることができ、その最高にクレイジーな作品をお店で紹介しています。ここブライトンに、ストレンジで奇妙なものたちの居場所を作りたいのです。')}</p>
             <p>{t('Many of these artists have never been shown in the UK. Their work usually only appears at galleries or toy conventions, not on a shop shelf every day. So we built a home where it can be on our shelves all the time, and where people can discover this fantastic art.', 'その多くは、イギリスではまだ紹介されたことのないアーティストです。作品が見られるのは普段はギャラリーやトイコンベンションだけで、毎日お店の棚に並ぶことはありません。だから私たちは、いつでも棚に作品が並び、たくさんの人がこの素晴らしいアートに出会える場所を作りました。')}</p>
             <p>{t('Alongside the sofubi you\u2019ll find lots of other independent makers: printmakers, sticker makers, t-shirt printers, and the list goes on. We\u2019re here to showcase it all.', 'ソフビと並んで、版画家、ステッカー作家、Tシャツのプリント職人など、ほかにもたくさんのインディペンデントな作り手の作品があります。そのすべてを紹介するのが私たちの役目です。')}</p>
-            <Link className="btn" href="/sofubi-showcase" style={{ background: 'var(--pink)', color: '#fff', marginTop: 8 }}>{t('Meet the artists →', 'アーティストに会う →')}</Link>
+            {!isHidden('/sofubi-showcase') && <Link className="btn" href="/sofubi-showcase" style={{ background: 'var(--pink)', color: '#fff', marginTop: 8 }}>{t('Meet the artists →', 'アーティストに会う →')}</Link>}
           </div>
         </div>
       </section>

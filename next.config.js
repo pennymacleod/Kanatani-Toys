@@ -1,6 +1,18 @@
 /** @type {import('next').NextConfig} */
+const { HIDDEN_PAGES } = require('./lib/hidden');
+// Unfinished pages are hidden on the live site only (see lib/hidden.js).
+const HIDE = process.env.VERCEL_ENV === 'production';
+
 const nextConfig = {
   reactStrictMode: true,
+  env: { HIDE_PAGES: HIDE ? '1' : '' },
+  async redirects() {
+    if (!HIDE) return [];
+    return HIDDEN_PAGES.flatMap(p => [
+      { source: p, destination: '/', permanent: false },
+      { source: `${p}/:path*`, destination: '/', permanent: false },
+    ]);
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.squarecdn.com' },
