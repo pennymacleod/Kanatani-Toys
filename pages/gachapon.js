@@ -102,7 +102,9 @@ const KAIJU = [
     "year": "1966",
     "studio": "TV series",
     "rarity": "COMMON",
-    "fact": "Garamon's cries are really the buzzing of cicadas, because it was built by an invading race of Cicada Men."
+    "fact": "Garamon's cries are really the buzzing of cicadas, because it was built by an invading race of Cicada Men.",
+    "img": "/nl/gacha-garamon.png",
+    "art": true
   },
   {
     "id": "baltan",
@@ -145,7 +147,9 @@ const KAIJU = [
     "year": "1966",
     "studio": "TV series",
     "rarity": "COMMON",
-    "fact": "Red King made his debut in the very same episode as little Pigmon."
+    "fact": "Red King made his debut in the very same episode as little Pigmon.",
+    "img": "/nl/gacha-red-king.png",
+    "art": true
   },
   {
     "id": "pigmon",
