@@ -73,7 +73,8 @@ const KAIJU = [
     "studio": "Toho film",
     "rarity": "COMMON",
     "fact": "The Smog Monster eats pollution. Its name comes from hedoro, the Japanese word for sludge.",
-    "img": "/nl/hedorah.png"
+    "img": "/nl/gacha-hedorah.png",
+    "art": true
   },
   {
     "id": "ghidorah",
