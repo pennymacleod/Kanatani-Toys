@@ -482,3 +482,11 @@ button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;le
   .pg-tv .tcard{top:56%}
   .pg-tv .minis{grid-template-columns:1fr 1fr;gap:16px}
 }
+
+/* ── Kaiju cursor + sparkle trail (components/KaijuCursor.js) ── */
+html.kaiju-on, html.kaiju-on body, html.kaiju-on a, html.kaiju-on button, html.kaiju-on [role=button], html.kaiju-on label, html.kaiju-on select{cursor:url(/nl/cursor-kaiju.png) 3 28, pointer}
+html.kaiju-on input, html.kaiju-on textarea{cursor:text}
+.ktrail{position:fixed;z-index:9999;pointer-events:none;transform:translate(-50%,-50%);animation:ktrail .75s ease-out forwards}
+.ktrail.star{font-size:20px;line-height:1;-webkit-text-stroke:1.5px #141018;paint-order:stroke fill}
+.ktrail.dot{width:10px;height:10px;border-radius:50%;border:2px solid #141018}
+@keyframes ktrail{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,0) scale(.3) rotate(90deg)}}

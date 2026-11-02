@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useCart } from '../lib/cart';
 import CartDrawer from './CartDrawer';
+import KaijuCursor from './KaijuCursor';
 import { useLang, JAPANESE_OFF } from '../lib/lang';
 import { isHidden, isPaused } from '../lib/hidden';
 
@@ -154,6 +155,7 @@ export default function Layout({
       </div>
 
       <CartDrawer />
+      <KaijuCursor />
     </>
   );
 }
