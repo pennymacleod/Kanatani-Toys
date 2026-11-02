@@ -482,3 +482,19 @@ button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;le
   .pg-tv .tcard{top:56%}
   .pg-tv .minis{grid-template-columns:1fr 1fr;gap:16px}
 }
+
+/* ── Visitor counter (bottom of the homepage, components/VisitorCounter.js) ── */
+.hitc{display:flex;justify-content:center;padding:120px 16px 56px}
+.hitbox{position:relative;background:var(--ink);border:6px solid var(--ink);border-radius:26px;box-shadow:10px 10px 0 rgba(20,16,24,.35);padding:16px 22px 18px;text-align:center;outline:6px solid var(--pink);outline-offset:-14px}
+.hitlab{color:var(--cream);font-weight:900;letter-spacing:4px;font-size:15px;margin:6px 0 10px;font-family:'Rubik','Inter',sans-serif}
+.hitlab small{display:block;font-family:'Mochiy Pop One',sans-serif;letter-spacing:2px;font-size:12px;color:var(--sky);margin-top:2px;font-weight:400}
+.hitdigits{display:flex;gap:6px;justify-content:center}
+.hitdigits .hd{position:relative;width:46px;height:66px;border-radius:10px;background:linear-gradient(#2a2333 0 50%,#1d1724 50% 100%);border:3px solid #000;color:#FFE3F3;font-family:'Rubik',sans-serif;font-weight:900;font-size:44px;line-height:60px;text-shadow:0 0 10px #FF1F8F,0 0 2px #fff}
+.hitdigits .hd:after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:#000}
+.hitdigits .hd.lit{color:#fff;background:linear-gradient(var(--pink) 0 50%,#e0157c 50% 100%);text-shadow:none}
+.hitbox .bolts i{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--yellow);border:3px solid #000}
+.hitbox .bolts i:nth-child(1){left:10px;top:10px}.hitbox .bolts i:nth-child(2){right:10px;top:10px}.hitbox .bolts i:nth-child(3){left:10px;bottom:10px}.hitbox .bolts i:nth-child(4){right:10px;bottom:10px}
+.hitthx{color:var(--cream);font-weight:800;font-size:13px;margin-top:10px}
+.hitthx b{color:#5BFF7A}
+.hitpk{position:absolute;right:18px;bottom:calc(100% - 8px);width:70px;transform:rotate(-4deg);pointer-events:none}
+@media (max-width:600px){.hitdigits .hd{width:38px;height:56px;font-size:36px;line-height:50px}.hitdigits{gap:4px}.hitbox{padding:14px 16px 16px}.hitpk{right:12px;width:58px}}

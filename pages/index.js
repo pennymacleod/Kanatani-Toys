@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
+import VisitorCounter from '../components/VisitorCounter';
 import { SHOP_TABS, TAB_PAGES, TAB_JA, shopTab } from '../lib/categories';
 import { useLang } from '../lib/lang';
 
@@ -209,6 +210,8 @@ export default function Home({ initialProducts, categories, error }) {
         <img src="/nl/penny-hiro.png" alt="" />
         <span className="say">{t('こんにちは! Come and say hello!', 'こんにちは! 遊びに来てね!')}</span>
       </div>
+
+      <VisitorCounter />
     </Layout>
   );
 }
