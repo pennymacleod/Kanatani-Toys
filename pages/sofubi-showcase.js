@@ -1,82 +1,86 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import aboutStyles from '../styles/About.module.css';
-import styles from '../styles/SofubiShowcase.module.css';
-import homeStyles from '../styles/Home.module.css';
-import Nav from '../components/Nav';
-import SocialLinks from '../components/SocialLinks';
-import LegalLinks from '../components/LegalLinks';
+import { useState, useEffect } from 'react';
+import Layout from '../components/Layout';
+import ArtistBox from '../components/ArtistBox';
+import { ARTISTS, COMING_SOON, CATEGORIES, CATEGORY_COLOURS, CATEGORY_JA } from '../lib/artists';
+import { useLang } from '../lib/lang';
 
-const IMAGES = [
-  { src: '/sofubi-showcase/goatee-showcase-card.png', alt: 'Sofubi Showcase — Goatee, Italy' },
-  { src: '/sofubi-showcase/pepperjerry-showcase-card.png', alt: 'Sofubi Showcase — Pepperjerry, Urban Devil, Taiwan' },
-];
+const TILES = ['ソ', 'フ', 'ビ', 'シ', 'ョ', 'ー', 'ケ', 'ー', 'ス'];
 
 export default function SofubiShowcase() {
-  const router = useRouter();
+  const [cat, setCat] = useState('All');
+  const { lang, t } = useLang();
+  const match = (a) => cat === 'All' || a.categories.includes(cat);
+  // On "All", group artists in tab order: Sofubi, Resin, 3D printed, Art prints, Stickers, Clothing.
+  const rank = (a) => Math.min(...a.categories.map(c => { const i = CATEGORIES.indexOf(c); return i < 0 ? 99 : i; }));
+  const byTab = (list) => list.map((a, i) => [a, i]).sort((x, y) => rank(x[0]) - rank(y[0]) || x[1] - y[1]).map(x => x[0]);
+  // The newest artist (the last one added to lib/artists.js) goes to the top
+  // of "All" and pushes everyone else down.
+  const newest = ARTISTS[ARTISTS.length - 1];
+  const shown = cat === 'All'
+    ? [newest, ...byTab(ARTISTS.filter(a => a !== newest))]
+    : byTab(ARTISTS.filter(match));
+  // Coming soon: only the next artist (first in COMING_SOON) is shown, big.
+  // Add ?all to the address to see the full list (for Penny).
+  const [showAll, setShowAll] = useState(false);
+  useEffect(() => { setShowAll(new URLSearchParams(window.location.search).has('all')); }, []);
+  const soon = showAll ? byTab(COMING_SOON.filter(match)) : COMING_SOON.slice(0, 1).filter(match);
 
   return (
-    <>
-      <Head>
-        <title>Sofubi Showcase — Kanatani Toys</title>
-        <meta name="description" content="Meet the independent sofubi artists behind the figures — Goatee (Italy) and Pepperjerry / Urban Devil (Taiwan)." />
-        <meta property="og:title" content="Sofubi Showcase — Kanatani Toys" />
-        <meta property="og:description" content="Meet the independent sofubi artists behind the figures — Goatee (Italy) and Pepperjerry / Urban Devil (Taiwan)." />
-        <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta property="og:image:width" content="1254" />
-        <meta property="og:image:height" content="1254" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://kanatanitoys.com/sofubi-showcase" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
-      </Head>
+    <Layout
+      title="Sofubi Showcase — Kanatani Toys"
+      description="Independent sofubi and toy artists from around the world, on our shelves in Brighton every day. Meet the makers."
+      path="/sofubi-showcase"
+      active="showcase"
+      page="showcase"
+    >
+      <section id="artists" className="ssb">
+        <div className="tiles3" aria-hidden="true">{TILES.map((t, i) => <span key={i}>{t}</span>)}</div>
+        <h1 className="big" style={{ fontSize: lang === 'ja' ? 'clamp(40px,7vw,84px)' : 120, margin: '4px 0 18px', color: 'var(--pink)', whiteSpace: 'nowrap' }}>
+          {lang === 'ja'
+            ? <>ソフビ・<span style={{ color: 'var(--gold)' }}>ショーケース</span></>
+            : <>Sofubi <span style={{ color: 'var(--gold)' }}>Showcase</span></>}
+        </h1>
+        <div className="mid" style={{ fontSize: 36, color: '#fff' }}>{t('Supporting independent artists from around the world', '世界中のインディペンデント・アーティストを応援しています')}</div>
+      </section>
 
-      <div className={homeStyles.root}>
-        {/* Header */}
-        <header className={homeStyles.header}>
-          <div className={homeStyles.headerLogo} onClick={() => router.push('/')} style={{ cursor: 'pointer' }}>
-            <img src="/logo.png" alt="Kanatani Toys" className={homeStyles.logo} />
-            <div>
-              <div className={homeStyles.logoText}>KANATANI</div>
-              <div className={homeStyles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
-            </div>
-          </div>
-          <Nav active="sofubi-showcase" />
-          <div className={homeStyles.headerRight}>
-            <SocialLinks />
-            <a href="/" className={homeStyles.cartBtn} style={{ textDecoration: 'none' }}>
-              ← <span className={homeStyles.cartLabel}>Back to Shop</span>
-            </a>
-          </div>
-        </header>
-
-        <div className={aboutStyles.page}>
-          <h1 className={styles.srOnly}>Sofubi Showcase</h1>
-
-          <div className={styles.grid}>
-            {IMAGES.map((img) => (
-              <img key={img.src} src={img.src} alt={img.alt} className={styles.image} />
+      <section className="floor" style={{ padding: '50px 0 80px' }}>
+        <div className="wrap">
+          <div className="tabs" role="group" aria-label="Filter artists">
+            {CATEGORIES.map(c => (
+              <button
+                key={c}
+                type="button"
+                className={`tab${cat === c ? ' on' : ''}`}
+                aria-pressed={cat === c}
+                onClick={() => setCat(c)}
+                style={{ '--c': CATEGORY_COLOURS[c] }}
+              >
+                {t(c, CATEGORY_JA[c])}
+              </button>
             ))}
           </div>
-        </div>
 
-        <footer className={homeStyles.footer}>
-          <div className={homeStyles.footerLeft}>
-            <img src="/logo.png" alt="" className={homeStyles.footerLogo} />
-            <div>
-              <div className={homeStyles.footerName}>KANATANI TOYS</div>
-              <div className={homeStyles.footerSub}>Strange Toys for Strange People</div>
+          {shown.length > 0 ? (
+            <div className="agrid">
+              {shown.map(a => <ArtistBox key={a.slug} artist={a} />)}
             </div>
-          </div>
-          <div className={homeStyles.footerRight}>
-            Open Market · Unit 7 · Marshalls Row · Brighton · BN1 4JU
-            <LegalLinks />
-          </div>
-        </footer>
-      </div>
-    </>
+          ) : (
+            <p className="empty">{t('No artists in this category yet. Check back soon!', 'このカテゴリーのアーティストはまだいません。またチェックしてね！')}</p>
+          )}
+
+          {soon.length > 0 && (
+            <>
+              <div className="soonhead">
+                <span className="plaque"><span className="mid" style={{ fontSize: 40, color: 'var(--sky)' }}>{t('Coming soon', '近日登場')}</span></span>
+                <p>{t('New artists on their way to the shop. Follow them on Instagram so you don\u2019t miss them!', '新しいアーティストがお店にやってきます。見逃さないよう、Instagramでフォローしてね！')}</p>
+              </div>
+              <div className={showAll ? 'agrid' : 'agrid soonone'}>
+                {soon.map(a => <ArtistBox key={a.name} artist={a} soon />)}
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+    </Layout>
   );
 }

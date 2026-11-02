@@ -1,3 +1,4 @@
+import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
 // pages/api/checkout.js
 // ─────────────────────────────────────────────────────────────────────────────
 // Creates a Square Payment Link for the cart items.
@@ -11,6 +12,8 @@ const SQUARE_BASE = process.env.SQUARE_ENVIRONMENT === 'sandbox'
 
 const SQUARE_VERSION = '2025-01-23';
 
+import { postageFor } from '../../lib/postage';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -18,21 +21,30 @@ export default async function handler(req, res) {
 
   // Online orders paused (Oct 2026) while postage charges are sorted out.
   // Set ORDERS_PAUSED to false to take orders again.
-  const ORDERS_PAUSED = true;
+  const ORDERS_PAUSED = false;
   if (ORDERS_PAUSED) {
     return res.status(503).json({
-      error: 'Online orders are paused for a few days while we sort out postage. Please pop into the shop or email us at kanatanitoys@gmail.com to order. Sorry!',
+      error: 'Online orders are paused for a few days while we sort out postage. Please pop into the shop or message us on Instagram @kanatani_toys to order. Sorry!',
     });
   }
 
-  const { cartItems } = req.body; // [{ variationId, name, price, qty }]
+  const { cartItems, ukConfirmed } = req.body; // [{ variationId, name, price, qty }]
+
+  // UK addresses only for now; overseas customers message us instead.
+  if (!ukConfirmed) {
+    return res.status(400).json({ error: 'We can only post to UK addresses at the moment. Outside the UK? Email us at kanatanitoys@gmail.com and we\'ll sort it out.' });
+  }
 
   if (!cartItems || cartItems.length === 0) {
     return res.status(400).json({ error: 'Cart is empty' });
   }
 
   const token = process.env.SQUARE_ACCESS_TOKEN;
-  const locationId = process.env.SQUARE_LOCATION_ID;
+  const locationId = SQUARE_LOCATION_ID;
+
+  // Postage is worked out here from the item prices, not trusted from the browser.
+  const subtotal = cartItems.reduce((t, i) => t + (Number(i.price) || 0) * (Number(i.qty) || 0), 0);
+  const postage = postageFor(subtotal);
 
   try {
     const lineItems = cartItems.map(item => ({
@@ -61,6 +73,7 @@ export default async function handler(req, res) {
         checkout_options: {
           redirect_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/order-complete`,
           ask_for_shipping_address: true,
+          ...(postage != null && postage > 0 ? { shipping_fee: { name: 'UK postage (Royal Mail Tracked 48)', charge: { amount: postage, currency: 'GBP' } } } : {}),
         },
       }),
     });

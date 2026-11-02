@@ -1,20 +1,27 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import { useEffect } from 'react';
+import Link from 'next/link';
+import Layout from '../components/Layout';
+import { useCart } from '../lib/cart';
 
 export default function OrderComplete() {
+  const { clear } = useCart();
+
+  // Square only sends people here after a successful payment, so empty the basket.
+  useEffect(() => { clear(); }, []);
+
   return (
-    <>
-      <Head><title>Order Complete — Kanatani Toys</title></Head>
-      <div className={styles.root} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '40px 20px' }}>
-        <div style={{ fontSize: 72, marginBottom: 20 }}>🎉</div>
-        <h1 style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 28, marginBottom: 12 }}>Order Confirmed!</h1>
-        <p style={{ color: '#888', maxWidth: 400, lineHeight: 1.7, marginBottom: 28 }}>
-          Thank you for your order. You'll receive a confirmation email shortly. Your order has been recorded in our Square system and we'll pack it with care.
-        </p>
-        <a href="/" style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 12, letterSpacing: 2, padding: '10px 24px', borderRadius: 6, border: '1px solid #333', color: 'inherit', textDecoration: 'none' }}>
-          ← BACK TO SHOP
-        </a>
-      </div>
-    </>
+    <Layout title="Order Complete — Kanatani Toys" path="/order-complete" noindex>
+      <section className="floor textpage">
+        <div className="wrap">
+          <div className="sheet" style={{ textAlign: 'center' }}>
+            <span className="kicker">ありがとう · THANK YOU</span>
+            <div style={{ fontSize: 72, margin: '20px 0 0' }} aria-hidden="true">🎉</div>
+            <h1 className="big">Order confirmed!</h1>
+            <p>Thank you for your order. You&apos;ll get a confirmation email shortly, and we&apos;ll pack your new weird little friend with care.</p>
+            <Link className="btn" href="/#shop" style={{ background: 'var(--sky)', marginTop: 16 }}>← Back to the shop</Link>
+          </div>
+        </div>
+      </section>
+    </Layout>
   );
 }

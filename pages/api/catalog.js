@@ -1,3 +1,6 @@
+import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
+import { isHiddenProduct, soldOutAt } from '../../lib/productRules';
+import { SHOP_TABS, shopTab } from '../../lib/categories';
 // pages/api/catalog.js
 // ─────────────────────────────────────────────────────────────────────────────
 // Server-side API route — runs on the server, never in the browser.
@@ -18,7 +21,7 @@ export default async function handler(req, res) {
   }
 
   const token = process.env.SQUARE_ACCESS_TOKEN;
-  const locationId = process.env.SQUARE_LOCATION_ID;
+  const locationId = SQUARE_LOCATION_ID;
 
   if (!token || !locationId) {
     return res.status(500).json({
@@ -96,8 +99,10 @@ export default async function handler(req, res) {
       if (invRes.ok) {
         const invData = await invRes.json();
         (invData.counts || []).forEach(c => {
-          stockMap[c.catalog_object_id] =
-            (stockMap[c.catalog_object_id] || 0) + parseInt(c.quantity || 0, 10);
+          // Only IN_STOCK counts are sellable. Stock removed as damaged/lost/waste
+          // comes back as other states and must not be added back on.
+          const q = c.state && c.state !== 'IN_STOCK' ? 0 : parseInt(c.quantity || 0, 10);
+          stockMap[c.catalog_object_id] = (stockMap[c.catalog_object_id] || 0) + q;
         });
       }
       // If inventory call fails we continue — products show with stock unknown
@@ -105,11 +110,11 @@ export default async function handler(req, res) {
 
     // ── Step 4: Build clean product list ────────────────────────────────────
     const products = items
-      .filter(item => item.item_data?.name) // skip unnamed items
+      .filter(item => item.item_data?.name && !isHiddenProduct(item.item_data.name)) // skip unnamed + hand-hidden items
       .map(item => {
         const variations = item.item_data?.variations || [];
         const firstVariation = variations[0];
-        const stock = stockMap[firstVariation?.id] ?? null; // null = not tracked
+        const stock = soldOutAt(firstVariation, locationId, item.item_data?.name) ? 0 : (stockMap[firstVariation?.id] ?? null); // null = not tracked
         const price = firstVariation?.item_variation_data?.price_money?.amount || 0;
         const currency = firstVariation?.item_variation_data?.price_money?.currency || 'GBP';
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
@@ -118,7 +123,7 @@ export default async function handler(req, res) {
           id: item.id,
           name: item.item_data.name,
           description: item.item_data?.description || '',
-          category: catId && categoryMap[catId] ? categoryMap[catId] : 'Other',
+          category: shopTab(categoryMap[catId], item.item_data?.name || ''),
           price,        // in pence / smallest currency unit
           currency,
           stock,        // null means inventory not tracked in Square
@@ -131,7 +136,7 @@ export default async function handler(req, res) {
             id: v.id,
             name: v.item_variation_data?.name,
             price: v.item_variation_data?.price_money?.amount || price,
-            stock: stockMap[v.id] ?? null,
+            stock: soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v.id] ?? null),
           })),
           isAvailable: item.item_data?.is_deleted !== true,
         };
@@ -139,7 +144,7 @@ export default async function handler(req, res) {
       .filter(p => p.isAvailable && p.price > 0);
 
     // ── Step 5: Build category list ─────────────────────────────────────────
-    const categories = ['All', ...new Set(products.map(p => p.category))].filter(Boolean);
+    const categories = SHOP_TABS;
 
     return res.status(200).json({
       products,

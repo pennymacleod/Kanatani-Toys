@@ -1,26 +1,33 @@
-import { useState } from 'react';
-import Head from 'next/head';
+import { SQUARE_LOCATION_ID } from '../lib/squareLocation';
+import { isHiddenProduct, soldOutAt } from '../lib/productRules';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
-import Cart from '../components/Cart';
-import SocialLinks from '../components/SocialLinks';
-import LegalLinks from '../components/LegalLinks';
-import Testimonials from '../components/Testimonials';
-import Nav from '../components/Nav';
-import styles from '../styles/Home.module.css';
+import { SHOP_TABS, TAB_PAGES, TAB_JA, shopTab } from '../lib/categories';
+import { useLang } from '../lib/lang';
 
-export default function Home({ initialProducts, categories, error, fetchedAt }) {
-  const [products] = useState(initialProducts || []);
+const IRASSHAI = ['い', 'ら', 'っ', 'し', 'ゃ', 'い', 'ま', 'せ'];
+
+export default function Home({ initialProducts, categories, error }) {
+  const products = initialProducts || [];
   const [activeCategory, setActiveCategory] = useState('All');
   const [search, setSearch] = useState('');
-  const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false);
+  const { lang, t } = useLang();
+
+  // Lets other pages link to a search, e.g. /?q=hedorah#shop
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get('q');
+    if (q) setSearch(q);
+  }, []);
 
   const filtered = products
     .filter(p => {
       const matchCat = activeCategory === 'All' || p.category === activeCategory;
-      const matchSearch = !search ||
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.description?.toLowerCase().includes(search.toLowerCase());
+      const q = search.trim().toLowerCase();
+      const matchSearch = !q ||
+        p.name.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q);
       return matchCat && matchSearch;
     })
     .sort((a, b) => {
@@ -28,42 +35,14 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
       const bOut = b.stock === 0;
       if (aOut && !bOut) return 1;
       if (!aOut && bOut) return -1;
-      return 0;
+      // On "All": sofubi first, then merch, then other strange things.
+      return SHOP_TABS.indexOf(a.category) - SHOP_TABS.indexOf(b.category);
     });
-
-  const addToCart = (product) => {
-    setCart(prev => {
-      const ex = prev.find(i => i.id === product.id);
-      if (ex) return prev.map(i => i.id === product.id ? { ...i, qty: i.qty + 1 } : i);
-      return [...prev, { ...product, qty: 1 }];
-    });
-  };
-
-  const changeQty = (id, qty) => {
-    if (qty <= 0) removeFromCart(id);
-    else setCart(prev => prev.map(i => i.id === id ? { ...i, qty } : i));
-  };
-
-  const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
-  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
 
   return (
-    <>
-      <Head>
-        <title>Kanatani Toys — Strange Toys for Strange People</title>
-        <meta name="description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton." />
-        <meta property="og:title" content="Kanatani Toys — Strange Toys for Strange People" />
-        <meta property="og:description" content="Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton." />
-        <meta property="og:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta property="og:image:width" content="1254" />
-        <meta property="og:image:height" content="1254" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://kanatanitoys.com" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://kanatanitoys.com/social-share.jpg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo.png" />
-        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+    <Layout
+      active="shop"
+      head={(
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -106,139 +85,131 @@ export default function Home({ initialProducts, categories, error, fetchedAt }) 
             }),
           }}
         />
-      </Head>
-
-      <div className={styles.root}>
-        <header className={styles.header}>
-          <div
-            className={styles.headerLogo}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            style={{ cursor: 'pointer' }}
-          >
-            <img src="/logo.png" alt="Kanatani Toys" className={styles.logo} />
-            <div>
-              <div className={styles.logoText}>KANATANI</div>
-              <div className={styles.logoSub}>カナタニ · TOYS · BRIGHTON</div>
-            </div>
-          </div>
-          <Nav home />
-          <div className={styles.headerRight}>
-            <SocialLinks />
-            <button className={styles.cartBtn} onClick={() => setCartOpen(true)}>
-              <span>🛒</span>
-              <span className={styles.cartLabel}>Basket</span>
-              {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
-            </button>
-          </div>
-        </header>
-
-        <section className={styles.hero}>
-          <div className={styles.heroStars} aria-hidden="true" />
-          <div className={styles.heroContent}>
-            <p className={styles.heroEyebrow}>カナタニ · BRIGHTON &amp; HOVE</p>
-            <h1 className={styles.heroTitle}>Kanatani Toys</h1>
-            <p className={styles.heroSub}>
-              Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists from Japan and around the world. Hand-picked. Genuinely loved.
+      )}
+    >
+      <section className="floor herosec">
+        <div className="wrap hero">
+          <div>
+            <span className="kicker">怪獣 · ソフビ · BRIGHTON</span>
+            <h1 className="big" style={{ fontSize: lang === 'ja' ? 'clamp(38px,5.6vw,62px)' : 88, lineHeight: lang === 'ja' ? 1.3 : undefined, margin: '22px 0 26px', color: 'var(--pink)' }}>
+              {lang === 'ja'
+                ? <><span style={{ color: 'var(--sky)' }}>ストレンジ</span>な人のための<br />ストレンジなおもちゃ</>
+                : <>Strange toys<br />for <span style={{ color: 'var(--sky)' }}>strange</span><br />people</>}
+            </h1>
+            <p style={{ fontSize: 21, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 12px' }}>
+              {t('We specialise in Sofubi, Kaiju and vintage treasures, hand-picked from Japan.', '日本で一つひとつ選んだソフビ、怪獣、ヴィンテージのお宝を扱っています。')}
             </p>
-            <div className={styles.heroActions}>
-              <a href="#shop" className={styles.heroBtnPrimary}>Browse the Shop</a>
-              <a href="/our-story" className={styles.heroBtnSecondary}>Our Story →</a>
-            </div>
-            <div className={styles.searchWrap}>
-              <span className={styles.searchIcon}>🔍</span>
-              <input
-                type="text"
-                placeholder="Search toys... おもちゃを探す"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className={styles.searchInput}
-              />
+            <p style={{ fontSize: 19, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 12px' }}>
+              {t('We\u2019re also proud to support so many independent artists: makers of handmade sofubi and indie art toys, whose wonderfully strange creations are showcased in our shop.', '世界中のインディペンデント・アーティストを応援できることも、私たちの誇りです。手作りソフビやインディーのアートトイを生み出すアーティストたちの、最高にストレンジな作品をお店で紹介しています。')}
+            </p>
+            <p style={{ fontSize: 19, lineHeight: 1.55, fontWeight: 600, maxWidth: '30em', margin: '0 0 28px' }}>
+              {t('And all the amazing artists who show their work with us, from prints to keyrings, stickers and amazing clothes. We\u2019re so proud at Kanatani Toys to support so many amazing artists.', 'プリント、キーホルダー、ステッカー、素敵な洋服まで、作品を置いてくれているすべてのアーティストに感謝しています。カナタニ・トイズは、たくさんの素晴らしいアーティストを応援できることを心から誇りに思っています。')}
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+              <a className="btn" href="#shop" style={{ background: 'var(--sky)' }}>{t('Shop the toys →', 'おもちゃを見る →')}</a>
+              <Link className="btn" href="/about" style={{ background: '#fff' }}>{t('Visit the shop', 'お店に行く')}</Link>
             </div>
           </div>
-        </section>
-
-        <div className={styles.aboutStrip}>
-          <span className={styles.aboutStripItem}>🇯🇵 Hand-picked in Japan</span>
-          <span className={styles.aboutStripDivider} />
-          <span className={styles.aboutStripItem}>🎌 Independent Artists</span>
-          <span className={styles.aboutStripDivider} />
-          <span className={styles.aboutStripItem}>👾 Kaiju · Sofubi · Designer Toys</span>
-          <span className={styles.aboutStripDivider} />
-          <span className={styles.aboutStripItem}>📍 Open Market, Brighton</span>
-        </div>
-
-        {error && (
-          <div className={styles.errorBanner}>
-            ⚠ Square connection issue: {error}
-          </div>
-        )}
-
-        <div className={styles.filterBar} id="shop">
-          <div className={styles.filterTabs}>
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`${styles.filterTab} ${activeCategory === cat ? styles.filterTabActive : ''}`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          <div className={styles.productMeta}>
-            {filtered.length} products
-            {fetchedAt && <span> · synced {new Date(fetchedAt).toLocaleTimeString()}</span>}
+          <div className="heroart">
+            <div className="irasshai" aria-label="Irasshaimase">
+              {IRASSHAI.map((c, i) => <span key={i} aria-hidden="true">{c}</span>)}
+            </div>
+            <div className="welcome">WELCOME!</div>
+            <div className="circ"><img className="peeker" src="/nl/pink_head_bold.png" alt="" /></div>
           </div>
         </div>
+      </section>
 
-        <main className={styles.main}>
-          <h2 className={styles.sectionTitle}>Featured Items</h2>
-          {filtered.length === 0 ? (
-            <div className={styles.noResults}>
-              <p>🔍</p>
-              <p>No products found{search ? ` for "${search}"` : ''}.</p>
-            </div>
-          ) : (
-            <div className={styles.grid}>
-              {filtered.map(product => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onAddToCart={addToCart}
-                  cart={cart}
-                  onOpenCart={() => setCartOpen(true)}
-                />
+      <section id="shop" className="board" style={{ padding: '60px 0' }}>
+        <div className="plaque"><h2 className="mid" style={{ fontSize: 54, color: 'var(--sky)', margin: 0 }}>{t('New in the cabinet', 'ショーケースの新入荷')}</h2></div>
+      </section>
+
+      <section className="floor" style={{ padding: '56px 0 70px' }}>
+        <div className="wrap">
+          {error && <div className="errorbar">{t('Sorry, we couldn\u2019t load the toys from our till just now. Please try again in a minute.', '申し訳ありません。ただいまレジからおもちゃを読み込めませんでした。少し経ってからもう一度お試しください。')}</div>}
+          <div className="shopbar">
+            <div className="cats" role="group" aria-label="Filter by category">
+              {categories.map(cat => (
+                TAB_PAGES[cat] && !products.some(p => p.category === cat) ? (
+                  <Link key={cat} href={TAB_PAGES[cat]} className="cat">{t(cat, TAB_JA[cat])} →</Link>
+                ) : (
+                  <button
+                    key={cat}
+                    type="button"
+                    className={`cat${activeCategory === cat ? ' on' : ''}`}
+                    aria-pressed={activeCategory === cat}
+                    onClick={() => setActiveCategory(cat)}
+                  >
+                    {t(cat, TAB_JA[cat])}
+                  </button>
+                )
               ))}
             </div>
-          )}
-        </main>
-
-        <Testimonials />
-
-        <footer className={styles.footer}>
-          <div className={styles.footerLeft}>
-            <img src="/logo.png" alt="" className={styles.footerLogo} />
-            <div>
-              <div className={styles.footerName}>KANATANI TOYS</div>
-              <div className={styles.footerSub}>Strange Toys for Strange People</div>
-            </div>
+            <input
+              type="search"
+              className="search"
+              placeholder="Search toys… おもちゃを探す"
+              aria-label="Search toys"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
           </div>
-          <div className={styles.footerRight}>
-            Powered by Square API · Products & stock update automatically
-            <LegalLinks />
+          <div className="cabinet">
+            <p className="shopcount">{lang === 'ja' ? `${filtered.length}点` : `${filtered.length} ${filtered.length === 1 ? 'toy' : 'toys'}`}</p>
+            {filtered.length === 0 ? (
+              TAB_PAGES[activeCategory] && !search ? (
+                <p className="noresults">{lang === 'ja'
+                  ? <><Link href={TAB_PAGES[activeCategory]} style={{ textDecoration: 'underline' }}>{TAB_JA[activeCategory]}のページ →</Link>を見てね</>
+                  : <>Have a look on our <Link href={TAB_PAGES[activeCategory]} style={{ textDecoration: 'underline' }}>{activeCategory} page →</Link></>}</p>
+              ) : (
+                <p className="noresults">{lang === 'ja'
+                  ? `${search ? `「${search}」に` : ''}一致するおもちゃは見つかりませんでした。別の言葉で探してみてください!`
+                  : `No toys found${search ? ` for "${search}"` : ''}. Try another word!`}</p>
+              )
+            ) : (
+              <div className="shelf">
+                {filtered.map((product, i) => (
+                  <ProductCard key={product.id} product={product} index={i} />
+                ))}
+              </div>
+            )}
           </div>
-        </footer>
+        </div>
+      </section>
 
-        {cartOpen && (
-          <Cart
-            cart={cart}
-            onClose={() => setCartOpen(false)}
-            onChangeQty={changeQty}
-            onRemove={removeFromCart}
-          />
-        )}
+      <div id="gachapromo" className="wrap" style={{ paddingBlock: '0 56px' }}>
+        <Link href="/gachapon" className="gp" style={{ background: 'var(--green)', border: '5px solid var(--ink)', borderRadius: 22, padding: '24px 28px', boxShadow: '8px 8px 0 var(--ink)', color: 'var(--ink)' }}>
+          <span className="gpt">
+            <span style={{ fontWeight: 900, letterSpacing: '.2em', fontSize: 14 }}>NEW · ガチャガチャ</span>
+            <span className="big" style={{ fontSize: 'clamp(30px,4vw,46px)', color: '#fff', display: 'block' }}>{t('Play Kaiju Gachapon!', '怪獣ガチャポンで遊ぼう!')}</span>
+            <span style={{ fontWeight: 700, fontSize: 17 }}>{t('Turn the handle, open a capsule, collect all ten kaiju.', 'ハンドルを回してカプセルを開けて、怪獣10体を全部集めよう。')}</span>
+          </span>
+          <span className="btn" style={{ background: 'var(--gold)' }}>{t('Play →', '遊ぶ →')}</span>
+        </Link>
       </div>
-    </>
+
+      <section id="story" className="floor" style={{ padding: '10px 0 80px' }}>
+        <div className="wrap visit">
+          <Link href="/about" className="counter visitbox" style={{ color: 'inherit' }}>
+            <div style={{ flex: 1, textAlign: 'center' }}>
+              <div className="big" style={{ fontSize: 'clamp(40px,6vw,72px)', color: 'var(--gold)', lineHeight: 1 }}>{t('Come and visit!', '遊びに来てね!')}</div>
+              <div className="mid" style={{ fontSize: 44, color: '#fff', margin: '10px 0' }}>Unit 7, Brighton Open Market</div>
+              <div style={{ fontSize: 19 }}>{t('Marshalls Row, Brighton BN1 4JU · Tue–Sat 11–5 · every other Sunday 12–3', 'Marshalls Row, Brighton BN1 4JU · 火〜土 11時〜17時 · 日曜は隔週 12時〜15時')}</div>
+              <span className="tapme"><span className="arr">👉</span> {t('Tap here to find us', 'タップして行き方を見る')} <span className="arr r">👈</span></span>
+            </div>
+          </Link>
+          <div className="mascotcol" style={{ textAlign: 'center' }}>
+            <div className="bubble-say">{t('Come and say hi!', '気軽に寄ってね!')}</div>
+            <img src="/nl/orange_bold.png" alt="" style={{ width: 190, display: 'block', margin: '0 auto' }} />
+          </div>
+        </div>
+      </section>
+
+      <div className="peekus floor" aria-hidden="true">
+        <img src="/nl/penny-hiro.png" alt="" />
+        <span className="say">{t('こんにちは! Come and say hello!', 'こんにちは! 遊びに来てね!')}</span>
+      </div>
+    </Layout>
   );
 }
 
@@ -250,7 +221,7 @@ export async function getServerSideProps({ res }) {
 
   try {
     const token = process.env.SQUARE_ACCESS_TOKEN;
-    const locationId = process.env.SQUARE_LOCATION_ID;
+    const locationId = SQUARE_LOCATION_ID;
     const env = process.env.SQUARE_ENVIRONMENT || 'production';
     const base = env === 'sandbox'
       ? 'https://connect.squareupsandbox.com'
@@ -311,7 +282,10 @@ export async function getServerSideProps({ res }) {
       if (invR.ok) {
         const invData = await invR.json();
         (invData.counts || []).forEach(c => {
-          stockMap[c.catalog_object_id] = (stockMap[c.catalog_object_id] || 0) + parseInt(c.quantity || 0, 10);
+          // Only IN_STOCK counts are sellable. Stock removed as damaged/lost/waste
+          // comes back as other states and must not be added back on.
+          const q = c.state && c.state !== 'IN_STOCK' ? 0 : parseInt(c.quantity || 0, 10);
+          stockMap[c.catalog_object_id] = (stockMap[c.catalog_object_id] || 0) + q;
         });
       }
     }
@@ -320,19 +294,23 @@ export async function getServerSideProps({ res }) {
       .filter(item => {
         if (item.is_deleted) return false;
         if (!item.item_data?.name) return false;
-        if (item.item_data?.ecom_visibility === 'HIDDEN') return false;
+        // Hidden from the website if Penny hides it, archives it, or switches
+        // off online selling for it in Square.
+        if (item.item_data?.is_archived) return false;
+        if (['HIDDEN', 'UNAVAILABLE'].includes(item.item_data?.ecom_visibility)) return false;
         if (item.item_data?.available_online === false) return false;
+        if (isHiddenProduct(item.item_data?.name)) return false;
         return true;
       })
       .map(item => {
         const v = item.item_data?.variations?.[0];
-        const stock = stockMap[v?.id] ?? null;
+        const stock = soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v?.id] ?? null);
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
         return {
           id: item.id,
           name: item.item_data.name,
           description: item.item_data?.description || '',
-          category: categoryMap[catId] || 'Other',
+          category: shopTab(categoryMap[catId], item.item_data.name),
           price: v?.item_variation_data?.price_money?.amount || 0,
           currency: v?.item_variation_data?.price_money?.currency || 'GBP',
           stock,
@@ -344,14 +322,14 @@ export async function getServerSideProps({ res }) {
             id: vv.id,
             name: vv.item_variation_data?.name,
             price: vv.item_variation_data?.price_money?.amount || 0,
-            stock: stockMap[vv.id] ?? null,
+            stock: soldOutAt(vv, locationId, item.item_data?.name) ? 0 : (stockMap[vv.id] ?? null),
           })),
         };
       })
       .filter(p => p.price > 0)
       .reverse();
 
-    const categories = ['All', ...new Set(products.map(p => p.category))];
+    const categories = SHOP_TABS;
 
     return {
       props: {

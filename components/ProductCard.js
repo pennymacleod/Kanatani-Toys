@@ -1,85 +1,92 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+// How light a photo is (0 dark – 1 light), so the SOLD stamp can be white on
+// dark photos and black on light ones. Returns null if the photo can't be read.
+function lightness(img) {
+  try {
+    const c = document.createElement('canvas'); c.width = c.height = 24;
+    const x = c.getContext('2d'); x.drawImage(img, 0, 0, 24, 24);
+    const d = x.getImageData(0, 0, 24, 24).data; let t = 0;
+    for (let i = 0; i < d.length; i += 4) t += (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) / 255;
+    return t / (d.length / 4);
+  } catch (e) { return null; }
+}
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import styles from '../styles/Home.module.css';
+import { useCart, fmt } from '../lib/cart';
+import { useLang } from '../lib/lang';
+import { TAB_JA } from '../lib/categories';
 
-const fmt = (pence) => `£${(pence / 100).toFixed(2)}`;
+const COLOURS = ['#FF1F8F', '#FFD21F', '#3FB7F0'];
 
-export default function ProductCard({ product, onAddToCart, onOpenCart }) {
-  const router = useRouter();
+// Only honest labels, straight from Square stock numbers.
+function tagFor(stock, ja) {
+  if (stock === 0) return ja ? '売り切れ' : 'SOLD OUT';
+  if (stock !== null && stock > 1 && stock <= 5) return ja ? `残り${stock}点` : `ONLY ${stock} LEFT`;
+  return null;
+}
+
+function ShotWrap({ sold, href, children }) {
+  if (sold) return <div className="shot" style={{ display: 'block', cursor: 'default' }}>{children}</div>;
+  return <Link href={href} className="shot" style={{ display: 'block' }} tabIndex={-1} aria-hidden="true">{children}</Link>;
+}
+
+export default function ProductCard({ product, index = 0 }) {
+  const { add, setOpen } = useCart();
+  const { lang, t } = useLang();
   const [justAdded, setJustAdded] = useState(false);
   const outOfStock = product.stock === 0;
-  const lowStock = product.stock !== null && product.stock > 0 && product.stock <= 5;
+  const [light, setLight] = useState(null);
+  // For sold items, check the photo in the background (a separate copy, so the
+  // photo on the card always shows even if Square's server won't let us read it).
+  useEffect(() => {
+    const src = product.imageUrls?.[0];
+    if (!outOfStock || !src) return;
+    const im = new Image(); im.crossOrigin = 'anonymous';
+    im.onload = () => { const l = lightness(im); if (l != null) setLight(l > 0.6); };
+    im.src = src;
+  }, [outOfStock, product.imageUrls]);
+  const tag = tagFor(product.stock, lang === 'ja');
 
-  const badge = outOfStock ? 'Sold Out' : lowStock ? 'Low Stock' : null;
-
-  const handleClick = (e) => {
-    e.stopPropagation(); // don't navigate when clicking the button
+  const onAdd = () => {
     if (outOfStock) return;
     if (justAdded) {
-      onOpenCart?.();
-      setJustAdded(false); // revert to "Add" so another one can be added
-    } else {
-      onAddToCart(product);
-      setJustAdded(true);
+      setOpen(true);
+      setJustAdded(false);
+      return;
     }
+    const ok = add({ ...product, id: product.variationId || product.id });
+    if (!ok) { setOpen(true); return; }
+    setJustAdded(true);
   };
 
   return (
     <div
-      className={styles.card}
-      style={{ opacity: outOfStock ? 0.6 : 1, cursor: 'pointer' }}
-      onClick={() => router.push(`/product/${product.id}`)}
+      className={`card${outOfStock ? ' sold' : ''}`}
+      style={{ background: COLOURS[index % COLOURS.length] }}
     >
-      {/* Image */}
-      <div className={styles.cardImg}>
-        {product.imageUrls?.[0]
-          ? <img
-              src={product.imageUrls[0]}
-              alt={product.name}
-              loading="lazy"
-              style={{ width:'100%', height:'100%', objectFit:'contain', position:'absolute', inset:0 }}
-              onError={e => { e.target.style.display='none'; }}
-            />
-          : <span className={styles.cardEmoji}>🧸</span>
-        }
-        {badge && (
-          <span className={`${styles.badge} ${styles[`badge${badge.replace(' ', '')}`]}`}>
-            {badge}
-          </span>
+      {/* Sold items stay in the cabinet (at the bottom) but can't be opened. */}
+      <ShotWrap sold={outOfStock} href={`/product/${product.id}`}>
+        {product.imageUrls?.[0] ? (
+          <img src={product.imageUrls[0]} alt={product.name} loading="lazy" style={{ background: '#fff', objectFit: 'contain' }}
+ />
+        ) : (
+          <div className="ph"><img src="/nl/pink_head_bold.png" alt="" /><span>{t('Photo coming soon', '写真は準備中')}</span></div>
         )}
-        {lowStock && (
-          <span className={styles.stockWarn}>Only {product.stock} left</span>
-        )}
-      </div>
-
-      {/* Body */}
-      <div className={styles.cardBody}>
-        <div className={styles.category}>{product.category}</div>
-        {/* A real link (not just the card's onClick) so crawlers, Google and the
-            Pipeliner chatbot's product detector can find every product page. */}
-        <h3 className={styles.productName}>
-          <Link
-            href={`/product/${product.id}`}
-            onClick={(e) => e.stopPropagation()}
-            style={{ color: 'inherit', textDecoration: 'none' }}
-          >
-            {product.name}
-          </Link>
-        </h3>
-        {product.description && (
-          <p className={styles.description}>{product.description}</p>
-        )}
-        <div className={styles.cardFooter}>
-          <span className={styles.price}>{fmt(product.price)}</span>
-          <button
-            className={`${styles.addBtn} ${justAdded ? styles.addBtnDone : ''}`}
-            onClick={handleClick}
-            disabled={outOfStock}
-          >
-            {outOfStock ? 'Sold Out' : justAdded ? 'View Basket →' : 'Add'}
-          </button>
-        </div>
+        {tag && !outOfStock && <span className="tag">{tag}</span>}
+        {outOfStock && <span className={`soldstamp${light ? ' onlight' : ''}`} aria-label={t('Sold', '売り切れ')}>{t('SOLD', '売切')}</span>}
+      </ShotWrap>
+      {product.category && product.category !== 'Other' && <div className="maker">{t(product.category, TAB_JA[product.category])}</div>}
+      <div className="name">{outOfStock ? product.name : <Link href={`/product/${product.id}`}>{product.name}</Link>}</div>
+      <div className="cardfoot">
+        <div className="price"><span>{fmt(product.price)}</span></div>
+        <button
+          type="button"
+          className={`addbtn${justAdded ? ' done' : ''}`}
+          onClick={onAdd}
+          disabled={outOfStock}
+        >
+          {outOfStock ? t('Sold out', '売り切れ') : justAdded ? t('View basket →', 'カートを見る →') : t('Add +', 'カートに入れる +')}
+        </button>
       </div>
     </div>
   );

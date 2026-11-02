@@ -1,3 +1,7 @@
+import { SHIRTS } from '../lib/tshirts';
+import { isHidden } from '../lib/hidden';
+import { ARTISTS } from '../lib/artists';
+
 const SQUARE_BASE = process.env.SQUARE_ENVIRONMENT === 'sandbox'
   ? 'https://connect.squareupsandbox.com'
   : 'https://connect.squareup.com';
@@ -42,7 +46,15 @@ function buildSitemap(products) {
     { loc: `${SITE_URL}/about`, priority: '0.6' },
     { loc: `${SITE_URL}/our-story`, priority: '0.5' },
     { loc: `${SITE_URL}/sofubi-showcase`, priority: '0.5' },
+    { loc: `${SITE_URL}/gachapon`, priority: '0.4' },
+    { loc: `${SITE_URL}/badge-press`, priority: '0.4' },
+    { loc: `${SITE_URL}/news`, priority: '0.5' },
+    { loc: `${SITE_URL}/t-shirts`, priority: '0.5' },
+    ...SHIRTS.map(t => ({ loc: `${SITE_URL}/t-shirts/${t.slug}`, priority: '0.4' })),
+    ...ARTISTS.map(a => ({ loc: `${SITE_URL}/artist/${a.slug}`, priority: '0.4' })),
   ];
+
+  const visible = staticUrls.filter(u => !isHidden(u.loc.replace(SITE_URL, '') || '/'));
 
   const productUrls = products.map(p => ({
     loc: `${SITE_URL}/product/${p.id}`,
@@ -50,7 +62,7 @@ function buildSitemap(products) {
     priority: '0.8',
   }));
 
-  const urls = [...staticUrls, ...productUrls];
+  const urls = [...visible, ...productUrls];
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
