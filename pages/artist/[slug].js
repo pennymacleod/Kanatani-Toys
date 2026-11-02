@@ -85,7 +85,7 @@ export default function ArtistPage({ slug }) {
               <div className="mbtns">
                 {a.instagram && <a className="btn" href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ background: '#fff', color: '#141018' }}>Instagram · {a.handle}</a>}
                 {a.website && <a className="btn" href={a.website} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--sky)', color: '#141018' }}>{t('Website ↗', 'ウェブサイト ↗')}</a>}
-                {a.work.length > 0 && <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>{t('See what\u2019s in the shop ↓', 'お店にある作品を見る ↓')}</a>}
+                <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>{t('See what\u2019s in the shop ↓', 'お店にある作品を見る ↓')}</a>
               </div>
             </div>
             <div className="mpanel">
@@ -93,13 +93,13 @@ export default function ArtistPage({ slug }) {
             </div>
           </div>
 
-          {a.work.length > 0 && <div className="workh" id="work">
+          <div className="workh" id="work">
             <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{t('In the shop now', '店頭にあります')}</span></span>
-          </div>}
+          </div>
 
-          {a.work.length > 0 && (
+          {(
             <>
-              <p className="wintro">{t('Tap a photo to see it bigger.', '写真をタップすると大きく見られます。')}</p>
+              {a.work.length > 0 && <p className="wintro">{t('Tap a photo to see it bigger.', '写真をタップすると大きく見られます。')}</p>}
               <div className="wgrid">
                 {a.work.map((w, i) => (
                   // A gallery, not a shop. `shop: "word"` swaps the DM button for a
@@ -115,6 +115,14 @@ export default function ArtistPage({ slug }) {
                         ? <Link className="btn wdm" href={`/?q=${encodeURIComponent(w.shop)}#shop`}>{t('Buy online →', 'オンラインで買う →')}</Link>
                         : !w.sold && <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer">💬 {t('Ask about it', 'DMで聞く')}</a>}
                     </div>
+                  </div>
+                ))}
+                {/* Always four spaces, like Ofuton Heaven: empty ones say photos coming soon. */}
+                {Array.from({ length: Math.max(0, 4 - a.work.length) }).map((_, k) => (
+                  <div key={`soon-${k}`} className="wcard wsoon">
+                    <div className="wshot"><div className="ph"><img src="/nl/pink_head_bold.png" alt="" /><span>{t('Photos coming soon', '写真は準備中')}</span></div></div>
+                    <div className="wname">{t('Photos coming soon', '写真は準備中')}</div>
+                    <div className="wbottom"><span className="wprice">{t('In the shop', '店頭にあります')}</span></div>
                   </div>
                 ))}
               </div>
