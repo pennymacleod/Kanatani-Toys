@@ -402,3 +402,83 @@ button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;le
 /* Kanatani News: wish list form (Tally embed) in the sky-blue panel */
 .pg-news .wishform { background: #F2C230; border: 4px solid var(--ink); border-radius: 22px; padding: 6px 10px; overflow: hidden; }
 .pg-news .wishform iframe { display: block; width: 100%; border: 0; min-height: 600px; }
+
+/* ── Kanatani TV (/tv) ─────────────────────────────────────────────
+   A chunky retro telly. Shows live in lib/tv.js. */
+.pg-tv .tv-wrap{padding:30px 16px 70px}
+.pg-tv .tv-hd{text-align:center}
+.pg-tv .tv-title{font-size:clamp(52px,11vw,104px);line-height:.95;color:#fff;margin:0}
+.pg-tv .tv-jp{font-family:'Mochiy Pop One',sans-serif;color:var(--tardis);font-size:22px;margin-top:8px}
+.pg-tv .tv-sub{font-weight:800;font-size:18px;max-width:600px;margin:12px auto 0;line-height:1.45}
+.pg-tv .tvzone{position:relative;max-width:760px;margin:150px auto 0}
+.pg-tv .ant{position:absolute;top:0;left:50%;width:0;height:0;z-index:1}
+.pg-tv .ant i{position:absolute;bottom:20px;left:-3px;width:7px;height:92px;background:var(--ink);border-radius:4px;transform-origin:bottom center}
+.pg-tv .ant i:nth-of-type(1){transform:rotate(-32deg)}
+.pg-tv .ant i:nth-of-type(2){transform:rotate(30deg)}
+.pg-tv .ant b{position:absolute;width:22px;height:22px;border:4px solid var(--ink);border-radius:50%}
+.pg-tv .ant b:nth-of-type(1){background:var(--pink);left:-62px;top:-118px}
+.pg-tv .ant b:nth-of-type(2){background:var(--sky);left:32px;top:-118px}
+.pg-tv .ant em{position:absolute;left:-30px;top:-26px;width:52px;height:24px;background:var(--ink);border-radius:26px 26px 0 0}
+.pg-tv .tvset{position:relative;background:var(--red);border:6px solid var(--ink);border-radius:34px;box-shadow:12px 12px 0 var(--ink);padding:22px;display:flex;gap:18px;z-index:2}
+.pg-tv .tvset:before{content:"";position:absolute;inset:8px;border:3px dashed rgba(255,244,214,.55);border-radius:26px;pointer-events:none}
+.pg-tv .bezel{flex:1;background:var(--cream);border:5px solid var(--ink);border-radius:28px;padding:14px;position:relative;z-index:1}
+.pg-tv .screen{position:relative;aspect-ratio:4/3;border:5px solid var(--ink);border-radius:46px/38px;overflow:hidden;background:#20142a;box-shadow:inset 0 0 50px rgba(0,0,0,.7)}
+.pg-tv .screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.pg-tv .bars{position:absolute;inset:0;display:flex}
+.pg-tv .bars i{flex:1}
+.pg-tv .bars i:nth-child(1){background:#EDEDED}.pg-tv .bars i:nth-child(2){background:#F2D21B}.pg-tv .bars i:nth-child(3){background:#2ED3E0}.pg-tv .bars i:nth-child(4){background:#5BD34A}.pg-tv .bars i:nth-child(5){background:#FF1F8F}.pg-tv .bars i:nth-child(6){background:#E0262E}.pg-tv .bars i:nth-child(7){background:#1A3FA6}
+.pg-tv .scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 2px,transparent 2px 5px)}
+.pg-tv .glare{position:absolute;inset:0;background:radial-gradient(ellipse at 28% 18%,rgba(255,255,255,.45),transparent 42%);pointer-events:none}
+.pg-tv .tcard{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--ink);color:#fff;border:4px solid #fff;border-radius:18px;padding:12px 18px;text-align:center;width:74%}
+.pg-tv .tcard .k{font-family:'Mochiy Pop One',sans-serif;color:var(--sky);font-size:14px}
+.pg-tv .tcard .t{font-family:'Rubik',sans-serif;font-weight:900;font-size:clamp(17px,3.6vw,26px);margin:4px 0;line-height:1.15}
+.pg-tv .tvplay{display:inline-flex;align-items:center;justify-content:center;width:62px;height:62px;border-radius:50%;background:var(--pink);border:4px solid #fff;margin-top:6px;cursor:pointer;padding:0}
+.pg-tv .tvplay:after{content:"";border-left:22px solid #fff;border-top:14px solid transparent;border-bottom:14px solid transparent;margin-left:6px}
+.pg-tv .tvplay:hover{transform:scale(1.08)}
+.pg-tv .onair{position:absolute;top:14px;left:18px;background:var(--red);color:#fff;font-weight:900;font-size:12px;letter-spacing:2px;padding:4px 10px;border:3px solid #fff;border-radius:8px}
+.pg-tv .side{width:118px;display:flex;flex-direction:column;align-items:center;gap:14px;background:var(--cream);border:5px solid var(--ink);border-radius:22px;padding:16px 10px;position:relative;z-index:1}
+.pg-tv .knob{position:relative;width:62px;height:62px;border-radius:50%;background:var(--yellow);border:5px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:0;cursor:pointer;transition:transform .3s}
+.pg-tv .knob:after{content:"";position:absolute;left:50%;top:5px;width:6px;height:20px;margin-left:-3px;background:var(--ink);border-radius:3px}
+.pg-tv button.knob:not(:disabled):hover{transform:rotate(40deg)}
+.pg-tv button.knob:disabled{cursor:default}
+.pg-tv .knob.k2{background:var(--sky);transform:rotate(60deg);cursor:default}
+.pg-tv .lbl{font-weight:900;font-size:11px;letter-spacing:1px;margin-top:-8px}
+.pg-tv .grille{width:78px;display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.pg-tv .grille i{height:6px;background:var(--ink);border-radius:3px}
+.pg-tv .chan{font-family:'Rubik',sans-serif;font-weight:900;font-size:22px;background:var(--ink);color:#5BFF7A;border-radius:8px;padding:2px 10px;letter-spacing:2px}
+.pg-tv .feet{display:flex;justify-content:space-between;width:70%;margin:-4px auto 0;position:relative;z-index:1}
+.pg-tv .feet i{width:36px;height:28px;background:var(--ink);border-radius:0 0 10px 10px}
+.pg-tv .tv-pinky{position:absolute;right:-120px;bottom:-14px;width:150px;z-index:3;transform:rotate(10deg);pointer-events:none}
+.pg-tv .tv-ticket{max-width:640px;margin:36px auto 0;background:#fff;border:5px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);padding:16px 20px;display:flex;gap:16px;align-items:center}
+.pg-tv .tv-ticket .when{background:var(--pink);color:#fff;border:4px solid var(--ink);border-radius:16px;padding:8px 12px;text-align:center;font-weight:900;line-height:1.05;flex:none}
+.pg-tv .tv-ticket .when b{display:block;font-size:26px}
+.pg-tv .tv-ticket h3{margin:2px 0 0;font-weight:900;font-size:21px}
+.pg-tv .tv-ticket p{margin:4px 0 0;font-weight:600;font-size:15px;line-height:1.45}
+.pg-tv .tv-ticket small{display:block;margin-top:4px;font-weight:700;opacity:.7}
+.pg-tv .tv-cat{display:inline-block;background:var(--sky);border:3px solid var(--ink);border-radius:999px;padding:1px 10px;font-weight:900;font-size:12px;letter-spacing:.5px}
+.pg-tv .tv-past{margin:46px auto 0;max-width:920px;text-align:center}
+.pg-tv .tv-past .plaque{margin-bottom:20px}
+.pg-tv .minis{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;text-align:center}
+.pg-tv .mini{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pg-tv .mtv{width:100%;background:var(--c);border:5px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:10px;display:flex;gap:8px;transition:transform .15s}
+.pg-tv .mini:hover .mtv{transform:translate(-2px,-2px) rotate(-1deg)}
+.pg-tv .ms{flex:1;aspect-ratio:4/3;border:4px solid var(--ink);border-radius:20px/16px;background:#20142a;position:relative;overflow:hidden}
+.pg-tv .ms:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 2px,transparent 2px 5px)}
+.pg-tv .ms span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:13px;letter-spacing:1px}
+.pg-tv .mk{width:20px;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.pg-tv .mk i{width:18px;height:18px;border-radius:50%;background:var(--cream);border:3px solid var(--ink)}
+.pg-tv .mname{font-weight:900;font-size:15px;margin-top:4px}
+.pg-tv .mini small{font-weight:700;opacity:.75}
+.pg-tv .tv-note{max-width:640px;margin:36px auto 0;text-align:center;font-weight:700;font-size:13px;line-height:1.5;background:var(--cream);border:4px dashed var(--ink);border-radius:18px;padding:12px 16px}
+@media (max-width:600px){
+  .pg-tv .tvzone{margin-top:140px}
+  .pg-tv .tvset{flex-direction:column;padding:16px;gap:14px}
+  .pg-tv .side{width:100%;flex-direction:row;justify-content:space-around;padding:10px}
+  .pg-tv .lbl{display:none}
+  .pg-tv .grille{width:60px}
+  .pg-tv .tv-pinky{width:84px;right:-6px;bottom:auto;top:-128px;transform:rotate(-6deg)}
+  .pg-tv .tvplay{width:48px;height:48px}
+  .pg-tv .onair{top:8px;left:12px;font-size:10px;padding:2px 7px}
+  .pg-tv .tcard{top:56%}
+  .pg-tv .minis{grid-template-columns:1fr 1fr;gap:16px}
+}

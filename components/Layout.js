@@ -12,6 +12,7 @@ export const NAV = [
   { key: 'story', label: 'Our Story', ja: '私たちについて', href: '/our-story', bg: 'var(--orange)' },
   { key: 'findus', label: 'Find Us', ja: 'アクセス', href: '/about', bg: 'var(--gold)', ink: true },
   { key: 'news', label: 'Kanatani News', ja: 'カナタニ・ニュース', href: '/news', bg: 'var(--tardis)' },
+  { key: 'tv', label: 'Kanatani TV', ja: 'カナタニTV', href: '/tv', bg: 'var(--red)' },
   { key: 'gacha', label: 'Kaiju Gachapon', ja: '怪獣ガチャポン', href: '/gachapon', bg: 'var(--green)' },
   { key: 'badges', label: 'Badge Press', ja: '缶バッジ・プレス', href: '/badge-press', bg: 'var(--orange)' },
 ];
