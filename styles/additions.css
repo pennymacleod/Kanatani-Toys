@@ -482,3 +482,7 @@ button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;le
   .pg-tv .tcard{top:56%}
   .pg-tv .minis{grid-template-columns:1fr 1fr;gap:16px}
 }
+
+/* Kaiju Gachapon: drawn kaiju (art: true) stand flush on the bottom of the card's picture box */
+.pg-gacha .kphoto.has.art{justify-content:flex-end;padding:12px 12px 0;overflow:hidden}
+.pg-gacha .kphoto.has.art img{display:block;max-height:100%;max-width:100%;object-fit:contain;object-position:center bottom;filter:none;margin-bottom:0}

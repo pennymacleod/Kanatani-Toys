@@ -15,6 +15,8 @@ const HINTS = {
 const RARITY_JA = { 'SUPER RARE': 'スーパーレア', RARE: 'レア', COMMON: 'ノーマル' };
 
 // Ten kaiju to collect. Add `img` (a file in public/nl/) to show a photo of the figure.
+// `art: true` = a drawing with a see-through background; it sits flush on the
+// bottom edge of the card's picture box (no white gap underneath).
 const KAIJU = [
   {
     "id": "godzilla",
@@ -27,7 +29,9 @@ const KAIJU = [
     "year": "1954",
     "studio": "Toho film",
     "rarity": "SUPER RARE",
-    "fact": "His Japanese name, Gojira, mixes gorira (gorilla) and kujira (whale)."
+    "fact": "His Japanese name, Gojira, mixes gorira (gorilla) and kujira (whale).",
+    "img": "/nl/gacha-godzilla.png",
+    "art": true
   },
   {
     "id": "mothra",
@@ -80,7 +84,9 @@ const KAIJU = [
     "year": "1964",
     "studio": "Toho film",
     "rarity": "SUPER RARE",
-    "fact": "He was inspired by Yamata no Orochi, an eight-headed dragon from Japanese myth. The team thought about giving him seven or eight heads before settling on three."
+    "fact": "He was inspired by Yamata no Orochi, an eight-headed dragon from Japanese myth. The team thought about giving him seven or eight heads before settling on three.",
+    "img": "/nl/gacha-king-ghidorah.png",
+    "art": true
   },
   {
     "id": "garamon",
@@ -312,7 +318,7 @@ export default function Gachapon() {
               <span className="rar">★ {t(card.k.rarity, RARITY_JA[card.k.rarity])}</span>
               <span className="num">No. {KAIJU.indexOf(card.k) + 1} / {KAIJU.length}</span>
               {card.k.img ? (
-                <div className="kphoto has"><img src={card.k.img} alt={`${card.k.en} sofubi in our shop`} /></div>
+                <div className={'kphoto has' + (card.k.art ? ' art' : '')}><img src={card.k.img} alt={card.k.art ? `${card.k.en}, drawn for Kanatani Toys` : `${card.k.en} sofubi in our shop`} /></div>
               ) : (
                 <div className="kphoto"><span className="bigjp">{card.k.jp}</span></div>
               )}
