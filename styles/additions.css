@@ -382,3 +382,9 @@ html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
 /* Coming soon: just the next artist, about twice the size of a normal card. */
 .agrid.soonone{grid-template-columns:minmax(0,1fr)!important;max-width:min(100%,400px);margin-left:auto;margin-right:auto}
 @media (min-width:700px){.agrid.soonone{zoom:1.8}}
+
+/* Live site: Kaiju Gachapon and Badge Press show but are paused (lib/hidden.js). */
+.paused{position:relative}
+.paused .pausedinner{pointer-events:none;user-select:none;filter:grayscale(.5) brightness(.75)}
+.pausedcover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:min(22vh,180px);gap:18px;text-align:center;z-index:5;background:rgba(20,16,24,.35)}
+.pausedcover p{background:#fff;border:4px solid var(--ink);border-radius:18px;padding:12px 18px;font-weight:800;max-width:min(90%,520px);margin:0 16px}

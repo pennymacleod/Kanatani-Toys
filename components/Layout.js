@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useCart } from '../lib/cart';
 import CartDrawer from './CartDrawer';
 import { useLang } from '../lib/lang';
-import { isHidden } from '../lib/hidden';
+import { isHidden, isPaused } from '../lib/hidden';
 
 // Shared nav. Keep this the single source of truth for the menu.
 export const NAV = [
@@ -121,7 +121,15 @@ export default function Layout({
           </span>
         </div>
 
-        <main>{children}</main>
+        <main>{isPaused(path) ? (
+          <div className="paused">
+            <div className="pausedinner" aria-hidden="true">{children}</div>
+            <div className="pausedcover">
+              <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(30px,5vw,52px)', color: 'var(--sky)' }}>{t('Coming soon', '近日公開')}</span></span>
+              <p>{t('We\u2019re still putting the finishing touches on this one. Check back soon!', 'ただいま準備中です。もうしばらくお待ちください！')}</p>
+            </div>
+          </div>
+        ) : children}</main>
 
         <div className="scallop up" style={{ marginBottom: -1 }} />
         <footer>
