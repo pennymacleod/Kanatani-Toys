@@ -393,3 +393,8 @@ html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
 /* Live site: Japanese button shows 'coming soon' until Hiro has checked it. */
 button.soonlang{opacity:.6;cursor:default}
 button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;letter-spacing:.04em}
+
+/* Artist pages: empty spaces in the "In the shop now" row (photos coming soon). */
+.pg-artist .wsoon .ph{position:absolute;inset:0;aspect-ratio:auto;height:100%}
+.pg-artist .wsoon .ph img{position:static;width:40%;height:auto;padding:0;object-fit:contain}
+.pg-artist .wsoon .wname{opacity:.7}
