@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
   // Online orders paused (Oct 2026) while postage charges are sorted out.
   // Set ORDERS_PAUSED to false to take orders again.
-  const ORDERS_PAUSED = true;
+  const ORDERS_PAUSED = false;
   if (ORDERS_PAUSED) {
     return res.status(503).json({
       error: 'Online orders are paused for a few days while we sort out postage. Please pop into the shop or message us on Instagram @kanatani_toys to order. Sorry!',
