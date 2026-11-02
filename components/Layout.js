@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useCart } from '../lib/cart';
 import CartDrawer from './CartDrawer';
-import { useLang } from '../lib/lang';
+import { useLang, JAPANESE_OFF } from '../lib/lang';
 import { isHidden, isPaused } from '../lib/hidden';
 
 // Shared nav. Keep this the single source of truth for the menu.
@@ -91,7 +91,9 @@ export default function Layout({
           </button>
           <div className="langsw" role="group" aria-label="Language / 言語">
             <button type="button" className={lang === 'en' ? 'on' : ''} aria-pressed={lang === 'en'} onClick={() => setLang('en')}><FlagUK /> EN</button>
-            <button type="button" className={lang === 'ja' ? 'on' : ''} aria-pressed={lang === 'ja'} onClick={() => setLang('ja')}><FlagJP /> 日本語</button>
+            {JAPANESE_OFF
+              ? <button type="button" className="soonlang" disabled title="Japanese coming soon"><FlagJP /> 日本語 <small>coming soon</small></button>
+              : <button type="button" className={lang === 'ja' ? 'on' : ''} aria-pressed={lang === 'ja'} onClick={() => setLang('ja')}><FlagJP /> 日本語</button>}
           </div>
           <div className="wrap" style={{ paddingTop: 40 }}>
             <Link href="/" aria-label="Kanatani Toys home" style={{ display: 'block', width: 'max-content', maxWidth: '100%', margin: '0 auto' }}>
