@@ -112,7 +112,9 @@ const KAIJU = [
     "year": "1966",
     "studio": "TV series",
     "rarity": "SUPER RARE",
-    "fact": "Known as the 'Space Ninja', with a famously spooky laugh. Baltan is often called Ultraman's most popular enemy."
+    "fact": "Known as the 'Space Ninja', with a famously spooky laugh. Baltan is often called Ultraman's most popular enemy.",
+    "img": "/nl/gacha-alien-baltan.png",
+    "art": true
   },
   {
     "id": "metron",
