@@ -64,6 +64,6 @@ export default function ArtistBox({ artist, soon = false }) {
     </>
   );
 
-  if (soon) return <div className="abox nb soon">{inner}</div>;
-  return <Link className="abox nb" href={`/artist/${artist.slug}`}>{inner}</Link>;
+  if (soon && !artist.slug) return <div className="abox nb soon">{inner}</div>;
+  return <Link className={soon ? 'abox nb soon' : 'abox nb'} href={`/artist/${artist.slug}`}>{inner}</Link>;
 }

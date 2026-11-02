@@ -85,7 +85,7 @@ export default function ArtistPage({ slug }) {
               <div className="mbtns">
                 {a.instagram && <a className="btn" href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ background: '#fff', color: '#141018' }}>Instagram · {a.handle}</a>}
                 {a.website && <a className="btn" href={a.website} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--sky)', color: '#141018' }}>{t('Website ↗', 'ウェブサイト ↗')}</a>}
-                <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>{t('See what\u2019s in the shop ↓', 'お店にある作品を見る ↓')}</a>
+                <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>{a.comingSoon ? t('See what\u2019s coming ↓', '入荷予定の作品を見る ↓') : t('See what\u2019s in the shop ↓', 'お店にある作品を見る ↓')}</a>
               </div>
             </div>
             <div className="mpanel">
@@ -94,7 +94,7 @@ export default function ArtistPage({ slug }) {
           </div>
 
           <div className="workh" id="work">
-            <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{t('In the shop now', '店頭にあります')}</span></span>
+            <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{a.comingSoon ? t('Coming soon to the shop', '近日入荷') : t('In the shop now', '店頭にあります')}</span></span>
           </div>
 
           {(
@@ -110,7 +110,7 @@ export default function ArtistPage({ slug }) {
                     </button>
                     <div className="wname">{w.name}</div>
                     <div className="wbottom">
-                      <span className="wprice">{w.sold ? t('SOLD OUT', '売り切れ') : t('In the shop', '店頭にあります')}</span>
+                      <span className="wprice">{w.sold ? t('SOLD OUT', '売り切れ') : a.comingSoon ? t('Coming soon', '近日入荷') : t('In the shop', '店頭にあります')}</span>
                       {w.shop
                         ? <Link className="btn wdm" href={`/?q=${encodeURIComponent(w.shop)}#shop`}>{t('Buy online →', 'オンラインで買う →')}</Link>
                         : !w.sold && <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer">💬 {t('Ask about it', 'DMで聞く')}</a>}

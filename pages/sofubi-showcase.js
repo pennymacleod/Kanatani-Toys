@@ -15,15 +15,19 @@ export default function SofubiShowcase() {
   const byTab = (list) => list.map((a, i) => [a, i]).sort((x, y) => rank(x[0]) - rank(y[0]) || x[1] - y[1]).map(x => x[0]);
   // The newest artist (the last one added to lib/artists.js) goes to the top
   // of "All" and pushes everyone else down.
-  const newest = ARTISTS[ARTISTS.length - 1];
+  // Artists with `comingSoon: true` have a page but their stock hasn't
+  // arrived yet, so they show under Coming soon instead of the main grid.
+  const live = ARTISTS.filter(a => !a.comingSoon);
+  const newest = live[live.length - 1];
   const shown = cat === 'All'
-    ? [newest, ...byTab(ARTISTS.filter(a => a !== newest))]
-    : byTab(ARTISTS.filter(match));
+    ? [newest, ...byTab(live.filter(a => a !== newest))]
+    : byTab(live.filter(match));
   // Coming soon: only the next artist (first in COMING_SOON) is shown, big.
   // Add ?all to the address to see the full list (for Penny).
   const [showAll, setShowAll] = useState(false);
   useEffect(() => { setShowAll(new URLSearchParams(window.location.search).has('all')); }, []);
-  const soon = showAll ? byTab(COMING_SOON.filter(match)) : COMING_SOON.slice(0, 1).filter(match);
+  const soonAll = [...ARTISTS.filter(a => a.comingSoon), ...COMING_SOON];
+  const soon = showAll ? byTab(soonAll.filter(match)) : soonAll.slice(0, 1).filter(match);
 
   return (
     <Layout
