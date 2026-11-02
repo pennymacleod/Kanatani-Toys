@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useCart, fmt } from '../lib/cart';
 import MiniBadgePress from './MiniBadgePress';
+import { isPaused } from '../lib/hidden';
 import { postageFor } from '../lib/postage';
 
 export default function CartDrawer() {
@@ -90,9 +91,10 @@ export default function CartDrawer() {
 
         {cart.length > 0 && (
           <div className="nl-drawer-foot">
-            <MiniBadgePress />
+            {/* Mystery badges aren't on the till yet, so no badge offer on the live site. */}
+            {!isPaused('/badge-press') && <MiniBadgePress />}
             <div className="nl-uk">
-              <p><b>🇬🇧 We post to UK addresses only.</b> Outside the UK? Email us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a> and we'll sort it out for you.</p>
+              <p><b>🇬🇧 We post to UK addresses only at the moment.</b> We're working on posting to other countries. In the meantime, if you're outside the UK, email us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a> and we'll see what we can do.</p>
               <label><input type="checkbox" checked={ukOk} onChange={e => { setUkOk(e.target.checked); setError(''); }} /> My delivery address is in the UK</label>
             </div>
             {postage != null && <div className="nl-sub"><span>UK postage (tracked)</span><span>{postage === 0 ? 'Free' : fmt(postage)}</span></div>}
