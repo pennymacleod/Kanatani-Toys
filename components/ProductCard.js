@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // How light a photo is (0 dark – 1 light), so the SOLD stamp can be white on
 // dark photos and black on light ones. Returns null if the photo can't be read.
@@ -34,8 +34,17 @@ export default function ProductCard({ product, index = 0 }) {
   const { add, setOpen } = useCart();
   const { lang, t } = useLang();
   const [justAdded, setJustAdded] = useState(false);
-  const [light, setLight] = useState(null);
   const outOfStock = product.stock === 0;
+  const [light, setLight] = useState(null);
+  // For sold items, check the photo in the background (a separate copy, so the
+  // photo on the card always shows even if Square's server won't let us read it).
+  useEffect(() => {
+    const src = product.imageUrls?.[0];
+    if (!outOfStock || !src) return;
+    const im = new Image(); im.crossOrigin = 'anonymous';
+    im.onload = () => { const l = lightness(im); if (l != null) setLight(l > 0.6); };
+    im.src = src;
+  }, [outOfStock, product.imageUrls]);
   const tag = tagFor(product.stock, lang === 'ja');
 
   const onAdd = () => {
@@ -59,7 +68,7 @@ export default function ProductCard({ product, index = 0 }) {
       <ShotWrap sold={outOfStock} href={`/product/${product.id}`}>
         {product.imageUrls?.[0] ? (
           <img src={product.imageUrls[0]} alt={product.name} loading="lazy" style={{ background: '#fff', objectFit: 'contain' }}
-            {...(outOfStock ? { crossOrigin: 'anonymous', onLoad: (e) => { const l = lightness(e.currentTarget); if (l != null) setLight(l > 0.6); } } : {})} />
+ />
         ) : (
           <div className="ph"><img src="/nl/pink_head_bold.png" alt="" /><span>{t('Photo coming soon', '写真は準備中')}</span></div>
         )}
