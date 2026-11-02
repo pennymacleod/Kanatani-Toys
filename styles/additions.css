@@ -362,14 +362,15 @@ html[lang="ja"] body { word-break: auto-phrase; line-break: strict; }
 .nl-sub{display:flex;justify-content:space-between;font-weight:700;margin-bottom:4px}
 
 /* Sold toys: faded, with a big red rubber-stamp SOLD across the photo */
-.card.sold .shot img{filter:grayscale(.65) opacity(.55)}
+.card.sold .shot img{filter:grayscale(.4) opacity(.8)}
 .card.sold .name,.card.sold .price,.card.sold .maker{opacity:.6}
+/* SOLD stamp: bright white on dark photos, solid black on light photos
+   (ProductCard checks how light the photo is). */
 .soldstamp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-14deg);z-index:2;pointer-events:none;
-  font:400 clamp(34px,5vw,54px)/1 'Bagel Fat One','Mochiy Pop One',Rubik,sans-serif;letter-spacing:4px;color:#fff;
-  padding:6px 18px 8px;border:6px solid #fff;border-radius:12px;background:rgba(20,16,24,.6);
-  box-shadow:0 0 0 3px rgba(20,16,24,.35);text-shadow:none;
-  -webkit-mask-image:radial-gradient(circle at 30% 40%,#000 55%,rgba(0,0,0,.75) 70%,#000 85%);
-  mix-blend-mode:multiply}
+  font:400 clamp(38px,5.4vw,60px)/1 'Bagel Fat One','Mochiy Pop One',Rubik,sans-serif;letter-spacing:4px;
+  padding:6px 18px 8px;border:6px solid currentColor;border-radius:12px;background:none;
+  color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.55);box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.soldstamp.onlight{color:#141018;text-shadow:none;box-shadow:none}
 
 /* Artist pages: the toy sits in the middle of the starburst panel (Oct 2026,
    Penny). Prints keep their own framing and "flush" cut-offs stay on the bottom edge. */

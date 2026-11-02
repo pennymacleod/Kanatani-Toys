@@ -1,4 +1,16 @@
 import { useState } from 'react';
+
+// How light a photo is (0 dark – 1 light), so the SOLD stamp can be white on
+// dark photos and black on light ones. Returns null if the photo can't be read.
+function lightness(img) {
+  try {
+    const c = document.createElement('canvas'); c.width = c.height = 24;
+    const x = c.getContext('2d'); x.drawImage(img, 0, 0, 24, 24);
+    const d = x.getImageData(0, 0, 24, 24).data; let t = 0;
+    for (let i = 0; i < d.length; i += 4) t += (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) / 255;
+    return t / (d.length / 4);
+  } catch (e) { return null; }
+}
 import Link from 'next/link';
 import { useCart, fmt } from '../lib/cart';
 import { useLang } from '../lib/lang';
@@ -22,6 +34,7 @@ export default function ProductCard({ product, index = 0 }) {
   const { add, setOpen } = useCart();
   const { lang, t } = useLang();
   const [justAdded, setJustAdded] = useState(false);
+  const [light, setLight] = useState(null);
   const outOfStock = product.stock === 0;
   const tag = tagFor(product.stock, lang === 'ja');
 
@@ -45,12 +58,13 @@ export default function ProductCard({ product, index = 0 }) {
       {/* Sold items stay in the cabinet (at the bottom) but can't be opened. */}
       <ShotWrap sold={outOfStock} href={`/product/${product.id}`}>
         {product.imageUrls?.[0] ? (
-          <img src={product.imageUrls[0]} alt={product.name} loading="lazy" style={{ background: '#fff', objectFit: 'contain' }} />
+          <img src={product.imageUrls[0]} alt={product.name} loading="lazy" style={{ background: '#fff', objectFit: 'contain' }}
+            {...(outOfStock ? { crossOrigin: 'anonymous', onLoad: (e) => { const l = lightness(e.currentTarget); if (l != null) setLight(l > 0.6); } } : {})} />
         ) : (
           <div className="ph"><img src="/nl/pink_head_bold.png" alt="" /><span>{t('Photo coming soon', '写真は準備中')}</span></div>
         )}
         {tag && !outOfStock && <span className="tag">{tag}</span>}
-        {outOfStock && <span className="soldstamp" aria-label={t('Sold', '売り切れ')}>{t('SOLD', '売切')}</span>}
+        {outOfStock && <span className={`soldstamp${light ? ' onlight' : ''}`} aria-label={t('Sold', '売り切れ')}>{t('SOLD', '売切')}</span>}
       </ShotWrap>
       {product.category && product.category !== 'Other' && <div className="maker">{t(product.category, TAB_JA[product.category])}</div>}
       <div className="name">{outOfStock ? product.name : <Link href={`/product/${product.id}`}>{product.name}</Link>}</div>
