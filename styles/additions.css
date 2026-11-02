@@ -410,7 +410,7 @@ button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;le
 .pg-tv .tv-title{font-size:clamp(52px,11vw,104px);line-height:.95;color:#fff;margin:0}
 .pg-tv .tv-jp{font-family:'Mochiy Pop One',sans-serif;color:var(--tardis);font-size:22px;margin-top:8px}
 .pg-tv .tv-sub{font-weight:800;font-size:18px;max-width:600px;margin:12px auto 0;line-height:1.45}
-.pg-tv .tvzone{position:relative;max-width:760px;margin:150px auto 0}
+.pg-tv .tvzone{position:relative;max-width:760px;margin:215px auto 0}
 .pg-tv .ant{position:absolute;top:0;left:50%;width:0;height:0;z-index:1}
 .pg-tv .ant i{position:absolute;bottom:20px;left:-3px;width:7px;height:92px;background:var(--ink);border-radius:4px;transform-origin:bottom center}
 .pg-tv .ant i:nth-of-type(1){transform:rotate(-32deg)}
@@ -448,7 +448,7 @@ button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;le
 .pg-tv .chan{font-family:'Rubik',sans-serif;font-weight:900;font-size:22px;background:var(--ink);color:#5BFF7A;border-radius:8px;padding:2px 10px;letter-spacing:2px}
 .pg-tv .feet{display:flex;justify-content:space-between;width:70%;margin:-4px auto 0;position:relative;z-index:1}
 .pg-tv .feet i{width:36px;height:28px;background:var(--ink);border-radius:0 0 10px 10px}
-.pg-tv .tv-pinky{position:absolute;right:-120px;bottom:-14px;width:150px;z-index:3;transform:rotate(10deg);pointer-events:none}
+.pg-tv .tv-pinky{position:absolute;right:28px;top:auto;bottom:calc(100% - 10px);width:128px;z-index:3;transform:rotate(-5deg);pointer-events:none}
 .pg-tv .tv-ticket{max-width:640px;margin:36px auto 0;background:#fff;border:5px solid var(--ink);border-radius:22px;box-shadow:8px 8px 0 var(--ink);padding:16px 20px;display:flex;gap:16px;align-items:center}
 .pg-tv .tv-ticket .when{background:var(--pink);color:#fff;border:4px solid var(--ink);border-radius:16px;padding:8px 12px;text-align:center;font-weight:900;line-height:1.05;flex:none}
 .pg-tv .tv-ticket .when b{display:block;font-size:26px}
@@ -476,7 +476,7 @@ button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;le
   .pg-tv .side{width:100%;flex-direction:row;justify-content:space-around;padding:10px}
   .pg-tv .lbl{display:none}
   .pg-tv .grille{width:60px}
-  .pg-tv .tv-pinky{width:84px;right:-6px;bottom:auto;top:-128px;transform:rotate(-6deg)}
+  .pg-tv .tv-pinky{width:84px;right:-2px}
   .pg-tv .tvplay{width:48px;height:48px}
   .pg-tv .onair{top:8px;left:12px;font-size:10px;padding:2px 7px}
   .pg-tv .tcard{top:56%}
