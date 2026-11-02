@@ -13,6 +13,11 @@ function tagFor(stock, ja) {
   return null;
 }
 
+function ShotWrap({ sold, href, children }) {
+  if (sold) return <div className="shot" style={{ display: 'block', cursor: 'default' }}>{children}</div>;
+  return <Link href={href} className="shot" style={{ display: 'block' }} tabIndex={-1} aria-hidden="true">{children}</Link>;
+}
+
 export default function ProductCard({ product, index = 0 }) {
   const { add, setOpen } = useCart();
   const { lang, t } = useLang();
@@ -37,7 +42,8 @@ export default function ProductCard({ product, index = 0 }) {
       className={`card${outOfStock ? ' sold' : ''}`}
       style={{ background: COLOURS[index % COLOURS.length] }}
     >
-      <Link href={`/product/${product.id}`} className="shot" style={{ display: 'block' }} tabIndex={-1} aria-hidden="true">
+      {/* Sold items stay in the cabinet (at the bottom) but can't be opened. */}
+      <ShotWrap sold={outOfStock} href={`/product/${product.id}`}>
         {product.imageUrls?.[0] ? (
           <img src={product.imageUrls[0]} alt={product.name} loading="lazy" style={{ background: '#fff', objectFit: 'contain' }} />
         ) : (
@@ -45,9 +51,9 @@ export default function ProductCard({ product, index = 0 }) {
         )}
         {tag && !outOfStock && <span className="tag">{tag}</span>}
         {outOfStock && <span className="soldstamp" aria-label={t('Sold', '売り切れ')}>{t('SOLD', '売切')}</span>}
-      </Link>
+      </ShotWrap>
       {product.category && product.category !== 'Other' && <div className="maker">{t(product.category, TAB_JA[product.category])}</div>}
-      <div className="name"><Link href={`/product/${product.id}`}>{product.name}</Link></div>
+      <div className="name">{outOfStock ? product.name : <Link href={`/product/${product.id}`}>{product.name}</Link>}</div>
       <div className="cardfoot">
         <div className="price"><span>{fmt(product.price)}</span></div>
         <button
