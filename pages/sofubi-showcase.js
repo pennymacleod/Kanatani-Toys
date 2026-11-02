@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import ArtistBox from '../components/ArtistBox';
 import { ARTISTS, COMING_SOON, CATEGORIES, CATEGORY_COLOURS, CATEGORY_JA } from '../lib/artists';
@@ -13,8 +13,17 @@ export default function SofubiShowcase() {
   // On "All", group artists in tab order: Sofubi, Resin, 3D printed, Art prints, Stickers, Clothing.
   const rank = (a) => Math.min(...a.categories.map(c => { const i = CATEGORIES.indexOf(c); return i < 0 ? 99 : i; }));
   const byTab = (list) => list.map((a, i) => [a, i]).sort((x, y) => rank(x[0]) - rank(y[0]) || x[1] - y[1]).map(x => x[0]);
-  const shown = byTab(ARTISTS.filter(match));
-  const soon = byTab(COMING_SOON.filter(match));
+  // The newest artist (the last one added to lib/artists.js) goes to the top
+  // of "All" and pushes everyone else down.
+  const newest = ARTISTS[ARTISTS.length - 1];
+  const shown = cat === 'All'
+    ? [newest, ...byTab(ARTISTS.filter(a => a !== newest))]
+    : byTab(ARTISTS.filter(match));
+  // Coming soon: only the next artist (first in COMING_SOON) is shown, big.
+  // Add ?all to the address to see the full list (for Penny).
+  const [showAll, setShowAll] = useState(false);
+  useEffect(() => { setShowAll(new URLSearchParams(window.location.search).has('all')); }, []);
+  const soon = showAll ? byTab(COMING_SOON.filter(match)) : COMING_SOON.slice(0, 1).filter(match);
 
   return (
     <Layout
@@ -65,7 +74,7 @@ export default function SofubiShowcase() {
                 <span className="plaque"><span className="mid" style={{ fontSize: 40, color: 'var(--sky)' }}>{t('Coming soon', '近日登場')}</span></span>
                 <p>{t('New artists on their way to the shop. Follow them on Instagram so you don\u2019t miss them!', '新しいアーティストがお店にやってきます。見逃さないよう、Instagramでフォローしてね！')}</p>
               </div>
-              <div className="agrid">
+              <div className={showAll ? 'agrid' : 'agrid soonone'}>
                 {soon.map(a => <ArtistBox key={a.name} artist={a} soon />)}
               </div>
             </>
