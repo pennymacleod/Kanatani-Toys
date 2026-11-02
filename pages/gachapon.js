@@ -129,7 +129,9 @@ const KAIJU = [
     "year": "1967",
     "studio": "TV series",
     "rarity": "RARE",
-    "fact": "Metron hid tiny red devices in cigarettes to make people go wild. He's famous for sitting down with the hero across a low table in a tiny flat."
+    "fact": "Metron hid tiny red devices in cigarettes to make people go wild. He's famous for sitting down with the hero across a low table in a tiny flat.",
+    "img": "/nl/gacha-alien-metron.png",
+    "art": true
   },
   {
     "id": "redking",
