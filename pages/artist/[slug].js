@@ -37,7 +37,6 @@ export default function ArtistPage({ slug }) {
   const cat = a.categories[0];
   const role = ROLE[cat] || 'Artist';
   const [big, setBig] = useState(null);
-  const [copied, setCopied] = useState(null);
   const { lang, t } = useLang();
 
   // Open the photo a DM link points at (e.g. /artist/goatee#p-neurami).
@@ -47,16 +46,6 @@ export default function ArtistPage({ slug }) {
     if (n >= 0) setBig(n);
   }, [slug]);
 
-  // Instagram can't take a photo or message from a website, so copy a
-  // message with a link to the photo; the customer pastes it into the DM.
-  const onAsk = (w) => {
-    const link = `${window.location.origin}/artist/${a.slug}#${pieceId(w.name)}`;
-    const msg = lang === 'ja'
-      ? `こんにちは！${a.name}の「${w.name}」について聞きたいです：${link}`
-      : `Hi! I'd like to ask about "${w.name}" by ${a.name}: ${link}`;
-    try { navigator.clipboard?.writeText(msg).catch(() => {}); } catch (e) {}
-    setCopied(w.name);
-  };
   useEffect(() => {
     if (big === null) return;
     const onKey = (e) => {
@@ -92,11 +81,11 @@ export default function ArtistPage({ slug }) {
                   <span key={c} style={{ background: CATEGORY_COLOURS[c] || '#FF1F8F', color: '#fff' }}>{t(c, CATEGORY_JA[c])}</span>
                 ))}
               </div>
-              <p className="mbio">{t(a.bio, a.bio_ja)}</p>
+              {a.bio && <p className="mbio">{t(a.bio, a.bio_ja || a.bio)}</p>}
               <div className="mbtns">
-                <a className="btn" href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ background: '#fff', color: '#141018' }}>Instagram · {a.handle}</a>
+                {a.instagram && <a className="btn" href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ background: '#fff', color: '#141018' }}>Instagram · {a.handle}</a>}
                 {a.website && <a className="btn" href={a.website} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--sky)', color: '#141018' }}>{t('Website ↗', 'ウェブサイト ↗')}</a>}
-                <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>{a.work.length > 0 ? t('See what\u2019s in the shop ↓', 'お店にある作品を見る ↓') : t('See their work ↓', '作品を見る ↓')}</a>
+                {a.work.length > 0 && <a className="btn" href="#work" style={{ background: 'var(--pink)', color: '#fff' }}>{t('See what\u2019s in the shop ↓', 'お店にある作品を見る ↓')}</a>}
               </div>
             </div>
             <div className="mpanel">
@@ -104,13 +93,13 @@ export default function ArtistPage({ slug }) {
             </div>
           </div>
 
-          <div className="workh" id="work">
-            <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{a.work.length > 0 ? t('In the shop now', '店頭にあります') : a.name}</span></span>
-          </div>
+          {a.work.length > 0 && <div className="workh" id="work">
+            <span className="plaque"><span className="mid" style={{ fontSize: 'clamp(26px,4vw,40px)', color: 'var(--sky)' }}>{t('In the shop now', '店頭にあります')}</span></span>
+          </div>}
 
           {a.work.length > 0 && (
             <>
-              <p className="wintro">{t('Tap a photo to see it bigger. Want one? Tap \u201cDM us about this\u201d: we\u2019ll copy a message with a link to that photo, then you open Instagram and paste it in.', '写真をタップすると大きく見られます。欲しいものがあったら「DMで聞く」をタップしてね。その写真へのリンク付きメッセージをコピーするので、Instagramを開いて貼り付けてください。')}</p>
+              <p className="wintro">{t('Tap a photo to see it bigger.', '写真をタップすると大きく見られます。')}</p>
               <div className="wgrid">
                 {a.work.map((w, i) => (
                   // A gallery, not a shop. `shop: "word"` swaps the DM button for a
@@ -121,35 +110,17 @@ export default function ArtistPage({ slug }) {
                     </button>
                     <div className="wname">{w.name}</div>
                     <div className="wbottom">
-                      <span className="wprice">{t('In the shop', '店頭にあります')}</span>
+                      <span className="wprice">{w.sold ? t('SOLD OUT', '売り切れ') : t('In the shop', '店頭にあります')}</span>
                       {w.shop
                         ? <Link className="btn wdm" href={`/?q=${encodeURIComponent(w.shop)}#shop`}>{t('Buy online →', 'オンラインで買う →')}</Link>
-                        : <button type="button" className="btn wdm" onClick={() => onAsk(w)}>💬 {t('DM us about this', 'DMで聞く')}</button>}
+                        : !w.sold && <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer">💬 {t('Ask about it', 'DMで聞く')}</a>}
                     </div>
-                    {copied === w.name && (
-                      <div className="wcopied" role="status">
-                        <div><b>1.</b> {t('Message copied ✓', 'メッセージをコピーしました ✓')}</div>
-                        <div><b>2.</b> {t('Open Instagram and paste it in the chat:', 'Instagramを開いて、チャットに貼り付けてね：')}</div>
-                        <a className="btn wig" href={ASK} target="_blank" rel="noopener noreferrer">{t('Open Instagram →', 'Instagramを開く →')}</a>
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
             </>
           )}
 
-          <div className="wempty">
-            {a.work.length > 0
-              ? (lang === 'ja'
-                ? <>{a.name}の作品は、ブライトン・オープンマーケットのUnit 7のショーケースや棚にもっとあります。ぜひ遊びに来てね！</>
-                : <>More of {a.name}&apos;s work is in the cabinets and on the shelves at Unit 7, Brighton Open Market. Pop in and say hello!</>)
-              : (lang === 'ja'
-                ? <>{a.name}の作品は、ブライトン・オープンマーケットのUnit 7のショーケースや棚に並んでいます。ぜひ遊びに来てね。最新作は{' '}
-                  <a href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>{a.handle}</a> をフォローしてチェック！</>
-                : <>You&apos;ll find {a.name}&apos;s work in the cabinets and on the shelves at Unit 7, Brighton Open Market. Pop in and say hello, or follow{' '}
-                  <a href={a.instagram} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>{a.handle}</a> for their latest work.</>)}
-          </div>
 
           <div className="anav">
             <a className="btn" href={ASK} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--pink)', color: '#fff' }}>💬 {t('DM us on Instagram', 'InstagramでDMする')}</a>

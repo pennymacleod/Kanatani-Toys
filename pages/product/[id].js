@@ -273,7 +273,7 @@ export async function getServerSideProps({ params, res }) {
         id: v.id,
         name: v.item_variation_data?.name,
         price: v.item_variation_data?.price_money?.amount || 0,
-        stock: soldOutAt(v, locationId) ? 0 : (stockMap[v.id] ?? null),
+        stock: soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v.id] ?? null),
       })),
     };
 

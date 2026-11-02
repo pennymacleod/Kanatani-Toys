@@ -304,7 +304,7 @@ export async function getServerSideProps({ res }) {
       })
       .map(item => {
         const v = item.item_data?.variations?.[0];
-        const stock = soldOutAt(v, locationId) ? 0 : (stockMap[v?.id] ?? null);
+        const stock = soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v?.id] ?? null);
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
         return {
           id: item.id,
@@ -322,7 +322,7 @@ export async function getServerSideProps({ res }) {
             id: vv.id,
             name: vv.item_variation_data?.name,
             price: vv.item_variation_data?.price_money?.amount || 0,
-            stock: soldOutAt(vv, locationId) ? 0 : (stockMap[vv.id] ?? null),
+            stock: soldOutAt(vv, locationId, item.item_data?.name) ? 0 : (stockMap[vv.id] ?? null),
           })),
         };
       })

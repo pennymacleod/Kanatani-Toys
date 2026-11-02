@@ -114,7 +114,7 @@ export default async function handler(req, res) {
       .map(item => {
         const variations = item.item_data?.variations || [];
         const firstVariation = variations[0];
-        const stock = soldOutAt(firstVariation, locationId) ? 0 : (stockMap[firstVariation?.id] ?? null); // null = not tracked
+        const stock = soldOutAt(firstVariation, locationId, item.item_data?.name) ? 0 : (stockMap[firstVariation?.id] ?? null); // null = not tracked
         const price = firstVariation?.item_variation_data?.price_money?.amount || 0;
         const currency = firstVariation?.item_variation_data?.price_money?.currency || 'GBP';
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
@@ -136,7 +136,7 @@ export default async function handler(req, res) {
             id: v.id,
             name: v.item_variation_data?.name,
             price: v.item_variation_data?.price_money?.amount || price,
-            stock: soldOutAt(v, locationId) ? 0 : (stockMap[v.id] ?? null),
+            stock: soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v.id] ?? null),
           })),
           isAvailable: item.item_data?.is_deleted !== true,
         };

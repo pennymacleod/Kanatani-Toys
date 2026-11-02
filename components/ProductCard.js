@@ -9,8 +9,7 @@ const COLOURS = ['#FF1F8F', '#FFD21F', '#3FB7F0'];
 // Only honest labels, straight from Square stock numbers.
 function tagFor(stock, ja) {
   if (stock === 0) return ja ? '売り切れ' : 'SOLD OUT';
-  if (stock === 1) return ja ? 'ラスト1点' : 'LAST ONE';
-  if (stock !== null && stock <= 5) return ja ? `残り${stock}点` : `ONLY ${stock} LEFT`;
+  if (stock !== null && stock > 1 && stock <= 5) return ja ? `残り${stock}点` : `ONLY ${stock} LEFT`;
   return null;
 }
 
