@@ -59,7 +59,9 @@ const KAIJU = [
     "year": "1965",
     "studio": "Daiei film",
     "rarity": "RARE",
-    "fact": "Gamera flies by pulling his legs into his shell and firing jets out of the holes. In Japan, 27 November is Gamera Day."
+    "fact": "Gamera flies by pulling his legs into his shell and firing jets out of the holes. In Japan, 27 November is Gamera Day.",
+    "img": "/nl/gacha-gamera.png",
+    "art": true
   },
   {
     "id": "hedorah",
