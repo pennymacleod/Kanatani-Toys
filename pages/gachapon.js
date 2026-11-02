@@ -44,7 +44,9 @@ const KAIJU = [
     "year": "1961",
     "studio": "Toho film",
     "rarity": "RARE",
-    "fact": "Mothra is known as the Queen of the Monsters. She hatches from a giant egg as a caterpillar before turning into a huge moth, and she has been in more films than any kaiju except Godzilla."
+    "fact": "Mothra is known as the Queen of the Monsters. She hatches from a giant egg as a caterpillar before turning into a huge moth, and she has been in more films than any kaiju except Godzilla.",
+    "img": "/nl/gacha-mothra.png",
+    "art": true
   },
   {
     "id": "gamera",
