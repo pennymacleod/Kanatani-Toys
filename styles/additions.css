@@ -499,3 +499,6 @@ button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;le
 nav .navddmenu a{display:flex;align-items:center;gap:8px;white-space:nowrap}
 .ddsoon{margin-left:auto;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:0 8px;font-size:11px;font-weight:900;text-transform:uppercase}
 @media (max-width:760px){.navddbtn{font-size:13px;padding:7px 12px}.navddmenu{min-width:200px}}
+/* Let the Play Zone drop-down hang below the pink header, above the scallop and conga line */
+header.night{overflow:visible;z-index:20}
+header.night .navddmenu{z-index:100}
