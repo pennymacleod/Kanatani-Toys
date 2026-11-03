@@ -502,3 +502,8 @@ nav .navddmenu a{display:flex;align-items:center;gap:8px;white-space:nowrap}
 /* Let the Play Zone drop-down hang below the pink header, above the scallop and conga line */
 header.night{overflow:visible;z-index:20}
 header.night .navddmenu{z-index:100}
+
+/* News: jump-to-wish-list button at the top (Penny, Nov 2026) */
+.pg-news .wishjump { text-align: center; margin: 16px 0 6px; }
+.pg-news .wishjump .btn { background: var(--pink); color: #fff; font-size: clamp(16px, 2.4vw, 21px); padding: 12px 22px; text-decoration: none; }
+.pg-news #wishlist { scroll-margin-top: 90px; }

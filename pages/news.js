@@ -37,6 +37,7 @@ export default function News() {
             <h1 className="mid" style={{ margin: 0 }}>Kanatani <span>News!</span></h1>
           </div>
           <div className="issue"><span>ISSUE 1 · WINTER · FREE · WEATHER: 100% CHANCE OF TOYS</span></div>
+          <div className="wishjump"><a className="btn" href="#wishlist">⭐ Wish list! Tell us what to hunt for →</a></div>
           <div className="stage">
             <h2 className="hl" style={{ margin: 0, fontWeight: 400 }}>
               <span className="big l1">We&apos;re</span><span className="big l2">off to</span><span className="big l3">Japan!</span>
@@ -73,7 +74,7 @@ export default function News() {
           </div>
 
           <div className="duo2">
-            <div className="panel" style={{ background: 'var(--sky)' }}>
+            <div id="wishlist" className="panel" style={{ background: 'var(--sky)' }}>
               <h2 className="big" style={{ color: '#FFD21F' }}>Wish list!</h2>
               <p>Hunting for a grail? A kaiju you&apos;ve wanted since you were small? Tell us and we&apos;ll keep our eyes peeled in Japan!</p>
               <div className="wishform">
