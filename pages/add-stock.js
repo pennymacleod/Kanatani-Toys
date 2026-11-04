@@ -58,7 +58,7 @@ async function getCutout() {
   return cutoutFn;
 }
 
-const EMPTY = { name: '', price: '', quantity: '1', categoryId: '', description: '', online: true, artist: '' };
+const EMPTY = { name: '', price: '', quantity: '1', categoryId: '', description: '', online: true, artist: '', underArtist: true };
 const NUMBERED = TILL_ARTISTS.map((n, i) => tillName(i, n));
 
 export default function AddStock() {
@@ -142,13 +142,13 @@ export default function AddStock() {
     try {
       const r = await fetch('/api/admin/add-item', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: pass, ...form, name: form.artist ? `${form.artist} – ${form.name}` : form.name, image }),
+        body: JSON.stringify({ password: pass, ...form, name: form.artist && !form.underArtist ? `${form.artist} – ${form.name}` : form.name, underArtist: !!(form.artist && form.underArtist), image }),
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'Something went wrong');
       setAdded([{ name: d.name, img: image, notes: d.notes || [] }, ...added]);
       setMsg({ text: `Added “${d.name}” to Square.`, notes: d.notes });
-      setForm({ ...EMPTY, categoryId: form.categoryId, artist: form.artist });
+      setForm({ ...EMPTY, categoryId: form.categoryId, artist: form.artist, underArtist: form.underArtist });
       setOriginal(null); setCut(null);
       if (fileRef.current) fileRef.current.value = '';
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -205,17 +205,21 @@ export default function AddStock() {
                   </div>
                 )}
 
-                <label>Artist (optional, puts their number in front of the name)
+                <label>Artist (optional)
                   <select value={form.artist} onChange={set('artist')}>
                     <option value="">Not an artist piece</option>
                     {NUMBERED.map(a => <option key={a} value={a}>{a}</option>)}
                   </select>
                 </label>
+                {form.artist && (
+                  <label className="as-check"><input type="checkbox" checked={form.underArtist} onChange={set('underArtist')} /> Put it under {form.artist}’s till button</label>
+                )}
                 <label>2. Name<input value={form.name} onChange={set('name')} required placeholder="e.g. PICOCO AFTERGLOW sofubi" /></label>
                 <div className="as-row">
                   <label>Price (£)<input type="number" inputMode="decimal" step="0.01" min="0.01" value={form.price} onChange={set('price')} required /></label>
                   <label>How many<input type="number" inputMode="numeric" step="1" min="0" value={form.quantity} onChange={set('quantity')} required /></label>
                 </div>
+                {!(form.artist && form.underArtist) && (<>
                 <label>Category
                   <select value={form.categoryId} onChange={set('categoryId')}>
                     <option value="">No category</option>
@@ -224,6 +228,7 @@ export default function AddStock() {
                 </label>
                 <label>Description (optional)<textarea rows={3} value={form.description} onChange={set('description')} /></label>
                 <label className="as-check"><input type="checkbox" checked={form.online} onChange={set('online')} /> Show it on the website too</label>
+                </>)}
 
                 <button className="as-btn" disabled={busy || cutting || !form.name || !form.price}>
                   {busy ? 'Adding…' : 'Add to Square'}
