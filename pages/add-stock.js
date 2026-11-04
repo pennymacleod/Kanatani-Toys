@@ -3,6 +3,7 @@
 // sent anywhere else), fill in the details, and it goes straight into Square.
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../components/Layout';
+import { TILL_ARTISTS, TILL_COLOURS, tillName } from '../lib/tillArtists';
 
 const PASS_KEY = 'kt-add-stock-pass';
 const CUTOUT_LIB = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
@@ -57,7 +58,8 @@ async function getCutout() {
   return cutoutFn;
 }
 
-const EMPTY = { name: '', price: '', quantity: '1', categoryId: '', description: '', online: true };
+const EMPTY = { name: '', price: '', quantity: '1', categoryId: '', description: '', online: true, artist: '' };
+const NUMBERED = TILL_ARTISTS.map((n, i) => tillName(i, n));
 
 export default function AddStock() {
   const [pass, setPass] = useState('');
@@ -75,6 +77,20 @@ export default function AddStock() {
   const [form, setForm] = useState(EMPTY);
   const [added, setAdded] = useState([]);
   const fileRef = useRef();
+  const [btnBusy, setBtnBusy] = useState(false);
+  const [btnMsg, setBtnMsg] = useState(null);
+
+  async function makeButtons() {
+    setBtnBusy(true); setBtnMsg(null);
+    try {
+      const buttons = TILL_ARTISTS.map((n, i) => ({ name: tillName(i, n), colour: TILL_COLOURS[i % TILL_COLOURS.length] }));
+      const r = await fetch('/api/admin/artist-buttons', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass, buttons }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Something went wrong');
+      setBtnMsg({ text: d.made ? `Made ${d.made} artist buttons in Square${d.skipped ? ` (${d.skipped} were already there)` : ''}. They're in the “Artists” category on the till.` : 'All the artist buttons are already in Square.' });
+    } catch (e) { setBtnMsg({ bad: true, text: e.message }); }
+    finally { setBtnBusy(false); }
+  }
 
   async function unlock(p) {
     setBusy(true); setMsg(null);
@@ -126,13 +142,13 @@ export default function AddStock() {
     try {
       const r = await fetch('/api/admin/add-item', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: pass, ...form, image }),
+        body: JSON.stringify({ password: pass, ...form, name: form.artist ? `${form.artist} – ${form.name}` : form.name, image }),
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'Something went wrong');
       setAdded([{ name: d.name, img: image, notes: d.notes || [] }, ...added]);
       setMsg({ text: `Added “${d.name}” to Square.`, notes: d.notes });
-      setForm({ ...EMPTY, categoryId: form.categoryId });
+      setForm({ ...EMPTY, categoryId: form.categoryId, artist: form.artist });
       setOriginal(null); setCut(null);
       if (fileRef.current) fileRef.current.value = '';
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -186,6 +202,12 @@ export default function AddStock() {
                   </div>
                 )}
 
+                <label>Artist (optional, puts their number in front of the name)
+                  <select value={form.artist} onChange={set('artist')}>
+                    <option value="">Not an artist piece</option>
+                    {NUMBERED.map(a => <option key={a} value={a}>{a}</option>)}
+                  </select>
+                </label>
                 <label>2. Name<input value={form.name} onChange={set('name')} required placeholder="e.g. PICOCO AFTERGLOW sofubi" /></label>
                 <div className="as-row">
                   <label>Price (£)<input type="number" inputMode="decimal" step="0.01" min="0.01" value={form.price} onChange={set('price')} required /></label>
@@ -204,6 +226,22 @@ export default function AddStock() {
                   {busy ? 'Adding…' : 'Add to Square'}
                 </button>
               </form>
+            )}
+
+            {unlocked && (
+              <div className="as-till">
+                <h2>Artist buttons for the till</h2>
+                <p>One button per artist, with their number. On the till, tap the artist and type the price. They don't show on the website.</p>
+                <div className="as-tiles">
+                  {TILL_ARTISTS.map((n, i) => (
+                    <div key={n} className="as-tile" style={{ background: '#' + TILL_COLOURS[i % TILL_COLOURS.length] }}>
+                      <span>{n}</span><b>{String(i + 1).padStart(2, '0')}</b>
+                    </div>
+                  ))}
+                </div>
+                {btnMsg && <div className={`as-msg${btnMsg.bad ? ' bad' : ''}`}>{btnMsg.text}</div>}
+                <button type="button" className="as-btn" onClick={makeButtons} disabled={btnBusy}>{btnBusy ? 'Making…' : 'Make these buttons in Square'}</button>
+              </div>
             )}
 
             {added.length > 0 && (
