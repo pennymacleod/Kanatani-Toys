@@ -11,7 +11,7 @@ export const config = { api: { bodyParser: { sizeLimit: '4mb' } } };
 const key = () => crypto.randomUUID();
 
 export default async function handler(req, res) {
-  if (!guard(req, res)) return;
+  if (!(await guard(req, res))) return;
   const { name, description, price, quantity, categoryId, online, image } = req.body || {};
 
   const title = String(name || '').trim();

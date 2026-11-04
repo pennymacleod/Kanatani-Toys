@@ -5,7 +5,7 @@ import { guard, square, explain } from '../../../lib/squareAdmin';
 import { TILL_CATEGORY } from '../../../lib/tillArtists';
 
 export default async function handler(req, res) {
-  if (!guard(req, res)) return;
+  if (!(await guard(req, res))) return;
   const wanted = (req.body?.buttons || [])
     .map(b => ({ name: String(b.name || '').trim(), colour: String(b.colour || '').replace('#', '') }))
     .filter(b => b.name);

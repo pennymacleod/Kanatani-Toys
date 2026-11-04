@@ -3,7 +3,7 @@
 import { guard, square, explain } from '../../../lib/squareAdmin';
 
 export default async function handler(req, res) {
-  if (!guard(req, res)) return;
+  if (!(await guard(req, res))) return;
   try {
     let cats = [];
     let cursor = null;
