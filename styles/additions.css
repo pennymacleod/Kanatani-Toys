@@ -534,3 +534,4 @@ header.night .navddmenu{z-index:100}
 .addstock .as-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; margin: 14px 0 18px; }
 .addstock .as-tile { aspect-ratio: 1; border: 3px solid var(--ink); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 8px 6px; text-align: center; font-weight: 900; font-size: 13px; line-height: 1.1; color: var(--ink); }
 .addstock .as-tile b { background: #fff; border: 2px solid var(--ink); border-radius: 999px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.addstock .as-link { background: none; border: 0; padding: 0; font: inherit; color: var(--blue, #1A3FA6); text-decoration: underline; cursor: pointer; }

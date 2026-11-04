@@ -99,16 +99,16 @@ export default function AddStock() {
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'Could not open');
       setCats(d.categories || []); setUnlocked(true);
-      try { sessionStorage.setItem(PASS_KEY, p); } catch {}
+      try { localStorage.setItem(PASS_KEY, p); } catch {}
     } catch (e) {
       setMsg({ bad: true, text: e.message });
-      try { sessionStorage.removeItem(PASS_KEY); } catch {}
+      try { localStorage.removeItem(PASS_KEY); } catch {}
     } finally { setBusy(false); }
   }
 
   useEffect(() => {
     let p = null;
-    try { p = sessionStorage.getItem(PASS_KEY); } catch {}
+    try { p = localStorage.getItem(PASS_KEY); } catch {}
     if (p) { setPass(p); unlock(p); }
   }, []);
 
@@ -166,6 +166,9 @@ export default function AddStock() {
           <div className="sheet">
             <span className="kicker">カナタニ · PRIVATE</span>
             <h1 className="big">Add stock</h1>
+            {unlocked && (
+              <p className="as-note">This device remembers the password. <button type="button" className="as-link" onClick={() => { try { localStorage.removeItem(PASS_KEY); } catch {} setUnlocked(false); setPass(''); }}>Forget it here</button></p>
+            )}
 
             {msg && (
               <div className={`as-msg${msg.bad ? ' bad' : ''}`}>
