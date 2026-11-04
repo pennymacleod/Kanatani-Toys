@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../components/Layout';
 import { TILL_ARTISTS, TILL_COLOURS, tillName } from '../lib/tillArtists';
+import { STOCK_LISTS } from '../lib/stockLists';
 
 const PASS_KEY = 'kt-add-stock-pass';
 const CUTOUT_LIB = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
@@ -77,6 +78,42 @@ export default function AddStock() {
   const [form, setForm] = useState(EMPTY);
   const [added, setAdded] = useState([]);
   const fileRef = useRef();
+  const [listArtist, setListArtist] = useState('');
+  const [rows, setRows] = useState([]);
+  const [listBusy, setListBusy] = useState(false);
+  const [listMsg, setListMsg] = useState(null);
+
+  function pickListArtist(v) {
+    setListArtist(v); setListMsg(null);
+    const plain = v.replace(/^\d+\s+/, '');
+    const preset = STOCK_LISTS[plain];
+    setRows(preset ? preset.map(r => ({ ...r, done: false })) : [{ name: '', price: '', qty: '1', done: false }]);
+  }
+  const setRow = (i, k) => (e) => setRows(rows.map((r, j) => j === i ? { ...r, [k]: e.target.value } : r));
+
+  async function addList() {
+    setListBusy(true); setListMsg(null);
+    const next = [...rows]; let ok = 0; const problems = [];
+    for (let i = 0; i < next.length; i++) {
+      const r = next[i];
+      if (r.done || !r.name.trim()) continue;
+      try {
+        const res = await fetch('/api/admin/add-item', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pass, name: r.name, price: r.price, quantity: r.qty, artist: listArtist, underArtist: true }) });
+        const d = await res.json();
+        if (!res.ok) throw new Error(d.error || 'Something went wrong');
+        next[i] = { ...r, done: true }; ok++;
+        (d.notes || []).forEach(n => problems.push(`${r.name}: ${n}`));
+      } catch (e) {
+        problems.push(`${r.name}: ${e.message}`);
+        if (/permission|read|find the/i.test(e.message)) break;
+      }
+      setRows([...next]);
+    }
+    setListMsg({ bad: ok === 0, text: ok ? `Added ${ok} piece${ok === 1 ? '' : 's'} under ${listArtist}.` : 'Nothing was added.', notes: problems });
+    setListBusy(false);
+  }
+
   const [btnBusy, setBtnBusy] = useState(false);
   const [btnMsg, setBtnMsg] = useState(null);
 
@@ -249,6 +286,42 @@ export default function AddStock() {
                 </div>
                 {btnMsg && <div className={`as-msg${btnMsg.bad ? ' bad' : ''}`}>{btnMsg.text}</div>}
                 <button type="button" className="as-btn" onClick={makeButtons} disabled={btnBusy}>{btnBusy ? 'Making…' : 'Make these buttons in Square'}</button>
+              </div>
+            )}
+
+            {unlocked && (
+              <div className="as-till">
+                <h2>Add a list under an artist's button</h2>
+                <p>For a whole delivery at once. Photos can be added afterwards.</p>
+                <label>Artist
+                  <select value={listArtist} onChange={(e) => pickListArtist(e.target.value)}>
+                    <option value="">Choose an artist</option>
+                    {NUMBERED.map(a => <option key={a} value={a}>{a}{STOCK_LISTS[a.replace(/^\d+\s+/, '')] ? ' (list ready)' : ''}</option>)}
+                  </select>
+                </label>
+                {listArtist && (
+                  <>
+                    <div className="as-list">
+                      <div className="as-lrow as-lhead"><span>Piece</span><span>£</span><span>How many</span></div>
+                      {rows.map((r, i) => (
+                        <div key={i} className={`as-lrow${r.done ? ' done' : ''}`}>
+                          <input value={r.name} onChange={setRow(i, 'name')} disabled={r.done} />
+                          <input type="number" inputMode="decimal" step="0.01" value={r.price} onChange={setRow(i, 'price')} disabled={r.done} />
+                          <input type="number" inputMode="numeric" step="1" min="0" value={r.qty} onChange={setRow(i, 'qty')} disabled={r.done} />
+                        </div>
+                      ))}
+                    </div>
+                    <button type="button" className="as-choice-add" onClick={() => setRows([...rows, { name: '', price: '', qty: '1', done: false }])}>+ Another piece</button>
+                    {listMsg && (
+                      <div className={`as-msg${listMsg.bad ? ' bad' : ''}`}>{listMsg.text}
+                        {(listMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}
+                      </div>
+                    )}
+                    <button type="button" className="as-btn" onClick={addList} disabled={listBusy || !rows.some(r => !r.done && r.name.trim())}>
+                      {listBusy ? 'Adding…' : `Add these under ${listArtist}`}
+                    </button>
+                  </>
+                )}
               </div>
             )}
 
