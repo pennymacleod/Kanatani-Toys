@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /add-stock
+Disallow: /api/
 
 Sitemap: https://kanatanitoys.com/sitemap.xml

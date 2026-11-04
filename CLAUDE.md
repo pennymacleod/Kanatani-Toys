@@ -120,6 +120,8 @@ Keep this section updated as things change — it's the fastest way for a new se
 
 - **Artist toy cut-outs**: `figure` (full body, shown on the artist page starburst) and optional `cardFigure` (waist-up crop that fills the showcase card's starburst) in `lib/artists.js`, images in `public/nl/figures/`. `photoFigure: true` = a real photo cut-out, shown without the chunky cartoon drop-shadow. Ofuton Heaven is the first (Oct 2026); Penny will send photos for the others (best: light-box photo, or a cut-out copied straight from her iPad).
 
+- **Add Stock page** (`/add-stock`, Nov 2026): private page for Penny and Hiro, not in the nav, `noindex`, disallowed in robots.txt. Password is the Vercel env `ADMIN_PASSWORD` (checked server-side in `lib/squareAdmin.js`). Take a photo → the background is cut off in the browser with `@imgly/background-removal` loaded from jsDelivr (put on a white square; "Photo as it is" fallback) → `pages/api/admin/add-item.js` creates the Square item + variation (GBP, stock tracked), uploads the photo as the main image and sets the stock count at the Brighton location. Categories come live from Square (`pages/api/admin/categories.js`). Unticking "Show it on the website" sets `ecom_visibility: HIDDEN`. Needs the Square token to have ITEMS_WRITE and INVENTORY_WRITE. The Square Claude connector is US-only, which is why this page exists.
+
 ## Known tooling quirks (for future AI sessions specifically)
 
 If you're an AI assistant working on this repo via a remote device-file-bridge (rather than a local terminal with direct shell access):
