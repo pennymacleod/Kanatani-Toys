@@ -2,7 +2,7 @@
 // Skips any button whose name is already in Square, so it's safe to press twice.
 import crypto from 'crypto';
 import { guard, square, explain } from '../../../lib/squareAdmin';
-import { TILL_CATEGORY } from '../../../lib/tillArtists';
+import { TILL_CATEGORY, TILL_REMOVE, TILL_RENAME } from '../../../lib/tillArtists';
 
 export default async function handler(req, res) {
   if (!(await guard(req, res))) return;
@@ -19,12 +19,40 @@ export default async function handler(req, res) {
       objs = objs.concat((d.objects || []).filter(o => !o.is_deleted));
       cursor = d.cursor || null;
     } while (cursor);
-    const have = new Set(objs.filter(o => o.type === 'ITEM').map(o => (o.item_data?.name || '').trim().toLowerCase()));
+    const items = objs.filter(o => o.type === 'ITEM');
+    const byName = (n) => items.find(o => (o.item_data?.name || '').trim().toLowerCase() === n.toLowerCase());
+    const notes = [];
+
+    // Take retired buttons off (only if nothing's been added under them).
+    let removed = 0;
+    for (const n of TILL_REMOVE) {
+      const it = byName(n);
+      if (!it) continue;
+      const pieces = (it.item_data?.variations || []).filter(v => v.item_variation_data?.pricing_type !== 'VARIABLE_PRICING');
+      if (pieces.length) { notes.push(`Left “${n}” on the till because it has pieces under it.`); continue; }
+      await square(`/v2/catalog/object/${it.id}`, { method: 'DELETE' });
+      items.splice(items.indexOf(it), 1);
+      removed++;
+    }
+
+    // Rename buttons (keeps their sales and anything under them).
+    let renamed = 0;
+    for (const [from, to] of Object.entries(TILL_RENAME)) {
+      const it = byName(from);
+      if (!it || byName(to)) continue;
+      const fresh = (await square(`/v2/catalog/object/${it.id}`)).object;
+      fresh.item_data.name = to;
+      await square('/v2/catalog/object', { method: 'POST', body: { idempotency_key: crypto.randomUUID(), object: fresh } });
+      it.item_data.name = to;
+      renamed++;
+    }
+
+    const have = new Set(items.map(o => (o.item_data?.name || '').trim().toLowerCase()));
     let cat = objs.find(o => o.type === 'CATEGORY' && (o.category_data?.name || '').trim().toLowerCase() === TILL_CATEGORY.toLowerCase());
 
     const todo = wanted.filter(b => !have.has(b.name.toLowerCase()));
     const skipped = wanted.length - todo.length;
-    if (!todo.length) return res.status(200).json({ ok: true, made: 0, skipped });
+    if (!todo.length) return res.status(200).json({ ok: true, made: 0, skipped, removed, renamed, notes });
 
     const batch = [];
     if (!cat) batch.push({ type: 'CATEGORY', id: '#cat', category_data: { name: TILL_CATEGORY } });
@@ -53,7 +81,7 @@ export default async function handler(req, res) {
       method: 'POST',
       body: { idempotency_key: crypto.randomUUID(), batches: [{ objects: batch }] },
     });
-    res.status(200).json({ ok: true, made: todo.length, skipped });
+    res.status(200).json({ ok: true, made: todo.length, skipped, removed, renamed, notes });
   } catch (err) {
     res.status(502).json({ error: explain(err) });
   }

@@ -3,7 +3,7 @@
 // sent anywhere else), fill in the details, and it goes straight into Square.
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../components/Layout';
-import { TILL_ARTISTS, TILL_COLOURS, tillName } from '../lib/tillArtists';
+import { TILL_BUTTONS } from '../lib/tillArtists';
 import { STOCK_LISTS } from '../lib/stockLists';
 
 const PASS_KEY = 'kt-add-stock-pass';
@@ -70,7 +70,7 @@ async function photoFromFile(file) {
 }
 
 const EMPTY = { name: '', price: '', quantity: '1', categoryId: '', description: '', online: true, artist: '', underArtist: true };
-const NUMBERED = TILL_ARTISTS.map((n, i) => tillName(i, n));
+const NUMBERED = TILL_BUTTONS.map(b => b.label);
 
 export default function AddStock() {
   const [pass, setPass] = useState('');
@@ -149,11 +149,15 @@ export default function AddStock() {
   async function makeButtons() {
     setBtnBusy(true); setBtnMsg(null);
     try {
-      const buttons = TILL_ARTISTS.map((n, i) => ({ name: tillName(i, n), colour: TILL_COLOURS[i % TILL_COLOURS.length] }));
+      const buttons = TILL_BUTTONS.map(b => ({ name: b.label, colour: b.colour }));
       const r = await fetch('/api/admin/artist-buttons', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass, buttons }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'Something went wrong');
-      setBtnMsg({ text: d.made ? `Made ${d.made} artist buttons in Square${d.skipped ? ` (${d.skipped} were already there)` : ''}. They're in the “Artists” category on the till.` : 'All the artist buttons are already in Square.' });
+      const bits = [];
+      if (d.made) bits.push(`made ${d.made} new`);
+      if (d.renamed) bits.push(`renamed ${d.renamed}`);
+      if (d.removed) bits.push(`took ${d.removed} off the till`);
+      setBtnMsg({ text: bits.length ? `Done: ${bits.join(', ')}.` : 'The till buttons are already up to date.', notes: d.notes });
     } catch (e) { setBtnMsg({ bad: true, text: e.message }); }
     finally { setBtnBusy(false); }
   }
@@ -307,14 +311,14 @@ export default function AddStock() {
                 <h2>Artist buttons for the till</h2>
                 <p>One button per artist, with their number. On the till, tap the artist and type the price. They don't show on the website.</p>
                 <div className="as-tiles">
-                  {TILL_ARTISTS.map((n, i) => (
-                    <div key={n} className="as-tile" style={{ background: '#' + TILL_COLOURS[i % TILL_COLOURS.length] }}>
-                      <span>{n}</span><b>{String(i + 1).padStart(2, '0')}</b>
+                  {TILL_BUTTONS.map(b => (
+                    <div key={b.label} className="as-tile" style={{ background: '#' + b.colour }}>
+                      <span>{b.name}</span><b>{b.number}</b>
                     </div>
                   ))}
                 </div>
-                {btnMsg && <div className={`as-msg${btnMsg.bad ? ' bad' : ''}`}>{btnMsg.text}</div>}
-                <button type="button" className="as-btn" onClick={makeButtons} disabled={btnBusy}>{btnBusy ? 'Making…' : 'Make these buttons in Square'}</button>
+                {btnMsg && <div className={`as-msg${btnMsg.bad ? ' bad' : ''}`}>{btnMsg.text}{(btnMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
+                <button type="button" className="as-btn" onClick={makeButtons} disabled={btnBusy}>{btnBusy ? 'Updating…' : 'Update the till buttons'}</button>
               </div>
             )}
 
