@@ -59,6 +59,16 @@ async function getCutout() {
   return cutoutFn;
 }
 
+async function photoFromFile(file) {
+  const dataUrl = await new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = bad; r.readAsDataURL(file); });
+  const jpg = await toJpeg(dataUrl);
+  try {
+    const remove = await getCutout();
+    const blob = await remove(jpg, { model: 'isnet_quint8', output: { format: 'image/png' } });
+    return await cutoutOnWhite(blob);
+  } catch { return jpg; }
+}
+
 const EMPTY = { name: '', price: '', quantity: '1', categoryId: '', description: '', online: true, artist: '', underArtist: true };
 const NUMBERED = TILL_ARTISTS.map((n, i) => tillName(i, n));
 
@@ -90,6 +100,25 @@ export default function AddStock() {
     setRows(preset ? preset.map(r => ({ ...r, done: false })) : [{ name: '', price: '', qty: '1', done: false }]);
   }
   const setRow = (i, k) => (e) => setRows(rows.map((r, j) => j === i ? { ...r, [k]: e.target.value } : r));
+  const patchRow = (i, patch) => setRows(cur => cur.map((r, j) => j === i ? { ...r, ...patch } : r));
+
+  async function rowPhoto(i, file) {
+    if (!file) return;
+    patchRow(i, { photoBusy: true, photoErr: null });
+    const img = await photoFromFile(file);
+    const r = rows[i];
+    if (r.done && r.id) {
+      try {
+        const res = await fetch('/api/admin/add-photo', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pass, objectId: r.id, name: r.name, image: img }) });
+        const d = await res.json();
+        if (!res.ok) throw new Error(d.error || 'Photo didn’t save');
+        patchRow(i, { img, photoBusy: false });
+      } catch (e) { patchRow(i, { photoBusy: false, photoErr: e.message }); }
+    } else {
+      patchRow(i, { img, photoBusy: false });
+    }
+  }
 
   async function addList() {
     setListBusy(true); setListMsg(null);
@@ -99,10 +128,10 @@ export default function AddStock() {
       if (r.done || !r.name.trim()) continue;
       try {
         const res = await fetch('/api/admin/add-item', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: pass, name: r.name, price: r.price, quantity: r.qty, artist: listArtist, underArtist: true }) });
+          body: JSON.stringify({ password: pass, name: r.name, price: r.price, quantity: r.qty, artist: listArtist, underArtist: true, image: r.img || null }) });
         const d = await res.json();
         if (!res.ok) throw new Error(d.error || 'Something went wrong');
-        next[i] = { ...r, done: true }; ok++;
+        next[i] = { ...r, done: true, id: d.id }; ok++;
         (d.notes || []).forEach(n => problems.push(`${r.name}: ${n}`));
       } catch (e) {
         problems.push(`${r.name}: ${e.message}`);
@@ -225,7 +254,7 @@ export default function AddStock() {
               <form onSubmit={submit} className="as-form">
                 <label className="as-photo">
                   <span>1. Photo</span>
-                  <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={onPhoto} />
+                  <input ref={fileRef} type="file" accept="image/*" onChange={onPhoto} />
                 </label>
 
                 {original && (
@@ -302,15 +331,21 @@ export default function AddStock() {
                 {listArtist && (
                   <>
                     <div className="as-list">
-                      <div className="as-lrow as-lhead"><span>Piece</span><span>£</span><span>How many</span></div>
+                      <div className="as-lrow as-lhead"><span>Photo</span><span>Piece</span><span>£</span><span>How many</span></div>
                       {rows.map((r, i) => (
                         <div key={i} className={`as-lrow${r.done ? ' done' : ''}`}>
+                          <label className="as-cam" title="Add a photo">
+                            {r.img ? <img src={r.img} alt="" /> : <span>{r.photoBusy ? '…' : '📷'}</span>}
+                            <input type="file" accept="image/*" onChange={(e) => rowPhoto(i, e.target.files?.[0])} />
+                          </label>
                           <input value={r.name} onChange={setRow(i, 'name')} disabled={r.done} />
                           <input type="number" inputMode="decimal" step="0.01" value={r.price} onChange={setRow(i, 'price')} disabled={r.done} />
                           <input type="number" inputMode="numeric" step="1" min="0" value={r.qty} onChange={setRow(i, 'qty')} disabled={r.done} />
                         </div>
                       ))}
+                      {rows.some(r => r.photoErr) && rows.filter(r => r.photoErr).map((r, i) => <div key={'e' + i} className="as-note">{r.name}: {r.photoErr}</div>)}
                     </div>
+                    <p className="as-note">Tap 📷 to add a photo. It works before or after you add the list.</p>
                     <button type="button" className="as-choice-add" onClick={() => setRows([...rows, { name: '', price: '', qty: '1', done: false }])}>+ Another piece</button>
                     {listMsg && (
                       <div className={`as-msg${listMsg.bad ? ' bad' : ''}`}>{listMsg.text}
