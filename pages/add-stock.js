@@ -177,7 +177,7 @@ export default function AddStock() {
             {!unlocked ? (
               <form onSubmit={(e) => { e.preventDefault(); unlock(pass); }} className="as-form">
                 <label>Password
-                  <input type="password" value={pass} onChange={(e) => setPass(e.target.value)} autoComplete="current-password" />
+                  <input type="password" value={pass} onChange={(e) => setPass(e.target.value)} autoComplete="current-password" autoCapitalize="none" autoCorrect="off" spellCheck={false} />
                 </label>
                 <button className="as-btn" disabled={busy || !pass}>{busy ? 'Checking…' : 'Open'}</button>
               </form>
