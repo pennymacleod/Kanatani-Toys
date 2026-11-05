@@ -177,8 +177,10 @@ export default function AddStock() {
   }
 
   useEffect(() => {
+    // Penny's private link (?k=...) opens it with nothing to type.
     let p = null;
-    try { p = localStorage.getItem(PASS_KEY); } catch {}
+    try { p = new URLSearchParams(window.location.search).get('k'); } catch {}
+    if (!p) { try { p = localStorage.getItem(PASS_KEY); } catch {} }
     if (p) { setPass(p); unlock(p); }
   }, []);
 
