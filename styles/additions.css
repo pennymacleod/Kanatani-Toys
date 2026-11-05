@@ -502,6 +502,10 @@ nav .navddmenu a{display:flex;align-items:center;gap:8px;white-space:nowrap}
 /* Let the Play Zone drop-down hang below the pink header, above the scallop and conga line */
 header.night{overflow:visible;z-index:20}
 header.night .navddmenu{z-index:100}
+/* Monsters walk in front of the header so their heads aren't cut off... */
+.walkrow{z-index:21}
+/* ...except while the Play Zone menu is open, so it drops down over them */
+header.night:has(.navddmenu){z-index:30}
 
 /* News: jump-to-wish-list button at the top (Penny, Nov 2026) */
 .pg-news .wishjump { text-align: center; margin: 16px 0 6px; }
