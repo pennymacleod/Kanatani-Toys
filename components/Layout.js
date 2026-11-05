@@ -106,6 +106,42 @@ const FlagJP = () => (
 
 const CONGA = ['kaiju', 'pinkyeti', 'purpledog', 'cubehead', 'orangefuzz'];
 
+// Keeps the conga steady. Each monster's place along the border is worked out
+// from the clock, so moving to another page carries on where they were instead
+// of starting over, and the gap between monsters is a fixed distance on every
+// screen size (so they never overlap or spread out).
+function useConga(ref) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof window === 'undefined') return undefined;
+    let timer;
+    const place = () => {
+      const w = window.innerWidth;
+      const phone = w <= 640;
+      const speed = phone ? 24 : 34;   // pixels per second
+      const gap = phone ? 74 : 96;     // distance from one monster to the next
+      const track = w + 140;           // in from the right edge, out past the left
+      const lap = track / speed;
+      const now = Date.now() / 1000;
+      el.style.setProperty('--t', `${lap.toFixed(3)}s`);
+      el.querySelectorAll('.walker').forEach((n, i) => {
+        const along = (((now * speed - i * gap) % track) + track) % track;
+        n.style.animationDelay = `${(-along / speed).toFixed(3)}s`;
+      });
+    };
+    place();
+    const onResize = () => { clearTimeout(timer); timer = setTimeout(place, 150); };
+    const onShow = () => { if (!document.hidden) place(); };
+    window.addEventListener('resize', onResize);
+    document.addEventListener('visibilitychange', onShow);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onShow);
+    };
+  }, [ref]);
+}
+
 export default function Layout({
   title = 'Kanatani Toys — Strange Toys for Strange People',
   description = 'Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton.',
@@ -117,6 +153,8 @@ export default function Layout({
   head,
   children,
 }) {
+  const congaRef = useRef(null);
+  useConga(congaRef);
   const { count, setOpen } = useCart();
   const { lang, setLang, t } = useLang();
 
@@ -176,7 +214,7 @@ export default function Layout({
         <div className="walkrow">
           <div className="scallop up" />
           {/* Hiro's monsters doing a conga along the border */}
-          <span className="conga" aria-hidden="true">
+          <span className="conga" aria-hidden="true" ref={congaRef}>
             {CONGA.map((c, i) => (
               <span key={c} className={`walker w-${c}`} style={{ '--d': `${-i * 0.23}s`, '--i': i }}><img src={`/nl/walker${c === 'kaiju' ? '' : `-${c}`}.png`} alt="" /></span>
             ))}
