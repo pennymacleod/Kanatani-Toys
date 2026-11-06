@@ -54,7 +54,9 @@ export default function ArtistPage({ slug }) {
     }).catch(() => {});
     return () => { gone = true; };
   }, [slug]);
-  const findOnline = (w) => w.shop && online[String(w.shop).trim().toLowerCase()];
+  // `shop` can be one Square name or a list (tried in order, e.g. the new name then an older one).
+  const shopNames = (w) => [].concat(w.shop || []);
+  const findOnline = (w) => shopNames(w).map(n => online[String(n).trim().toLowerCase()]).find(Boolean);
   const stockOf = (p) => {
     const v = (p.allVariations || []).map(x => x.stock);
     if (v.some(x => x === null)) return null;
@@ -144,10 +146,10 @@ export default function ArtistPage({ slug }) {
                         <div className="wbottom">
                           <span className="wprice">{soldOut ? t('SOLD OUT', '売り切れ')
                             : a.comingSoon ? t('Coming soon', '近日入荷')
-                            : w.shop ? `${p ? `£${(p.price / 100).toFixed(2).replace(/\.00$/, '')} · ` : ''}${t('Online & in the shop', 'オンライン・店頭で販売中')}`
+                            : w.shop ? t('Online & in the shop', 'オンライン・店頭で販売中')
                             : t('In the shop', '店頭にあります')}</span>
                           {w.shop && !soldOut
-                            ? <Link className="btn wdm" href={p ? `/product/${p.id}` : `/?q=${encodeURIComponent(w.shop)}#shop`}>{t('Buy it now →', '今すぐ買う →')}</Link>
+                            ? <Link className="btn wdm" href={p ? `/product/${p.id}` : `/?q=${encodeURIComponent(shopNames(w).slice(-1)[0])}#shop`}>{t('Buy it now →', '今すぐ買う →')}</Link>
                             : !soldOut && <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer">💬 {t('Ask about it', 'DMで聞く')}</a>}
                         </div>
                       );
