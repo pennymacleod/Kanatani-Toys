@@ -113,7 +113,9 @@ export default async function handler(req, res) {
       .filter(item => item.item_data?.name && !isHiddenProduct(item.item_data.name)) // skip unnamed + hand-hidden items
       .map(item => {
         const variations = item.item_data?.variations || [];
-        const firstVariation = variations[0];
+        // First size that's in stock (t-shirts), so a sold-out S doesn't make the whole shirt look sold out.
+        const leftOf = (v) => soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v?.id] ?? null);
+        const firstVariation = variations.find(v => { const n = leftOf(v); return n == null || n > 0; }) || variations[0];
         const stock = soldOutAt(firstVariation, locationId, item.item_data?.name) ? 0 : (stockMap[firstVariation?.id] ?? null); // null = not tracked
         const price = firstVariation?.item_variation_data?.price_money?.amount || 0;
         const currency = firstVariation?.item_variation_data?.price_money?.currency || 'GBP';

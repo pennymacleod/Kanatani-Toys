@@ -16,7 +16,8 @@ function stockText(stock) {
 
 export default function ProductPage({ product, error }) {
   const { add, count, setOpen, qtyOf } = useCart();
-  const [selected, setSelected] = useState(product?.allVariations?.[0] || null);
+  // Start on the first size that's in stock (a sold-out S shouldn't be picked).
+  const [selected, setSelected] = useState((product?.allVariations || []).find(v => v.stock == null || v.stock > 0) || product?.allVariations?.[0] || null);
   const [added, setAdded] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);

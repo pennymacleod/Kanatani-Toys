@@ -307,8 +307,12 @@ export async function getServerSideProps({ res }) {
         return true;
       })
       .map(item => {
-        const v = item.item_data?.variations?.[0];
-        const stock = soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v?.id] ?? null);
+        // Items with sizes (t-shirts): show the first size that's in stock, and
+        // only call the item sold out when every size is.
+        const vars = item.item_data?.variations || [];
+        const left = (vv) => soldOutAt(vv, locationId, item.item_data?.name) ? 0 : (stockMap[vv?.id] ?? null);
+        const v = vars.find(vv => { const n = left(vv); return n == null || n > 0; }) || vars[0];
+        const stock = left(v);
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
         return {
           id: item.id,
