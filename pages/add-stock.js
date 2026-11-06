@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Layout from '../components/Layout';
 import { TILL_BUTTONS } from '../lib/tillArtists';
 import { STOCK_LISTS } from '../lib/stockLists';
+import { SHIRTS, TSHIRT_SIZES } from '../lib/tshirts';
 
 const PASS_KEY = 'kt-add-stock-pass';
 const CUTOUT_LIB = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
@@ -162,6 +163,20 @@ export default function AddStock() {
     finally { setBtnBusy(false); }
   }
 
+  const [teeBusy, setTeeBusy] = useState(false);
+  const [teeMsg, setTeeMsg] = useState(null);
+
+  async function setupTshirts() {
+    setTeeBusy(true); setTeeMsg(null);
+    try {
+      const r = await fetch('/api/admin/setup-tshirts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Something went wrong');
+      setTeeMsg({ text: 'Done! The t-shirts are in Square with stock tracking on.', notes: d.report });
+    } catch (e) { setTeeMsg({ bad: true, text: e.message }); }
+    finally { setTeeBusy(false); }
+  }
+
   async function unlock(p) {
     setBusy(true); setMsg(null);
     try {
@@ -306,6 +321,18 @@ export default function AddStock() {
                   {busy ? 'Adding…' : 'Add to Square'}
                 </button>
               </form>
+            )}
+
+            {unlocked && (
+              <div className="as-till">
+                <h2>T-shirts in Square</h2>
+                <p>Puts the website's t-shirts into Square: sizes S, M and L at their price, stock tracking on, shown online. Safe to press again: it never resets stock after a sale.</p>
+                <ul style={{ margin: '0 0 14px', paddingLeft: 20 }}>
+                  {SHIRTS.map(s => <li key={s.slug}><b>{s.name}</b> £{s.price} · {TSHIRT_SIZES.map(z => `${z} ${s.stock?.[z] || 0}`).join(' · ')}</li>)}
+                </ul>
+                {teeMsg && <div className={`as-msg${teeMsg.bad ? ' bad' : ''}`}>{teeMsg.text}{(teeMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
+                <button type="button" className="as-btn" onClick={setupTshirts} disabled={teeBusy}>{teeBusy ? 'Setting up…' : 'Set up the T-shirts in Square'}</button>
+              </div>
             )}
 
             {unlocked && (
