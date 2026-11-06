@@ -50,8 +50,7 @@ export default function MiniBadgePress() {
     if (alive.current) setStep('idle');
   };
 
-  // Penny, 6 Nov 2026: no button in the basket until the Mystery Badge is
-  // actually for sale online (it's hidden in lib/productRules.js for now).
+  // No press in the basket if the Mystery Badge isn't in Square.
   if (!item) return null;
 
   return (

@@ -1,5 +1,5 @@
 import { SQUARE_LOCATION_ID } from '../lib/squareLocation';
-import { isHiddenProduct, soldOutAt } from '../lib/productRules';
+import { isHiddenProduct, isPressOnly, soldOutAt } from '../lib/productRules';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
@@ -300,6 +300,7 @@ export async function getServerSideProps({ res }) {
         if (['HIDDEN', 'UNAVAILABLE'].includes(item.item_data?.ecom_visibility)) return false;
         if (item.item_data?.available_online === false) return false;
         if (isHiddenProduct(item.item_data?.name)) return false;
+        if (isPressOnly(item.item_data?.name)) return false; // badge press only
         return true;
       })
       .map(item => {

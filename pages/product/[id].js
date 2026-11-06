@@ -1,5 +1,5 @@
 import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
-import { isHiddenProduct, soldOutAt } from '../../lib/productRules';
+import { isHiddenProduct, isPressOnly, soldOutAt } from '../../lib/productRules';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
@@ -216,6 +216,10 @@ export async function getServerSideProps({ params, res }) {
     }
 
     const item = data.object;
+    // The Mystery Badge is only sold through the badge press.
+    if (isPressOnly(item.item_data?.name)) {
+      return { redirect: { destination: '/badge-press', permanent: false } };
+    }
     if (item.is_deleted || item.item_data?.is_archived
       || ['HIDDEN', 'UNAVAILABLE'].includes(item.item_data?.ecom_visibility)
       || item.item_data?.available_online === false
