@@ -301,6 +301,9 @@ export async function getServerSideProps({ res }) {
         if (item.item_data?.available_online === false) return false;
         if (isHiddenProduct(item.item_data?.name)) return false;
         if (isPressOnly(item.item_data?.name)) return false; // badge press only
+        // Artist till buttons live in Square's "Artists" category: till only.
+        const cId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
+        if (cId && /^artists$/i.test(categoryMap?.[cId] || '')) return false;
         return true;
       })
       .map(item => {
