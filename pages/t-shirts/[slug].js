@@ -48,11 +48,14 @@ export default function TShirtPage({ slug }) {
               <span className="achip"><i />{t('CLOTHING', '洋服')}</span>
               <h1 className="big" style={{ fontSize: 'clamp(36px,5vw,60px)', margin: '20px 0 10px', color: 'var(--pink)', lineHeight: 1.1 }}>{shirt.name}</h1>
               <div className="buyrow">
-                <div className="bigprice" style={{ fontSize: 26 }}>{t('Available online soon', 'オンライン販売はもうすぐ')}</div>
+                {shirt.price
+                  ? <div className="bigprice">£{shirt.price}</div>
+                  : <div className="bigprice" style={{ fontSize: 26 }}>{t('Available online soon', 'オンライン販売はもうすぐ')}</div>}
               </div>
 
               <div className="specs">
                 <div className="spec"><b>{t('STOCK', '在庫')}</b><span>{t('In the shop now', '店頭にあります')}</span></div>
+                {shirt.sizes && shirt.sizes.length > 0 && <div className="spec"><b>{t('SIZES', 'サイズ')}</b><span>{shirt.sizes.join(' · ')}</span></div>}
                 <div className="spec"><b>{t('WHERE', '販売場所')}</b><span>{t('Brighton shop · online soon', 'ブライトンのお店 · オンラインはもうすぐ')}</span></div>
               </div>
 
