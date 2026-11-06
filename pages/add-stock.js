@@ -6,6 +6,7 @@ import Layout from '../components/Layout';
 import { TILL_BUTTONS } from '../lib/tillArtists';
 import { STOCK_LISTS } from '../lib/stockLists';
 import { SHIRTS, TSHIRT_SIZES } from '../lib/tshirts';
+import { ONLINE_ITEMS } from '../lib/onlineItems';
 
 const PASS_KEY = 'kt-add-stock-pass';
 const CUTOUT_LIB = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
@@ -177,6 +178,19 @@ export default function AddStock() {
     finally { setTeeBusy(false); }
   }
 
+  const [onBusy, setOnBusy] = useState(false);
+  const [onMsg, setOnMsg] = useState(null);
+  async function setupOnline() {
+    setOnBusy(true); setOnMsg(null);
+    try {
+      const r = await fetch('/api/admin/setup-online-items', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Something went wrong');
+      setOnMsg({ text: 'Done! They\u2019re in Square, on the website and on the till.', notes: d.report });
+    } catch (e) { setOnMsg({ bad: true, text: e.message }); }
+    finally { setOnBusy(false); }
+  }
+
   async function unlock(p) {
     setBusy(true); setMsg(null);
     try {
@@ -321,6 +335,18 @@ export default function AddStock() {
                   {busy ? 'Adding…' : 'Add to Square'}
                 </button>
               </form>
+            )}
+
+            {unlocked && (
+              <div className="as-till">
+                <h2>Artist pieces for sale online</h2>
+                <p>Puts these pieces in Square as their own items, so they sell on the till and the website, with stock tracking on. Safe to press again.</p>
+                <ul style={{ margin: '0 0 14px', paddingLeft: 20 }}>
+                  {ONLINE_ITEMS.map(p => <li key={p.name}><b>{p.name}</b> £{p.price} · {p.stock} in stock</li>)}
+                </ul>
+                {onMsg && <div className={`as-msg${onMsg.bad ? ' bad' : ''}`}>{onMsg.text}{(onMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
+                <button type="button" className="as-btn" onClick={setupOnline} disabled={onBusy}>{onBusy ? 'Working…' : 'Put artist pieces on the website & till'}</button>
+              </div>
             )}
 
             {unlocked && (
