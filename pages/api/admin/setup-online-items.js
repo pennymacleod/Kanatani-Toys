@@ -4,7 +4,7 @@
 import crypto from 'crypto';
 import { guard, square, explain } from '../../../lib/squareAdmin';
 import { SQUARE_LOCATION_ID } from '../../../lib/squareLocation';
-import { ONLINE_ITEMS } from '../../../lib/onlineItems';
+import { ONLINE_ITEMS, RETIRED_ONLINE_ITEMS } from '../../../lib/onlineItems';
 
 const key = () => crypto.randomUUID();
 const norm = (t) => String(t || '').trim().toLowerCase();
@@ -22,13 +22,16 @@ export default async function handler(req, res) {
     const report = [];
     for (const p of ONLINE_ITEMS) {
       const pence = Math.round(Number(p.price) * 100);
-      const found = items.find(o => norm(o.item_data?.name) === norm(p.name));
+      const names = [p.name, ...(p.aka || [])].map(norm);
+      const found = items.find(o => names.includes(norm(o.item_data?.name)));
       let item = found ? (await square(`/v2/catalog/object/${found.id}`)).object : null;
       const made = !item;
       if (!item) {
         item = { type: 'ITEM', id: '#item', item_data: { name: p.name, variations: [{ type: 'ITEM_VARIATION', id: '#var', item_variation_data: { name: 'Regular' } }] } };
       }
       const d = item.item_data;
+      d.name = p.name; // renames an older version (aka) to the current name
+      if (p.description) d.description = p.description;
       const v = d.variations[0];
       const wasTracked = !made && v.item_variation_data.track_inventory === true;
       Object.assign(v.item_variation_data, { pricing_type: 'FIXED_PRICING', price_money: { amount: pence, currency: 'GBP' }, track_inventory: true });
@@ -63,6 +66,16 @@ export default async function handler(req, res) {
         stock = `stock ${p.stock || 0}`;
       }
       report.push(`${p.name}: ${made ? 'made new' : 'updated'}, £${p.price}, ${stock}${photo}.`);
+    }
+    // Take retired items back off the website (they stay on the till).
+    for (const n of RETIRED_ONLINE_ITEMS) {
+      const f = items.find(o => norm(o.item_data?.name) === norm(n));
+      if (!f) continue;
+      const it = (await square(`/v2/catalog/object/${f.id}`)).object;
+      it.item_data.ecom_visibility = 'HIDDEN';
+      it.item_data.available_online = false;
+      await square('/v2/catalog/batch-upsert', { method: 'POST', body: { idempotency_key: key(), batches: [{ objects: [it] }] } });
+      report.push(`${n}: taken off the website.`);
     }
     res.status(200).json({ ok: true, report });
   } catch (err) {
