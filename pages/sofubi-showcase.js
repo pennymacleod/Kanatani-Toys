@@ -17,8 +17,10 @@ export default function SofubiShowcase() {
   // of "All" and pushes everyone else down.
   // Artists with `comingSoon: true` have a page but their stock hasn't
   // arrived yet, so they show under Coming soon instead of the main grid.
-  const live = ARTISTS.filter(a => !a.comingSoon);
-  const newest = live[live.length - 1];
+  // Newest first: lib/artists.js lists artists oldest first, so it's reversed
+  // here, and each tab shows the newest artists at the top (Penny, 6 Nov 2026).
+  const live = ARTISTS.filter(a => !a.comingSoon).reverse();
+  const newest = live[0];
   const shown = cat === 'All'
     ? [newest, ...byTab(live.filter(a => a !== newest))]
     : byTab(live.filter(match));
