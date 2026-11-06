@@ -43,6 +43,7 @@ export default function ArtistPage({ slug }) {
   // live so the card shows the real price and stock and links straight to the
   // product page (Penny, 6 Nov 2026).
   const [online, setOnline] = useState({});
+  const [looked, setLooked] = useState(false); // catalog checked
   useEffect(() => {
     if (!a.work.some(w => w.shop)) return;
     let gone = false;
@@ -51,6 +52,7 @@ export default function ArtistPage({ slug }) {
       const m = {};
       for (const p of d.products || []) m[String(p.name).trim().toLowerCase()] = p;
       setOnline(m);
+      setLooked(true);
     }).catch(() => {});
     return () => { gone = true; };
   }, [slug]);
@@ -140,6 +142,8 @@ export default function ArtistPage({ slug }) {
                     <div className="wname">{w.name}</div>
                     {(() => {
                       const p = findOnline(w);
+                      // Not on the website (yet): show it as a shop-only piece.
+                      if (looked && !p) w = { ...w, shop: undefined };
                       const left = p ? stockOf(p) : null;
                       const soldOut = w.sold || (p && left === 0);
                       return (
