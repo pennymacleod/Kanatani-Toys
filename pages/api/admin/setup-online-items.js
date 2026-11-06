@@ -34,6 +34,8 @@ export default async function handler(req, res) {
       if (p.description) d.description = p.description;
       const v = d.variations[0];
       const wasTracked = !made && v.item_variation_data.track_inventory === true;
+      // Name the variation after the artist so Square's sales reports show whose it is.
+      if (p.variation) v.item_variation_data.name = p.variation;
       Object.assign(v.item_variation_data, { pricing_type: 'FIXED_PRICING', price_money: { amount: pence, currency: 'GBP' }, track_inventory: true });
       item.present_at_all_locations = true;
       delete item.present_at_location_ids; delete item.absent_at_location_ids;
