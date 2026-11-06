@@ -29,6 +29,7 @@ export default function SofubiShowcase() {
   const [showAll, setShowAll] = useState(false);
   useEffect(() => { setShowAll(new URLSearchParams(window.location.search).has('all')); }, []);
   const soonAll = [...ARTISTS.filter(a => a.comingSoon), ...COMING_SOON];
+  const next = soonAll[0];
   const soon = showAll ? byTab(soonAll.filter(match)) : soonAll.slice(0, 1).filter(match);
 
   return (
@@ -40,13 +41,21 @@ export default function SofubiShowcase() {
       page="showcase"
     >
       <section id="artists" className="ssb">
+        {/* Next artist coming soon, so people see it without scrolling (Penny, 6 Nov 2026). */}
+        {next && (
+          <a className="soonbub" href="#soon" aria-label={t(`Coming soon: ${next.name}`, `近日登場：${next.name}`)}>
+            <span className="disc">{(next.cardFigure || next.figure || next.logo) && <img src={next.cardFigure || next.figure || next.logo} alt="" className={next.cardFigure || next.figure ? 'fig' : 'logo'} />}</span>
+            <span className="pill">{t('Coming soon', '近日登場')} ↓</span>
+            <span className="nm">{next.name}</span>
+          </a>
+        )}
         <div className="tiles3" aria-hidden="true">{TILES.map((t, i) => <span key={i}>{t}</span>)}</div>
         <h1 className="big" style={{ fontSize: lang === 'ja' ? 'clamp(40px,7vw,84px)' : 120, margin: '4px 0 18px', color: 'var(--pink)', whiteSpace: 'nowrap' }}>
           {lang === 'ja'
             ? <>ソフビ・<span style={{ color: 'var(--gold)' }}>ショーケース</span></>
             : <>Sofubi <span style={{ color: 'var(--gold)' }}>Showcase</span></>}
         </h1>
-        <div className="mid" style={{ fontSize: 36, color: '#fff' }}>{t('Supporting independent artists from around the world', '世界中のインディペンデント・アーティストを応援しています')}</div>
+        <div className="mid sub" style={{ fontSize: 36, color: '#fff' }}>{t('Supporting independent artists from around the world', '世界中のインディペンデント・アーティストを応援しています')}</div>
       </section>
 
       <section className="floor" style={{ padding: '50px 0 80px' }}>
@@ -76,7 +85,7 @@ export default function SofubiShowcase() {
 
           {soon.length > 0 && (
             <>
-              <div className="soonhead">
+              <div className="soonhead" id="soon">
                 <span className="plaque"><span className="mid" style={{ fontSize: 40, color: 'var(--sky)' }}>{t('Coming soon', '近日登場')}</span></span>
                 <p>{t('New artists on their way to the shop. Follow them on Instagram so you don\u2019t miss them!', '新しいアーティストがお店にやってきます。見逃さないよう、Instagramでフォローしてね！')}</p>
               </div>
