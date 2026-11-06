@@ -1,6 +1,7 @@
 import { SQUARE_LOCATION_ID } from '../../lib/squareLocation';
 import { isHiddenProduct, soldOutAt } from '../../lib/productRules';
 import { SHOP_TABS, shopTab } from '../../lib/categories';
+import { tillPieceProducts } from '../../lib/tillPieces';
 // pages/api/catalog.js
 // ─────────────────────────────────────────────────────────────────────────────
 // Server-side API route — runs on the server, never in the browser.
@@ -144,6 +145,12 @@ export default async function handler(req, res) {
         };
       })
       .filter(p => p.isAvailable && p.price > 0);
+
+    // Artists' pieces sold online as choices on their till button (lib/onlineItems.js).
+    products.push(...tillPieceProducts(items, {
+      imageMap,
+      stockOf: (v, item) => soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v.id] ?? null),
+    }));
 
     // ── Step 5: Build category list ─────────────────────────────────────────
     const categories = SHOP_TABS;

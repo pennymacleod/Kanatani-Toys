@@ -1,5 +1,6 @@
 import { SQUARE_LOCATION_ID } from '../lib/squareLocation';
 import { isHiddenProduct, isPressOnly, soldOutAt } from '../lib/productRules';
+import { tillPieceProducts } from '../lib/tillPieces';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
@@ -334,6 +335,10 @@ export async function getServerSideProps({ res }) {
           })),
         };
       })
+      .concat(tillPieceProducts(items, { // artists' pieces sold online from their till button
+        imageMap,
+        stockOf: (vv, item) => soldOutAt(vv, locationId, item.item_data?.name) ? 0 : (stockMap[vv.id] ?? null),
+      }).map(({ isAvailable, variationName, ...p }) => p))
       .filter(p => p.price > 0)
       .reverse();
 

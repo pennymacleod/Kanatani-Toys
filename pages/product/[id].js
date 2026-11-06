@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { useCart, fmt } from '../../lib/cart';
 import { shopTab } from '../../lib/categories';
+import { onlinePieceFor, pieceProduct } from '../../lib/tillPieces';
 
 function stockText(stock) {
   if (stock === null || stock === undefined) return 'In stock';
@@ -214,6 +215,34 @@ export async function getServerSideProps({ params, res }) {
     const data = await r.json();
     if (!r.ok || !data.object) {
       return { props: { product: null, error: 'Product not found' } };
+    }
+
+    // An artist's piece sold from their till button: the id is the variation.
+    if (data.object.type === 'ITEM_VARIATION') {
+      const v = data.object;
+      const ir = await fetch(`${base}/v2/catalog/object/${v.item_variation_data?.item_id}?include_related_objects=true`, {
+        headers: { Authorization: `Bearer ${token}`, 'Square-Version': '2025-01-23' },
+      });
+      const idata = await ir.json();
+      const owner = idata.object;
+      const fresh = (owner?.item_data?.variations || []).find(x => x.id === v.id) || v;
+      const found = owner && !owner.is_deleted && onlinePieceFor(owner, v.id);
+      if (!found) return { props: { product: null, error: 'Product not found' } };
+      const imageMap = {};
+      (idata.related_objects || []).filter(o => o.type === 'IMAGE').forEach(img => { if (img.image_data?.url) imageMap[img.id] = img.image_data.url; });
+      let stock = null;
+      const invR = await fetch(`${base}/v2/inventory/counts/batch-retrieve`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Square-Version': '2025-01-23', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ catalog_object_ids: [v.id], location_ids: [SQUARE_LOCATION_ID] }),
+      });
+      if (invR.ok) {
+        const counts = (await invR.json()).counts || [];
+        if (counts.length) stock = counts.reduce((n, c) => n + (c.state && c.state !== 'IN_STOCK' ? 0 : parseInt(c.quantity || 0, 10)), 0);
+      }
+      if (soldOutAt(fresh, SQUARE_LOCATION_ID, owner.item_data?.name)) stock = 0;
+      const { isAvailable, variationName, ...product } = pieceProduct({ piece: found.piece, variation: fresh, imageMap, stock });
+      return { props: { product, error: null } };
     }
 
     const item = data.object;
