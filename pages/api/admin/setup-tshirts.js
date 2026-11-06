@@ -16,7 +16,12 @@ const sizeOf = (name) => SIZE_WORDS[norm(name)] || null;
 
 export default async function handler(req, res) {
   if (!(await guard(req, res))) return;
+  // force: set every size's count to the numbers in lib/tshirts.js, even if
+  // it was already tracked, and clear any "sold out" switch on the till.
+  const force = req.body?.force === true;
   try {
+    const locs = (await square('/v2/locations')).locations || [];
+    const here = locs.find(l => l.id === SQUARE_LOCATION_ID);
     let objs = [], cursor = null;
     do {
       const d = await square(`/v2/catalog/list?types=ITEM,CATEGORY${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`);
@@ -54,6 +59,9 @@ export default async function handler(req, res) {
           wasTracked[size] = false;
         }
         Object.assign(v.item_variation_data, { pricing_type: 'FIXED_PRICING', price_money: { amount: pence, currency: 'GBP' }, track_inventory: true });
+        // Clear Square's per-location "sold out" switch and make sure stock is tracked everywhere.
+        const ov = v.item_variation_data.location_overrides || [];
+        if (force && ov.length) v.item_variation_data.location_overrides = ov.map(o => ({ ...o, sold_out: false, track_inventory: true }));
       }
       // Put the sizes first, in S, M, L order, so the website picks S by default.
       d.variations.sort((a, b) => {
@@ -94,7 +102,7 @@ export default async function handler(req, res) {
       for (const v of saved.item_data.variations) {
         const size = TSHIRT_SIZES.find(s => s.toLowerCase() === sizeOf(v.item_variation_data?.name));
         if (!size) continue;
-        if (wasTracked[size]) { counts.push(`${size} kept`); continue; }
+        if (wasTracked[size] && !force) { counts.push(`${size} kept`); continue; }
         const qty = Number(shirt.stock?.[size] || 0);
         changes.push({ type: 'PHYSICAL_COUNT', physical_count: { catalog_object_id: v.id, location_id: SQUARE_LOCATION_ID, quantity: String(qty), state: 'IN_STOCK', occurred_at: new Date().toISOString() } });
         counts.push(`${size} ${qty}`);
@@ -103,6 +111,7 @@ export default async function handler(req, res) {
 
       report.push(`${shirt.name}: ${made ? 'made new' : 'updated'}, £${shirt.price}, stock ${counts.join(' · ')}${photo}.`);
     }
+    report.push(`Stock is set at the “${here?.name || SQUARE_LOCATION_ID}” location. Your Square locations: ${locs.filter(l => l.status === 'ACTIVE').map(l => l.name).join(', ')}.`);
     res.status(200).json({ ok: true, report });
   } catch (err) {
     res.status(502).json({ error: explain(err) });

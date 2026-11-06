@@ -166,13 +166,13 @@ export default function AddStock() {
   const [teeBusy, setTeeBusy] = useState(false);
   const [teeMsg, setTeeMsg] = useState(null);
 
-  async function setupTshirts() {
+  async function setupTshirts(force = false) {
     setTeeBusy(true); setTeeMsg(null);
     try {
-      const r = await fetch('/api/admin/setup-tshirts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass }) });
+      const r = await fetch('/api/admin/setup-tshirts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass, force }) });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'Something went wrong');
-      setTeeMsg({ text: 'Done! The t-shirts are in Square with stock tracking on.', notes: d.report });
+      setTeeMsg({ text: force ? 'Done! T-shirt stock is set to the numbers above.' : 'Done! The t-shirts are in Square with stock tracking on.', notes: d.report });
     } catch (e) { setTeeMsg({ bad: true, text: e.message }); }
     finally { setTeeBusy(false); }
   }
@@ -331,7 +331,8 @@ export default function AddStock() {
                   {SHIRTS.map(s => <li key={s.slug}><b>{s.name}</b> £{s.price} · {TSHIRT_SIZES.map(z => `${z} ${s.stock?.[z] || 0}`).join(' · ')}</li>)}
                 </ul>
                 {teeMsg && <div className={`as-msg${teeMsg.bad ? ' bad' : ''}`}>{teeMsg.text}{(teeMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
-                <button type="button" className="as-btn" onClick={setupTshirts} disabled={teeBusy}>{teeBusy ? 'Setting up…' : 'Set up the T-shirts in Square'}</button>
+                <button type="button" className="as-btn" onClick={() => setupTshirts(false)} disabled={teeBusy}>{teeBusy ? 'Working…' : 'Set up the T-shirts in Square'}</button>
+                <button type="button" className="as-btn" onClick={() => setupTshirts(true)} disabled={teeBusy} style={{ marginTop: 10, background: 'var(--orange)' }}>{teeBusy ? 'Working…' : 'Reset T-shirt stock to these numbers'}</button>
               </div>
             )}
 
