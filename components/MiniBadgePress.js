@@ -50,6 +50,10 @@ export default function MiniBadgePress() {
     if (alive.current) setStep('idle');
   };
 
+  // Penny, 6 Nov 2026: no button in the basket until the Mystery Badge is
+  // actually for sale online (it's hidden in lib/productRules.js for now).
+  if (!item) return null;
+
   return (
     <div className={`mbp s-${step}`}>
       <button type="button" className="mbp-machine" onClick={pull} disabled={busy} aria-label={t('Pull the lever to add a mystery badge for £1', 'レバーを引いて£1のミステリー缶バッジを追加')}>
