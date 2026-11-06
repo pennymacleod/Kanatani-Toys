@@ -157,13 +157,14 @@ footer .footnav a { text-decoration: underline; text-underline-offset: 3px; }
 /* Artist "In the shop now" gallery: info at the top of each card,
    "In the shop" + the pink DM button always lined up at the bottom. */
 .pg-artist .wintro { text-align: center; font-weight: 700; font-size: 17px; margin: -6px 0 22px; }
-.pg-artist .wgrid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 18px; justify-content: stretch; }
+.pg-artist .wgrid { display: flex !important; flex-wrap: wrap; justify-content: center; gap: 18px; }
+.pg-artist .wgrid > .wcard { flex: 0 0 calc((100% - 54px) / 4); min-width: 0; }
 .pg-artist .wcard { display: flex; flex-direction: column; }
 .pg-artist .wname { flex: 1 0 auto; }
 .pg-artist .wbottom { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
 .pg-artist .wdm { display: block; width: 100%; box-sizing: border-box; font-size: 15px; padding: 10px 12px; border-radius: 999px; background: var(--pink); color: #fff; }
 .pg-artist .anav { justify-content: center; }
-@media (max-width: 760px) { .pg-artist .wgrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px; } .pg-artist .wdm { font-size: 13px; padding: 9px 8px; } }
+@media (max-width: 760px) { .pg-artist .wgrid { gap: 12px; } .pg-artist .wgrid > .wcard { flex-basis: calc((100% - 12px) / 2); } .pg-artist .wdm { font-size: 13px; padding: 9px 8px; } }
 
 /* Gachapon sound toggle */
 .pg-gacha .sound{appearance:none;font:inherit;font-weight:900;cursor:pointer;border:3px solid var(--ink);border-radius:999px;padding:6px 14px;background:var(--cream);color:var(--ink);margin-left:10px;vertical-align:middle}
@@ -395,9 +396,6 @@ button.soonlang{opacity:.6;cursor:default}
 button.soonlang small{font-size:.7em;margin-left:4px;text-transform:uppercase;letter-spacing:.04em}
 
 /* Artist pages: empty spaces in the "In the shop now" row (photos coming soon). */
-.pg-artist .wsoon .ph{position:absolute;inset:0;aspect-ratio:auto;height:100%}
-.pg-artist .wsoon .ph img{position:static;width:40%;height:auto;padding:0;object-fit:contain}
-.pg-artist .wsoon .wname{opacity:.7}
 
 /* Kanatani News: wish list form (Tally embed) in the sky-blue panel */
 .pg-news .wishform { background: #F2C230; border: 4px solid var(--ink); border-radius: 22px; padding: 6px 10px; overflow: hidden; }

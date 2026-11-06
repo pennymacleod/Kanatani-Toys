@@ -100,7 +100,12 @@ export default function ArtistPage({ slug }) {
           {(
             <>
               {a.work.length > 0 && <p className="wintro">{t('Tap a photo to see it bigger.', '写真をタップすると大きく見られます。')}</p>}
-              <div className="wgrid">
+              {a.work.length === 0 && (
+                <p className="wintro">{a.comingSoon
+                  ? t(`${a.name}'s work is on its way to the shop. Follow them on Instagram to see it first.`, `${a.name}の作品は入荷準備中です。Instagramでいち早くチェックしてください。`)
+                  : t(`${a.name}'s work is in our cabinets and on the shelves. Pop in to see it, or follow them on Instagram.`, `${a.name}の作品は店内のケースや棚に並んでいます。ぜひお店で見てください。Instagramもチェック！`)}</p>
+              )}
+              {a.work.length > 0 && <div className="wgrid">
                 {a.work.map((w, i) => (
                   // A gallery, not a shop. `shop: "word"` swaps the DM button for a
                   // "Buy online" link once that piece is on Square.
@@ -117,15 +122,7 @@ export default function ArtistPage({ slug }) {
                     </div>
                   </div>
                 ))}
-                {/* Always four spaces, like Ofuton Heaven: empty ones say photos coming soon. */}
-                {Array.from({ length: Math.max(0, 4 - a.work.length) }).map((_, k) => (
-                  <div key={`soon-${k}`} className="wcard wsoon">
-                    <div className="wshot"><div className="ph"><img src="/nl/pink_head_bold.png" alt="" /><span>{t('Photos coming soon', '写真は準備中')}</span></div></div>
-                    <div className="wname">{t('Photos coming soon', '写真は準備中')}</div>
-                    <div className="wbottom"><span className="wprice">{t('In the shop', '店頭にあります')}</span></div>
-                  </div>
-                ))}
-              </div>
+              </div>}
             </>
           )}
 
