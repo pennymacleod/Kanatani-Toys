@@ -63,6 +63,9 @@ export default async function handler(req, res) {
       });
       d.categories = [{ id: cat.id }];
       d.reporting_category = { id: cat.id };
+      // Coloured tile on the till, same colour as the shirt's website card.
+      const hex = String(shirt.colour || '').replace('#', '');
+      if (/^[0-9a-fA-F]{6}$/.test(hex)) d.label_color = hex.toUpperCase();
       d.ecom_visibility = 'VISIBLE';
       d.available_online = true;
 
