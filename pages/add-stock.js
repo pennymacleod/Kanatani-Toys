@@ -6,7 +6,8 @@ import Layout from '../components/Layout';
 import { TILL_BUTTONS } from '../lib/tillArtists';
 import { STOCK_LISTS } from '../lib/stockLists';
 import { SHIRTS, TSHIRT_SIZES } from '../lib/tshirts';
-import { ONLINE_ITEMS } from '../lib/onlineItems';
+import { ONLINE_ITEMS, TILL_PIECES } from '../lib/onlineItems';
+import { TILL_ARTISTS } from '../lib/tillArtists';
 
 const PASS_KEY = 'kt-add-stock-pass';
 const CUTOUT_LIB = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
@@ -339,9 +340,13 @@ export default function AddStock() {
 
             {unlocked && (
               <div className="as-till">
-                <h2>Artist pieces for sale online</h2>
-                <p>Puts these pieces in Square as their own items, so they sell on the till and the website, with stock tracking on. Safe to press again.</p>
+                <h2>Artist pieces on the till (and online)</h2>
+                <p>Adds each piece as a choice on the artist's till button, with its price and stock count, so tapping the button shows how many are left and every sale counts for that artist. Pieces marked "also online" sell on the website too. Safe to press again: stock is only set the first time.</p>
                 <ul style={{ margin: '0 0 14px', paddingLeft: 20 }}>
+                  {TILL_PIECES.flatMap(a => a.pieces.map(p => {
+                    const n = TILL_ARTISTS.findIndex(x => x === a.artist);
+                    return <li key={a.artist + p.name}><b>{String(n + 1).padStart(2, '0')} {a.artist}</b> → {p.name} £{p.price} · {p.stock} to start{p.online ? ' · also online' : ''}</li>;
+                  }))}
                   {ONLINE_ITEMS.map(p => <li key={p.name}><b>{p.name}</b> £{p.price} · {p.stock} in stock</li>)}
                 </ul>
                 {onMsg && <div className={`as-msg${onMsg.bad ? ' bad' : ''}`}>{onMsg.text}{(onMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
