@@ -69,6 +69,13 @@ export default async function handler(req, res) {
         const ib = TSHIRT_SIZES.findIndex(s => s.toLowerCase() === sizeOf(b.item_variation_data?.name));
         return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
       });
+      // Available at every location, so nobody has to tick locations in the dashboard.
+      item.present_at_all_locations = true;
+      delete item.present_at_location_ids; delete item.absent_at_location_ids;
+      for (const v of d.variations) {
+        v.present_at_all_locations = true;
+        delete v.present_at_location_ids; delete v.absent_at_location_ids;
+      }
       d.categories = [{ id: cat.id }];
       d.reporting_category = { id: cat.id };
       // Coloured tile on the till, same colour as the shirt's website card.
@@ -109,7 +116,21 @@ export default async function handler(req, res) {
       }
       if (changes.length) await square('/v2/inventory/changes/batch-create', { method: 'POST', body: { idempotency_key: key(), changes } });
 
-      report.push(`${shirt.name}: ${made ? 'made new' : 'updated'}, £${shirt.price}, stock ${counts.join(' · ')}${photo}.`);
+      // What Square now holds, per location, so we can see where the stock is.
+      let where = '';
+      try {
+        const ids = saved.item_data.variations.map(v => v.id);
+        const inv = await square('/v2/inventory/counts/batch-retrieve', { method: 'POST', body: { catalog_object_ids: ids } });
+        const byLoc = {};
+        for (const c of inv.counts || []) {
+          if (c.state !== 'IN_STOCK') continue;
+          const v = saved.item_data.variations.find(x => x.id === c.catalog_object_id);
+          const loc = (locs.find(l => l.id === c.location_id)?.name) || c.location_id;
+          (byLoc[loc] = byLoc[loc] || []).push(`${v?.item_variation_data?.name} ${c.quantity}`);
+        }
+        where = Object.entries(byLoc).map(([l, xs]) => ` [${l}: ${xs.join(', ')}]`).join('');
+      } catch (e) { where = ' [couldn’t read stock back]'; }
+      report.push(`${shirt.name}: ${made ? 'made new' : 'updated'}, £${shirt.price}, stock ${counts.join(' · ')}${photo}.${where}`);
     }
     report.push(`Stock is set at the “${here?.name || SQUARE_LOCATION_ID}” location. Your Square locations: ${locs.filter(l => l.status === 'ACTIVE').map(l => l.name).join(', ')}.`);
     res.status(200).json({ ok: true, report });
