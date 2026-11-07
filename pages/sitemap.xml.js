@@ -1,5 +1,6 @@
 import { SHIRTS } from '../lib/tshirts';
 import { isHidden } from '../lib/hidden';
+import { isHiddenProduct, isPressOnly } from '../lib/productRules';
 import { ARTISTS } from '../lib/artists';
 
 const SQUARE_BASE = process.env.SQUARE_ENVIRONMENT === 'sandbox'
@@ -36,7 +37,7 @@ async function fetchProductIds() {
   }
 
   return allObjects
-    .filter(o => o.type === 'ITEM' && o.item_data?.name && o.is_deleted !== true)
+    .filter(o => o.type === 'ITEM' && o.item_data?.name && o.is_deleted !== true && !isHiddenProduct(o.item_data.name) && !isPressOnly(o.item_data.name))
     .map(o => ({ id: o.id, updatedAt: o.updated_at }));
 }
 

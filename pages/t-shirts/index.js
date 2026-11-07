@@ -32,7 +32,7 @@ export default function TShirts() {
                 <Link key={s.slug} href={`/t-shirts/${s.slug}`} className="card" style={{ background: s.colour }}>
                   <div className="shot"><img src={s.img} alt={`${s.name} t-shirt`} loading="lazy" /></div>
                   <div className="name" style={{ fontSize: 20 }}>{s.name}</div>
-                  <div className="price"><span>{t('Available online soon', 'オンライン販売はもうすぐ')}</span></div>
+                  <div className="price">{s.price ? <>£{s.price}<span style={{ display: 'block', fontSize: 14, fontWeight: 600 }}>{t('Sizes', 'サイズ')} {(s.sizes || []).join(' · ')} · {t('online soon', 'オンラインはもうすぐ')}</span></> : <span>{t('Available online soon', 'オンライン販売はもうすぐ')}</span>}</div>
                 </Link>
               ))}
             </div>

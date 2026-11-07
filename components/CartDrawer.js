@@ -91,7 +91,7 @@ export default function CartDrawer() {
 
         {cart.length > 0 && (
           <div className="nl-drawer-foot">
-            {/* Mystery badges aren't on the till yet, so no badge offer on the live site. */}
+            {/* Mini badge press: adds the £1 Square "Mystery Badge" (shown while Badge Press is switched on). */}
             {!isPaused('/badge-press') && <MiniBadgePress />}
             <div className="nl-uk">
               <p><b>🇬🇧 We post to UK addresses only at the moment.</b> We're working on posting to other countries. In the meantime, if you're outside the UK, email us at <a href="mailto:kanatanitoys@gmail.com">kanatanitoys@gmail.com</a> and we'll see what we can do.</p>

@@ -24,6 +24,8 @@ export default function Privacy() {
             <ul>
               <li>Google Maps, used on our Find Us page to show our location</li>
               <li>Google Fonts, used to display the site's typefaces</li>
+              <li>YouTube (through its privacy-enhanced youtube-nocookie.com player), which plays the shows on our Kanatani TV page. Nothing from YouTube loads until you press play. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.</li>
+              <li>Tally, which runs the wish list form on our Kanatani News page. What you send in that form (your name, Instagram handle or email, what you're looking for and any photos) is stored by Tally so we can look for it on our trips. See <a href="https://tally.so/help/privacy-policy" target="_blank" rel="noopener noreferrer">Tally's Privacy Policy</a>.</li>
             </ul>
             <p>These are provided by Google — see <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>. Our web host (Vercel) keeps standard server access logs, like IP address and browser type, for security and reliability, as is normal for any website.</p>
 

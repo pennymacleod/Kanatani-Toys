@@ -15,6 +15,8 @@ const HINTS = {
 const RARITY_JA = { 'SUPER RARE': 'スーパーレア', RARE: 'レア', COMMON: 'ノーマル' };
 
 // Ten kaiju to collect. Add `img` (a file in public/nl/) to show a photo of the figure.
+// `art: true` = a drawing with a see-through background; it sits flush on the
+// bottom edge of the card's picture box (no white gap underneath).
 const KAIJU = [
   {
     "id": "godzilla",
@@ -27,7 +29,9 @@ const KAIJU = [
     "year": "1954",
     "studio": "Toho film",
     "rarity": "SUPER RARE",
-    "fact": "His Japanese name, Gojira, mixes gorira (gorilla) and kujira (whale)."
+    "fact": "His Japanese name, Gojira, mixes gorira (gorilla) and kujira (whale).",
+    "img": "/nl/gacha-godzilla.png",
+    "art": true
   },
   {
     "id": "mothra",
@@ -40,7 +44,9 @@ const KAIJU = [
     "year": "1961",
     "studio": "Toho film",
     "rarity": "RARE",
-    "fact": "Mothra is known as the Queen of the Monsters. She hatches from a giant egg as a caterpillar before turning into a huge moth, and she has been in more films than any kaiju except Godzilla."
+    "fact": "Mothra is known as the Queen of the Monsters. She hatches from a giant egg as a caterpillar before turning into a huge moth, and she has been in more films than any kaiju except Godzilla.",
+    "img": "/nl/gacha-mothra.png",
+    "art": true
   },
   {
     "id": "gamera",
@@ -53,7 +59,9 @@ const KAIJU = [
     "year": "1965",
     "studio": "Daiei film",
     "rarity": "RARE",
-    "fact": "Gamera flies by pulling his legs into his shell and firing jets out of the holes. In Japan, 27 November is Gamera Day."
+    "fact": "Gamera flies by pulling his legs into his shell and firing jets out of the holes. In Japan, 27 November is Gamera Day.",
+    "img": "/nl/gacha-gamera.png",
+    "art": true
   },
   {
     "id": "hedorah",
@@ -67,7 +75,8 @@ const KAIJU = [
     "studio": "Toho film",
     "rarity": "COMMON",
     "fact": "The Smog Monster eats pollution. Its name comes from hedoro, the Japanese word for sludge.",
-    "img": "/nl/hedorah.png"
+    "img": "/nl/gacha-hedorah.png",
+    "art": true
   },
   {
     "id": "ghidorah",
@@ -80,7 +89,9 @@ const KAIJU = [
     "year": "1964",
     "studio": "Toho film",
     "rarity": "SUPER RARE",
-    "fact": "He was inspired by Yamata no Orochi, an eight-headed dragon from Japanese myth. The team thought about giving him seven or eight heads before settling on three."
+    "fact": "He was inspired by Yamata no Orochi, an eight-headed dragon from Japanese myth. The team thought about giving him seven or eight heads before settling on three.",
+    "img": "/nl/gacha-king-ghidorah.png",
+    "art": true
   },
   {
     "id": "garamon",
@@ -93,7 +104,9 @@ const KAIJU = [
     "year": "1966",
     "studio": "TV series",
     "rarity": "COMMON",
-    "fact": "Garamon's cries are really the buzzing of cicadas, because it was built by an invading race of Cicada Men."
+    "fact": "Garamon's cries are really the buzzing of cicadas, because it was built by an invading race of Cicada Men.",
+    "img": "/nl/gacha-garamon.png",
+    "art": true
   },
   {
     "id": "baltan",
@@ -106,7 +119,9 @@ const KAIJU = [
     "year": "1966",
     "studio": "TV series",
     "rarity": "SUPER RARE",
-    "fact": "Known as the 'Space Ninja', with a famously spooky laugh. Baltan is often called Ultraman's most popular enemy."
+    "fact": "Known as the 'Space Ninja', with a famously spooky laugh. Baltan is often called Ultraman's most popular enemy.",
+    "img": "/nl/gacha-alien-baltan.png",
+    "art": true
   },
   {
     "id": "metron",
@@ -119,7 +134,9 @@ const KAIJU = [
     "year": "1967",
     "studio": "TV series",
     "rarity": "RARE",
-    "fact": "Metron hid tiny red devices in cigarettes to make people go wild. He's famous for sitting down with the hero across a low table in a tiny flat."
+    "fact": "Metron hid tiny red devices in cigarettes to make people go wild. He's famous for sitting down with the hero across a low table in a tiny flat.",
+    "img": "/nl/gacha-alien-metron.png",
+    "art": true
   },
   {
     "id": "redking",
@@ -132,7 +149,9 @@ const KAIJU = [
     "year": "1966",
     "studio": "TV series",
     "rarity": "COMMON",
-    "fact": "Red King made his debut in the very same episode as little Pigmon."
+    "fact": "Red King made his debut in the very same episode as little Pigmon.",
+    "img": "/nl/gacha-red-king.png",
+    "art": true
   },
   {
     "id": "pigmon",
@@ -312,7 +331,7 @@ export default function Gachapon() {
               <span className="rar">★ {t(card.k.rarity, RARITY_JA[card.k.rarity])}</span>
               <span className="num">No. {KAIJU.indexOf(card.k) + 1} / {KAIJU.length}</span>
               {card.k.img ? (
-                <div className="kphoto has"><img src={card.k.img} alt={`${card.k.en} sofubi in our shop`} /></div>
+                <div className={'kphoto has' + (card.k.art ? ' art' : '')}><img src={card.k.img} alt={card.k.art ? `${card.k.en}, drawn for Kanatani Toys` : `${card.k.en} sofubi in our shop`} /></div>
               ) : (
                 <div className="kphoto"><span className="bigjp">{card.k.jp}</span></div>
               )}

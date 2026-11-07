@@ -39,6 +39,32 @@ export default function ArtistPage({ slug }) {
   const [big, setBig] = useState(null);
   const { lang, t } = useLang();
 
+  // Pieces also sold on the website (`shop: "Square item name"`): look them up
+  // live so the card shows the real price and stock and links straight to the
+  // product page (Penny, 6 Nov 2026).
+  const [online, setOnline] = useState({});
+  const [looked, setLooked] = useState(false); // catalog checked
+  useEffect(() => {
+    if (!a.work.some(w => w.shop)) return;
+    let gone = false;
+    fetch('/api/catalog').then(r => r.json()).then(d => {
+      if (gone) return;
+      const m = {};
+      for (const p of d.products || []) m[String(p.name).trim().toLowerCase()] = p;
+      setOnline(m);
+      setLooked(true);
+    }).catch(() => {});
+    return () => { gone = true; };
+  }, [slug]);
+  // `shop` can be one Square name or a list (tried in order, e.g. the new name then an older one).
+  const shopNames = (w) => [].concat(w.shop || []);
+  const findOnline = (w) => shopNames(w).map(n => online[String(n).trim().toLowerCase()]).find(Boolean);
+  const stockOf = (p) => {
+    const v = (p.allVariations || []).map(x => x.stock);
+    if (v.some(x => x === null)) return null;
+    return v.length ? v.reduce((n, x) => n + (x || 0), 0) : p.stock;
+  };
+
   // Open the photo a DM link points at (e.g. /artist/goatee#p-neurami).
   useEffect(() => {
     const h = decodeURIComponent(window.location.hash.slice(1));
@@ -100,7 +126,12 @@ export default function ArtistPage({ slug }) {
           {(
             <>
               {a.work.length > 0 && <p className="wintro">{t('Tap a photo to see it bigger.', '写真をタップすると大きく見られます。')}</p>}
-              <div className="wgrid">
+              {a.work.length === 0 && (
+                <p className="wintro">{a.comingSoon
+                  ? t(`${a.name}'s work is on its way to the shop. Follow them on Instagram to see it first.`, `${a.name}の作品は入荷準備中です。Instagramでいち早くチェックしてください。`)
+                  : t(`${a.name}'s work is in our cabinets and on the shelves. Pop in to see it, or follow them on Instagram.`, `${a.name}の作品は店内のケースや棚に並んでいます。ぜひお店で見てください。Instagramもチェック！`)}</p>
+              )}
+              {a.work.length > 0 && <div className="wgrid">
                 {a.work.map((w, i) => (
                   // A gallery, not a shop. `shop: "word"` swaps the DM button for a
                   // "Buy online" link once that piece is on Square.
@@ -109,23 +140,27 @@ export default function ArtistPage({ slug }) {
                       <img src={w.img} alt={w.name} loading="lazy" />
                     </button>
                     <div className="wname">{w.name}</div>
-                    <div className="wbottom">
-                      <span className="wprice">{w.sold ? t('SOLD OUT', '売り切れ') : a.comingSoon ? t('Coming soon', '近日入荷') : t('In the shop', '店頭にあります')}</span>
-                      {w.shop
-                        ? <Link className="btn wdm" href={`/?q=${encodeURIComponent(w.shop)}#shop`}>{t('Buy online →', 'オンラインで買う →')}</Link>
-                        : !w.sold && <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer">💬 {t('Ask about it', 'DMで聞く')}</a>}
-                    </div>
+                    {(() => {
+                      const p = findOnline(w);
+                      // Not on the website (yet): show it as a shop-only piece.
+                      if (looked && !p) w = { ...w, shop: undefined };
+                      const left = p ? stockOf(p) : null;
+                      const soldOut = w.sold || (p && left === 0);
+                      return (
+                        <div className="wbottom">
+                          <span className="wprice">{soldOut ? t('SOLD OUT', '売り切れ')
+                            : a.comingSoon ? t('Coming soon', '近日入荷')
+                            : w.shop ? t('Online & in the shop', 'オンライン・店頭で販売中')
+                            : t('In the shop', '店頭にあります')}</span>
+                          {w.shop && !soldOut
+                            ? <Link className="btn wdm" href={p ? `/product/${p.id}` : `/?q=${encodeURIComponent(shopNames(w).slice(-1)[0])}#shop`}>{t('Buy it now →', '今すぐ買う →')}</Link>
+                            : !soldOut && <a className="btn wdm" href={ASK} target="_blank" rel="noopener noreferrer">💬 {t('Ask about it', 'DMで聞く')}</a>}
+                        </div>
+                      );
+                    })()}
                   </div>
                 ))}
-                {/* Always four spaces, like Ofuton Heaven: empty ones say photos coming soon. */}
-                {Array.from({ length: Math.max(0, 4 - a.work.length) }).map((_, k) => (
-                  <div key={`soon-${k}`} className="wcard wsoon">
-                    <div className="wshot"><div className="ph"><img src="/nl/pink_head_bold.png" alt="" /><span>{t('Photos coming soon', '写真は準備中')}</span></div></div>
-                    <div className="wname">{t('Photos coming soon', '写真は準備中')}</div>
-                    <div className="wbottom"><span className="wprice">{t('In the shop', '店頭にあります')}</span></div>
-                  </div>
-                ))}
-              </div>
+              </div>}
             </>
           )}
 

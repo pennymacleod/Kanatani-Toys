@@ -1,5 +1,6 @@
 import { SQUARE_LOCATION_ID } from '../lib/squareLocation';
-import { isHiddenProduct, soldOutAt } from '../lib/productRules';
+import { isHiddenProduct, isPressOnly, soldOutAt } from '../lib/productRules';
+import { tillPieceProducts } from '../lib/tillPieces';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '../components/Layout';
@@ -300,11 +301,19 @@ export async function getServerSideProps({ res }) {
         if (['HIDDEN', 'UNAVAILABLE'].includes(item.item_data?.ecom_visibility)) return false;
         if (item.item_data?.available_online === false) return false;
         if (isHiddenProduct(item.item_data?.name)) return false;
+        if (isPressOnly(item.item_data?.name)) return false; // badge press only
+        // Artist till buttons live in Square's "Artists" category: till only.
+        const cId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
+        if (cId && /^artists$/i.test(categoryMap?.[cId] || '')) return false;
         return true;
       })
       .map(item => {
-        const v = item.item_data?.variations?.[0];
-        const stock = soldOutAt(v, locationId, item.item_data?.name) ? 0 : (stockMap[v?.id] ?? null);
+        // Items with sizes (t-shirts): show the first size that's in stock, and
+        // only call the item sold out when every size is.
+        const vars = item.item_data?.variations || [];
+        const left = (vv) => soldOutAt(vv, locationId, item.item_data?.name) ? 0 : (stockMap[vv?.id] ?? null);
+        const v = vars.find(vv => { const n = left(vv); return n == null || n > 0; }) || vars[0];
+        const stock = left(v);
         const catId = item.item_data?.categories?.[0]?.id || item.item_data?.category_id;
         return {
           id: item.id,
@@ -326,6 +335,10 @@ export async function getServerSideProps({ res }) {
           })),
         };
       })
+      .concat(tillPieceProducts(items, { // artists' pieces sold online from their till button
+        imageMap,
+        stockOf: (vv, item) => soldOutAt(vv, locationId, item.item_data?.name) ? 0 : (stockMap[vv.id] ?? null),
+      }).map(({ isAvailable, variationName, ...p }) => p))
       .filter(p => p.price > 0)
       .reverse();
 

@@ -45,7 +45,8 @@ export default function ProductCard({ product, index = 0 }) {
     im.onload = () => { const l = lightness(im); if (l != null) setLight(l > 0.6); };
     im.src = src;
   }, [outOfStock, product.imageUrls]);
-  const tag = tagFor(product.stock, lang === 'ja');
+  const sized = (product.allVariations || []).length > 1;
+  const tag = product.preorder ? t('PRE-ORDER', '予約') : sized ? null : tagFor(product.stock, lang === 'ja');
 
   const onAdd = () => {
     if (outOfStock) return;
@@ -79,6 +80,9 @@ export default function ProductCard({ product, index = 0 }) {
       <div className="name">{outOfStock ? product.name : <Link href={`/product/${product.id}`}>{product.name}</Link>}</div>
       <div className="cardfoot">
         <div className="price"><span>{fmt(product.price)}</span></div>
+        {sized && !outOfStock ? (
+          <Link href={`/product/${product.id}`} className="addbtn">{t('Choose size →', 'サイズを選ぶ →')}</Link>
+        ) : (
         <button
           type="button"
           className={`addbtn${justAdded ? ' done' : ''}`}
@@ -87,6 +91,7 @@ export default function ProductCard({ product, index = 0 }) {
         >
           {outOfStock ? t('Sold out', '売り切れ') : justAdded ? t('View basket →', 'カートを見る →') : t('Add +', 'カートに入れる +')}
         </button>
+        )}
       </div>
     </div>
   );

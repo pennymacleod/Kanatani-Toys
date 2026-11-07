@@ -1,3 +1,4 @@
+import Script from 'next/script';
 import Layout from '../components/Layout';
 
 const STAR = '50.0,3.0 57.4,12.7 69.1,3.8 71.1,18.4 83.2,16.8 81.6,28.9 96.2,30.9 87.3,42.6 97.0,50.0 87.3,57.4 96.2,69.1 81.6,71.1 83.2,83.2 71.1,81.6 69.1,96.2 57.4,87.3 50.0,97.0 42.6,87.3 30.9,96.2 28.9,81.6 16.8,83.2 18.4,71.1 3.8,69.1 12.7,57.4 3.0,50.0 12.7,42.6 3.8,30.9 18.4,28.9 16.8,16.8 28.9,18.4 30.9,3.8 42.6,12.7';
@@ -16,6 +17,10 @@ const SPOTS = [
 
 const IG = 'https://www.instagram.com/kanatani_toys';
 
+// Wish list form lives in Tally (form ArzyWD). Answers stay in Tally / Penny's
+// linked Google Sheet, never her inbox, and customers never get her email.
+const WISH_FORM = 'https://tally.so/embed/ArzyWD?alignLeft=1&hideTitle=1&dynamicHeight=1';
+
 export default function News() {
   return (
     <Layout
@@ -32,6 +37,7 @@ export default function News() {
             <h1 className="mid" style={{ margin: 0 }}>Kanatani <span>News!</span></h1>
           </div>
           <div className="issue"><span>ISSUE 1 · WINTER · FREE · WEATHER: 100% CHANCE OF TOYS</span></div>
+          <div className="wishjump"><a className="btn" href="#wishlist">⭐ Wish list! Tell us what to hunt for →</a></div>
           <div className="stage">
             <h2 className="hl" style={{ margin: 0, fontWeight: 400 }}>
               <span className="big l1">We&apos;re</span><span className="big l2">off to</span><span className="big l3">Japan!</span>
@@ -68,13 +74,25 @@ export default function News() {
           </div>
 
           <div className="duo2">
-            <div className="panel" style={{ background: 'var(--sky)' }}>
+            <div id="wishlist" className="panel" style={{ background: 'var(--sky)' }}>
               <h2 className="big" style={{ color: '#FFD21F' }}>Wish list!</h2>
               <p>Hunting for a grail? A kaiju you&apos;ve wanted since you were small? Tell us and we&apos;ll keep our eyes peeled in Japan!</p>
-              <div className="soonnote">
-                Our wish list form is coming soon. For now, send us a message on Instagram{' '}
-                <a href={IG} target="_blank" rel="noopener noreferrer">@kanatani_toys</a> or tell us in the shop!
+              <div className="wishform">
+                <iframe
+                  data-tally-src={WISH_FORM}
+                  src={WISH_FORM}
+                  loading="lazy"
+                  width="100%"
+                  height="1150"
+                  frameBorder="0"
+                  title="Kanatani Toys Wish List"
+                />
               </div>
+              <Script
+                src="https://tally.so/widgets/embed.js"
+                strategy="lazyOnload"
+                onLoad={() => { if (typeof window !== 'undefined' && window.Tally) window.Tally.loadEmbeds(); }}
+              />
             </div>
             <div className="panel" style={{ background: 'var(--pink)' }}>
               <img className="pk" src="/nl/pink_head_bold.png" alt="" />

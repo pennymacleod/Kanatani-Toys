@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useCart } from '../lib/cart';
 import CartDrawer from './CartDrawer';
@@ -12,9 +14,65 @@ export const NAV = [
   { key: 'story', label: 'Our Story', ja: '私たちについて', href: '/our-story', bg: 'var(--orange)' },
   { key: 'findus', label: 'Find Us', ja: 'アクセス', href: '/about', bg: 'var(--gold)', ink: true },
   { key: 'news', label: 'Kanatani News', ja: 'カナタニ・ニュース', href: '/news', bg: 'var(--tardis)' },
-  { key: 'gacha', label: 'Kaiju Gachapon', ja: '怪獣ガチャポン', href: '/gachapon', bg: 'var(--green)' },
-  { key: 'badges', label: 'Badge Press', ja: '缶バッジ・プレス', href: '/badge-press', bg: 'var(--orange)' },
+  {
+    key: 'play', label: 'Play Zone', ja: 'プレイゾーン', bg: 'var(--green)',
+    // A drop-down: tap "Play Zone" to open it.
+    items: [
+      { key: 'gacha', label: 'Kaiju Gachapon', ja: '怪獣ガチャポン', href: '/gachapon', bg: 'var(--green)', emoji: '🎰' },
+      { key: 'badges', label: 'Badge Press', ja: '缶バッジ・プレス', href: '/badge-press', bg: 'var(--orange)', emoji: '🔘' },
+      { key: 'tv', label: 'Kanatani TV', ja: 'カナタニTV', href: '/tv', bg: 'var(--red)', emoji: '📺' },
+    ],
+  },
 ];
+
+// The Play Zone drop-down. Works by tap (phones/iPads) and click; closes when
+// you tap outside it, press Escape, or go to another page.
+function NavMenu({ item, active, t }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const router = useRouter();
+  const items = item.items.filter(i => !isHidden(i.href));
+  const isActive = items.some(i => i.key === active);
+  useEffect(() => {
+    if (!open) return;
+    const away = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    const esc = (e) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('pointerdown', away);
+    document.addEventListener('keydown', esc);
+    return () => { document.removeEventListener('pointerdown', away); document.removeEventListener('keydown', esc); };
+  }, [open]);
+  useEffect(() => {
+    const close = () => setOpen(false);
+    router.events.on('routeChangeStart', close);
+    return () => router.events.off('routeChangeStart', close);
+  }, [router.events]);
+  if (!items.length) return null;
+  return (
+    <span className={'navdd' + (open ? ' open' : '')} ref={ref}>
+      <button
+        type="button"
+        className="navddbtn"
+        aria-expanded={open}
+        aria-haspopup="true"
+        aria-current={isActive ? 'page' : undefined}
+        onClick={() => setOpen(o => !o)}
+        style={{ background: item.bg }}
+      >
+        {t(item.label, item.ja)} <span className="caret" aria-hidden="true">▾</span>
+      </button>
+      {open && (
+        <span className="navddmenu" role="menu">
+          {items.map(i => (
+            <Link key={i.key} href={i.href} role="menuitem" aria-current={active === i.key ? 'page' : undefined} style={{ background: i.bg }}>
+              <span aria-hidden="true">{i.emoji}</span> {t(i.label, i.ja)}
+              {isPaused(i.href) && <small className="ddsoon">{t('soon', '近日')}</small>}
+            </Link>
+          ))}
+        </span>
+      )}
+    </span>
+  );
+}
 
 export const SOCIALS = [
   { name: 'Instagram', handle: '@kanatani_toys', href: 'https://www.instagram.com/kanatani_toys', bg: 'var(--pink)' },
@@ -48,6 +106,42 @@ const FlagJP = () => (
 
 const CONGA = ['kaiju', 'pinkyeti', 'purpledog', 'cubehead', 'orangefuzz'];
 
+// Keeps the conga steady. Each monster's place along the border is worked out
+// from the clock, so moving to another page carries on where they were instead
+// of starting over, and the gap between monsters is a fixed distance on every
+// screen size (so they never overlap or spread out).
+function useConga(ref) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof window === 'undefined') return undefined;
+    let timer;
+    const place = () => {
+      const w = window.innerWidth;
+      const phone = w <= 640;
+      const speed = phone ? 24 : 34;   // pixels per second
+      const gap = phone ? 74 : 96;     // distance from one monster to the next
+      const track = w + 140;           // in from the right edge, out past the left
+      const lap = track / speed;
+      const now = Date.now() / 1000;
+      el.style.setProperty('--t', `${lap.toFixed(3)}s`);
+      el.querySelectorAll('.walker').forEach((n, i) => {
+        const along = (((now * speed - i * gap) % track) + track) % track;
+        n.style.animationDelay = `${(-along / speed).toFixed(3)}s`;
+      });
+    };
+    place();
+    const onResize = () => { clearTimeout(timer); timer = setTimeout(place, 150); };
+    const onShow = () => { if (!document.hidden) place(); };
+    window.addEventListener('resize', onResize);
+    document.addEventListener('visibilitychange', onShow);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
+      document.removeEventListener('visibilitychange', onShow);
+    };
+  }, [ref]);
+}
+
 export default function Layout({
   title = 'Kanatani Toys — Strange Toys for Strange People',
   description = 'Japanese toys, art and collectibles — kaiju, sofubi, designer toys and independent artists. Hand-picked in Japan, genuinely loved. Shop online or visit us at the Open Market in Brighton.',
@@ -59,6 +153,8 @@ export default function Layout({
   head,
   children,
 }) {
+  const congaRef = useRef(null);
+  useConga(congaRef);
   const { count, setOpen } = useCart();
   const { lang, setLang, t } = useLang();
 
@@ -100,7 +196,9 @@ export default function Layout({
               <div className="sign"><div className="k">KANATANI</div><div className="t">TOYS</div></div>
             </Link>
             <nav aria-label="Main">
-              {NAV.filter(n => !isHidden(n.href)).map(n => (
+              {NAV.filter(n => n.items || !isHidden(n.href)).map(n => n.items ? (
+                <NavMenu key={n.key} item={n} active={active} t={t} />
+              ) : (
                 <Link
                   key={n.key}
                   href={n.href}
@@ -116,7 +214,7 @@ export default function Layout({
         <div className="walkrow">
           <div className="scallop up" />
           {/* Hiro's monsters doing a conga along the border */}
-          <span className="conga" aria-hidden="true">
+          <span className="conga" aria-hidden="true" ref={congaRef}>
             {CONGA.map((c, i) => (
               <span key={c} className={`walker w-${c}`} style={{ '--d': `${-i * 0.23}s`, '--i': i }}><img src={`/nl/walker${c === 'kaiju' ? '' : `-${c}`}.png`} alt="" /></span>
             ))}
