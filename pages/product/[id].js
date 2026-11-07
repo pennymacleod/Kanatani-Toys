@@ -158,6 +158,9 @@ export default function ProductPage({ product, error }) {
                 </div>
               )}
 
+              {product.preorder && (
+                <p style={{ display: 'inline-block', margin: '0 0 18px', padding: '8px 14px', borderRadius: 12, border: '3px solid var(--ink)', background: 'var(--gold)', fontWeight: 800 }}>{product.preorder}</p>
+              )}
               <div className="specs">
                 <div className="spec"><b>STOCK</b><span>{stockText(stock)}</span></div>
                 <div className="spec"><b>WHERE</b><span>Brighton shop &amp; online</span></div>

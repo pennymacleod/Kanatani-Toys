@@ -46,7 +46,7 @@ export default function ProductCard({ product, index = 0 }) {
     im.src = src;
   }, [outOfStock, product.imageUrls]);
   const sized = (product.allVariations || []).length > 1;
-  const tag = sized ? null : tagFor(product.stock, lang === 'ja');
+  const tag = product.preorder ? t('PRE-ORDER', '予約') : sized ? null : tagFor(product.stock, lang === 'ja');
 
   const onAdd = () => {
     if (outOfStock) return;
