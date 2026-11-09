@@ -130,7 +130,7 @@ export default function Home({ initialProducts, categories, error }) {
           {error && <div className="errorbar">{t('Sorry, we couldn\u2019t load the toys from our till just now. Please try again in a minute.', '申し訳ありません。ただいまレジからおもちゃを読み込めませんでした。少し経ってからもう一度お試しください。')}</div>}
           <div className="shopbar">
             <div className="cats" role="group" aria-label="Filter by category">
-              {categories.map(cat => (
+              {categories.filter(cat => cat === 'All' || TAB_PAGES[cat] || products.some(p => p.category === cat)).map(cat => (
                 TAB_PAGES[cat] && !products.some(p => p.category === cat) ? (
                   <Link key={cat} href={TAB_PAGES[cat]} className="cat">{t(cat, TAB_JA[cat])} →</Link>
                 ) : (
