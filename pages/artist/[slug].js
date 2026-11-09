@@ -59,6 +59,10 @@ export default function ArtistPage({ slug }) {
   // `shop` can be one Square name or a list (tried in order, e.g. the new name then an older one).
   const shopNames = (w) => [].concat(w.shop || []);
   const findOnline = (w) => shopNames(w).map(n => online[String(n).trim().toLowerCase()]).find(Boolean);
+  // A piece with no photo file of its own uses its Square photo (Penny adds it
+  // on the Add Stock page). Pieces with no photo anywhere aren't shown.
+  const picOf = (w) => w.img || findOnline(w)?.imageUrls?.[0] || null;
+  const shown = a.work.filter(picOf).length;
   const stockOf = (p) => {
     const v = (p.allVariations || []).map(x => x.stock);
     if (v.some(x => x === null)) return null;
@@ -125,19 +129,19 @@ export default function ArtistPage({ slug }) {
 
           {(
             <>
-              {a.work.length > 0 && <p className="wintro">{t('Tap a photo to see it bigger.', '写真をタップすると大きく見られます。')}</p>}
-              {a.work.length === 0 && (
+              {shown > 0 && <p className="wintro">{t('Tap a photo to see it bigger.', '写真をタップすると大きく見られます。')}</p>}
+              {shown === 0 && (
                 <p className="wintro">{a.comingSoon
                   ? t(`${a.name}'s work is on its way to the shop. Follow them on Instagram to see it first.`, `${a.name}の作品は入荷準備中です。Instagramでいち早くチェックしてください。`)
                   : t(`${a.name}'s work is in our cabinets and on the shelves. Pop in to see it, or follow them on Instagram.`, `${a.name}の作品は店内のケースや棚に並んでいます。ぜひお店で見てください。Instagramもチェック！`)}</p>
               )}
-              {a.work.length > 0 && <div className="wgrid">
-                {a.work.map((w, i) => (
+              {shown > 0 && <div className="wgrid">
+                {a.work.map((w, i) => picOf(w) && (
                   // A gallery, not a shop. `shop: "word"` swaps the DM button for a
                   // "Buy online" link once that piece is on Square.
                   <div key={w.name} className="wcard" id={pieceId(w.name)}>
                     <button type="button" className={`wshot${w.photo === false ? '' : ' photo'}`} onClick={() => setBig(i)} aria-label={`Show ${w.name} bigger`}>
-                      <img src={w.img} alt={w.name} loading="lazy" />
+                      <img src={picOf(w)} alt={w.name} loading="lazy" />
                     </button>
                     <div className="wname">{w.name}</div>
                     {(() => {
@@ -176,7 +180,7 @@ export default function ArtistPage({ slug }) {
         <div className="lightbox" onClick={() => setBig(null)} role="dialog" aria-modal="true" aria-label={a.work[big].name}>
           <button type="button" className="lbbtn lbclose" onClick={(e) => { e.stopPropagation(); setBig(null); }} aria-label="Close">✕</button>
           {a.work.length > 1 && <button type="button" className="lbbtn lbprev" onClick={(e) => { e.stopPropagation(); setBig(i => (i - 1 + a.work.length) % a.work.length); }} aria-label="Previous">‹</button>}
-          <img src={a.work[big].img} alt={a.work[big].name} onClick={(e) => e.stopPropagation()} />
+          <img src={picOf(a.work[big])} alt={a.work[big].name} onClick={(e) => e.stopPropagation()} />
           {a.work.length > 1 && <button type="button" className="lbbtn lbnext" onClick={(e) => { e.stopPropagation(); setBig(i => (i + 1) % a.work.length); }} aria-label="Next">›</button>}
           <div className="lbcount">{a.work[big].name}{a.work[big].jp ? ` · ${a.work[big].jp}` : ''}</div>
         </div>
