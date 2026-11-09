@@ -61,8 +61,12 @@ export default function ArtistPage({ slug }) {
   const findOnline = (w) => shopNames(w).map(n => online[String(n).trim().toLowerCase()]).find(Boolean);
   // A piece with no photo file of its own uses its Square photo (Penny adds it
   // on the Add Stock page). Pieces with no photo anywhere aren't shown.
-  const picOf = (w) => w.img || findOnline(w)?.imageUrls?.[0] || null;
+  const picOf = (w) => w.img || w.imgs?.[0] || findOnline(w)?.imageUrls?.[0] || null;
   const shown = a.work.filter(picOf).length;
+  // Every photo in the big view, in order. A piece with `imgs` (e.g. a book's
+  // cover and inside) has all of them, so tapping it shows both (Penny, 9 Nov 2026).
+  const shots = a.work.flatMap((w, i) => (w.imgs?.length ? w.imgs : [picOf(w)]).filter(Boolean).map(src => ({ i, src })));
+  const openPiece = (i) => { const n = shots.findIndex(x => x.i === i); if (n >= 0) setBig(n); };
   const stockOf = (p) => {
     const v = (p.allVariations || []).map(x => x.stock);
     if (v.some(x => x === null)) return null;
@@ -73,19 +77,19 @@ export default function ArtistPage({ slug }) {
   useEffect(() => {
     const h = decodeURIComponent(window.location.hash.slice(1));
     const n = a.work.findIndex(w => pieceId(w.name) === h);
-    if (n >= 0) setBig(n);
+    if (n >= 0) openPiece(n);
   }, [slug]);
 
   useEffect(() => {
     if (big === null) return;
     const onKey = (e) => {
       if (e.key === 'Escape') setBig(null);
-      else if (e.key === 'ArrowLeft') setBig(i => (i - 1 + a.work.length) % a.work.length);
-      else if (e.key === 'ArrowRight') setBig(i => (i + 1) % a.work.length);
+      else if (e.key === 'ArrowLeft') setBig(i => (i - 1 + shots.length) % shots.length);
+      else if (e.key === 'ArrowRight') setBig(i => (i + 1) % shots.length);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [big, a.work.length]);
+  }, [big, shots.length]);
 
   return (
     <Layout
@@ -140,7 +144,7 @@ export default function ArtistPage({ slug }) {
                   // A gallery, not a shop. `shop: "word"` swaps the DM button for a
                   // "Buy online" link once that piece is on Square.
                   <div key={w.name} className="wcard" id={pieceId(w.name)}>
-                    <button type="button" className={`wshot${w.photo === false ? '' : ' photo'}`} onClick={() => setBig(i)} aria-label={`Show ${w.name} bigger`}>
+                    <button type="button" className={`wshot${w.photo === false ? '' : ' photo'}`} onClick={() => openPiece(i)} aria-label={`Show ${w.name} bigger`}>
                       <img src={picOf(w)} alt={w.name} loading="lazy" />
                     </button>
                     <div className="wname">{w.name}</div>
@@ -176,15 +180,15 @@ export default function ArtistPage({ slug }) {
         </div>
       </section>
 
-      {big !== null && a.work[big] && (
-        <div className="lightbox" onClick={() => setBig(null)} role="dialog" aria-modal="true" aria-label={a.work[big].name}>
+      {big !== null && shots[big] && (() => { const w = a.work[shots[big].i]; return (
+        <div className="lightbox" onClick={() => setBig(null)} role="dialog" aria-modal="true" aria-label={w.name}>
           <button type="button" className="lbbtn lbclose" onClick={(e) => { e.stopPropagation(); setBig(null); }} aria-label="Close">✕</button>
-          {a.work.length > 1 && <button type="button" className="lbbtn lbprev" onClick={(e) => { e.stopPropagation(); setBig(i => (i - 1 + a.work.length) % a.work.length); }} aria-label="Previous">‹</button>}
-          <img src={picOf(a.work[big])} alt={a.work[big].name} onClick={(e) => e.stopPropagation()} />
-          {a.work.length > 1 && <button type="button" className="lbbtn lbnext" onClick={(e) => { e.stopPropagation(); setBig(i => (i + 1) % a.work.length); }} aria-label="Next">›</button>}
-          <div className="lbcount">{a.work[big].name}{a.work[big].jp ? ` · ${a.work[big].jp}` : ''}</div>
+          {shots.length > 1 && <button type="button" className="lbbtn lbprev" onClick={(e) => { e.stopPropagation(); setBig(i => (i - 1 + shots.length) % shots.length); }} aria-label="Previous">‹</button>}
+          <img src={shots[big].src} alt={w.name} onClick={(e) => e.stopPropagation()} />
+          {shots.length > 1 && <button type="button" className="lbbtn lbnext" onClick={(e) => { e.stopPropagation(); setBig(i => (i + 1) % shots.length); }} aria-label="Next">›</button>}
+          <div className="lbcount">{w.name}{w.jp ? ` · ${w.jp}` : ''}</div>
         </div>
-      )}
+      ); })()}
     </Layout>
   );
 }
