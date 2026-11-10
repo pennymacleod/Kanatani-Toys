@@ -197,12 +197,12 @@ export default function AddStock() {
     try {
       const r = await fetch('/api/admin/categories', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: p }) });
       const d = await r.json();
-      if (!r.ok) throw new Error(d.error || 'Could not open');
+      if (!r.ok) { const err = new Error(d.error || 'Could not open'); err.quiet = d.quiet; throw err; }
       setCats(d.categories || []); setUnlocked(true);
-      try { localStorage.setItem(PASS_KEY, p); } catch {}
+      if (p) { try { localStorage.setItem(PASS_KEY, p); } catch {} }
     } catch (e) {
-      setMsg({ bad: true, text: e.message });
-      try { localStorage.removeItem(PASS_KEY); } catch {}
+      if (!e.quiet) setMsg({ bad: true, text: e.message });
+      if (p) { try { localStorage.removeItem(PASS_KEY); } catch {} }
     } finally { setBusy(false); }
   }
 
@@ -211,7 +211,9 @@ export default function AddStock() {
     let p = null;
     try { p = new URLSearchParams(window.location.search).get('k'); } catch {}
     if (!p) { try { p = localStorage.getItem(PASS_KEY); } catch {} }
-    if (p) { setPass(p); unlock(p); }
+    // With nothing saved here, still try: the server's saved cookie may open it.
+    if (p) setPass(p);
+    unlock(p || '');
   }, []);
 
   async function onPhoto(e) {
@@ -269,7 +271,7 @@ export default function AddStock() {
             <span className="kicker">カナタニ · PRIVATE</span>
             <h1 className="big">Add stock</h1>
             {unlocked && (
-              <p className="as-note">This device remembers the password. <button type="button" className="as-link" onClick={() => { try { localStorage.removeItem(PASS_KEY); } catch {} setUnlocked(false); setPass(''); }}>Forget it here</button></p>
+              <p className="as-note">This device remembers the password. <button type="button" className="as-link" onClick={() => { try { localStorage.removeItem(PASS_KEY); } catch {} fetch('/api/admin/forget', { method: 'POST' }).catch(() => {}); setUnlocked(false); setPass(''); }}>Forget it here</button></p>
             )}
 
             {msg && (
