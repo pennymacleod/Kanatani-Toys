@@ -109,6 +109,10 @@ export default async function handler(req, res) {
       for (const v of saved.item_data.variations) {
         const size = TSHIRT_SIZES.find(s => s.toLowerCase() === sizeOf(v.item_variation_data?.name));
         if (!size) continue;
+        if ((shirt.soldOut || []).includes(size)) {
+          changes.push({ type: 'PHYSICAL_COUNT', physical_count: { catalog_object_id: v.id, location_id: SQUARE_LOCATION_ID, quantity: '0', state: 'IN_STOCK', occurred_at: new Date().toISOString() } });
+          counts.push(`${size} SOLD OUT (0)`); continue;
+        }
         if (wasTracked[size] && !force) { counts.push(`${size} kept`); continue; }
         const qty = Number(shirt.stock?.[size] || 0);
         changes.push({ type: 'PHYSICAL_COUNT', physical_count: { catalog_object_id: v.id, location_id: SQUARE_LOCATION_ID, quantity: String(qty), state: 'IN_STOCK', occurred_at: new Date().toISOString() } });

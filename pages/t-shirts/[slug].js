@@ -22,7 +22,9 @@ export default function TShirtPage({ slug }) {
     fetch('/api/catalog').then(r => (r.ok ? r.json() : null)).then(d => {
       const p = (d?.products || []).find(x => x.name.trim().toLowerCase() === shirt.name.toLowerCase());
       if (!alive || !p) return;
-      const sizes = (p.allVariations || []).filter(v => ['S', 'M', 'L', 'SMALL', 'MEDIUM', 'LARGE'].includes(String(v.name || '').trim().toUpperCase()));
+      const gone = (shirt.soldOut || []).map(x => x.toUpperCase());
+      const sizes = (p.allVariations || []).filter(v => ['S', 'M', 'L', 'SMALL', 'MEDIUM', 'LARGE'].includes(String(v.name || '').trim().toUpperCase()))
+        .map(v => (gone.includes(String(v.name || '').trim().charAt(0).toUpperCase()) ? { ...v, stock: 0 } : v));
       if (!sizes.length) return;
       setLive({ ...p, sizes });
       const first = sizes.find(v => v.stock == null || v.stock > 0);
