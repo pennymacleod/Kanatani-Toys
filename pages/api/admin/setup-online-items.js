@@ -107,7 +107,11 @@ export default async function handler(req, res) {
       for (const p of a.pieces) {
         const v = pieceVariation(saved, p);
         let stock = 'stock kept as it is';
-        if (v && fresh.includes(p.name)) {
+        if (v && p.sold) {
+          // Sold / put aside for a customer: nothing left to sell on the till.
+          await square('/v2/inventory/changes/batch-create', { method: 'POST', body: { idempotency_key: key(), changes: [{ type: 'PHYSICAL_COUNT', physical_count: { catalog_object_id: v.id, location_id: SQUARE_LOCATION_ID, quantity: '0', state: 'IN_STOCK', occurred_at: new Date().toISOString() } }] } });
+          stock = 'SOLD, stock 0';
+        } else if (v && fresh.includes(p.name)) {
           const q = carry[p.name] ?? p.stock ?? 0;
           await square('/v2/inventory/changes/batch-create', { method: 'POST', body: { idempotency_key: key(), changes: [{ type: 'PHYSICAL_COUNT', physical_count: { catalog_object_id: v.id, location_id: SQUARE_LOCATION_ID, quantity: String(q), state: 'IN_STOCK', occurred_at: new Date().toISOString() } }] } });
           stock = `stock ${q}${carry[p.name] != null ? ' (carried over)' : ''}`;
