@@ -318,7 +318,7 @@ export default function AddStock() {
           <div className="sheet">
             <span className="kicker">カナタニ · PRIVATE</span>
             <h1 className="big">Add stock</h1>
-            {unlocked && (
+            {false && unlocked && (
               <p className="as-note">This device remembers the password. <button type="button" className="as-link" onClick={() => { try { localStorage.removeItem(PASS_KEY); } catch {} fetch('/api/admin/forget', { method: 'POST' }).catch(() => {}); setUnlocked(false); setPass(''); }}>Forget it here</button></p>
             )}
 
