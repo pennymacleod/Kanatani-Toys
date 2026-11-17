@@ -96,6 +96,54 @@ export default function AddStock() {
   const [listBusy, setListBusy] = useState(false);
   const [listMsg, setListMsg] = useState(null);
 
+  // Our own sofubi (KT Sofubi on the till): photos + counted stock.
+  const [kt, setKt] = useState(null);
+  const [ktBusy, setKtBusy] = useState(false);
+  const [ktMsg, setKtMsg] = useState(null);
+  const patchKt = (id, patch) => setKt(cur => cur.map(it => it.id === id ? { ...it, ...patch } : it));
+  const patchKtVar = (itemId, vid, patch) => setKt(cur => cur.map(it => it.id !== itemId ? it : { ...it, variations: it.variations.map(v => v.id === vid ? { ...v, ...patch } : v) }));
+
+  async function loadKt() {
+    setKtBusy(true); setKtMsg(null);
+    try {
+      const r = await fetch('/api/admin/sofubi-check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Couldn’t load them');
+      setKt(d.items || []);
+    } catch (e) { setKtMsg({ bad: true, text: e.message }); }
+    finally { setKtBusy(false); }
+  }
+
+  async function ktPhoto(it, file) {
+    if (!file) return;
+    patchKt(it.id, { photoBusy: true, err: null });
+    try {
+      const img = await photoFromFile(file);
+      const r = await fetch('/api/admin/add-photo', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass, objectId: it.id, name: it.name, image: img }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Photo didn’t save');
+      patchKt(it.id, { image: img, photoBusy: false });
+    } catch (e) { patchKt(it.id, { photoBusy: false, err: e.message }); }
+  }
+
+  async function ktCount(it, v, qty) {
+    patchKtVar(it.id, v.id, { busy: true });
+    patchKt(it.id, { err: null });
+    try {
+      const r = await fetch('/api/admin/sofubi-stock', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass, variationId: v.id, qty }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Didn’t save');
+      patchKtVar(it.id, v.id, { busy: false, tracked: true, count: qty });
+    } catch (e) { patchKtVar(it.id, v.id, { busy: false }); patchKt(it.id, { err: e.message }); }
+  }
+
+  async function ktCountAll() {
+    const todo = kt.flatMap(it => it.variations.filter(v => !v.tracked).map(v => [it, v]));
+    for (const [it, v] of todo) await ktCount(it, v, 1);
+  }
+
   function pickListArtist(v) {
     setListArtist(v); setListMsg(null);
     const plain = v.replace(/^\d+\s+/, '');
@@ -338,6 +386,50 @@ export default function AddStock() {
                   {busy ? 'Adding…' : 'Add to Square'}
                 </button>
               </form>
+            )}
+
+            {unlocked && (
+              <div className="as-till">
+                <h2>Our sofubi: photos & counting</h2>
+                <p>Everything in the Kanatani Sofubi category on the till. Tap 📷 to give a piece its photo (it shows on the till and the website). <b>Count it</b> sets it to 1, so when it sells on the till it goes to 0 and shows SOLD OUT on the website by itself. <b>Sold</b> sets it to 0 by hand.</p>
+                {ktMsg && <div className={`as-msg${ktMsg.bad ? ' bad' : ''}`}>{ktMsg.text}</div>}
+                {!kt ? (
+                  <button type="button" className="as-btn" onClick={loadKt} disabled={ktBusy}>{ktBusy ? 'Loading…' : 'Show our sofubi'}</button>
+                ) : (
+                  <>
+                    <p className="as-note">
+                      {kt.length} pieces · {kt.filter(it => !it.image).length} need a photo · {kt.reduce((n, it) => n + it.variations.filter(v => !v.tracked).length, 0)} not counted yet
+                    </p>
+                    {kt.some(it => it.variations.some(v => !v.tracked)) && (
+                      <button type="button" className="as-btn" onClick={ktCountAll} style={{ marginBottom: 12 }}>Count all the uncounted ones as 1</button>
+                    )}
+                    <div className="as-kt">
+                      {kt.map(it => (
+                        <div key={it.id} className={`as-ktrow${!it.image ? ' nophoto' : ''}`}>
+                          <label className="as-cam" title="Add a photo">
+                            {it.image ? <img src={it.image} alt="" /> : <span>{it.photoBusy ? '…' : '📷'}</span>}
+                            <input type="file" accept="image/*" onChange={(e) => ktPhoto(it, e.target.files?.[0])} />
+                          </label>
+                          <div className="as-ktinfo">
+                            <b>{it.name}</b>
+                            {it.variations.map(v => (
+                              <div key={v.id} className="as-ktvar">
+                                <span>{it.variations.length > 1 ? `${v.name} · ` : ''}{v.price != null ? `£${(v.price / 100).toFixed(2)}` : 'no price'} · {v.tracked ? (v.count > 0 ? `${v.count} left` : 'SOLD') : 'not counted'}</span>
+                                {!v.tracked && <button type="button" onClick={() => ktCount(it, v, 1)} disabled={v.busy}>{v.busy ? '…' : 'Count it'}</button>}
+                                {v.tracked && v.count > 0 && <button type="button" className="sold" onClick={() => ktCount(it, v, 0)} disabled={v.busy}>{v.busy ? '…' : 'Sold'}</button>}
+                                {v.tracked && v.count === 0 && <button type="button" onClick={() => ktCount(it, v, 1)} disabled={v.busy}>{v.busy ? '…' : 'Back in: 1'}</button>}
+                              </div>
+                            ))}
+                            {it.photoBusy && <span className="as-note">Cutting around it…</span>}
+                            {it.err && <span className="as-note">{it.err}</span>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <button type="button" className="as-choice-add" onClick={loadKt} disabled={ktBusy}>{ktBusy ? 'Loading…' : '↻ Refresh the list'}</button>
+                  </>
+                )}
+              </div>
             )}
 
             {unlocked && (

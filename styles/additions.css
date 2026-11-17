@@ -568,3 +568,15 @@ header.night:has(.navddmenu){z-index:30}
 }
 @media (prefers-reduced-motion:reduce){.soonbub .disc{animation:none}}
 .pg-showcase #soon{scroll-margin-top:20px}
+
+/* Add Stock: our own sofubi (photos + counting), Penny 17 Nov 2026 */
+.addstock .as-kt { display: grid; gap: 10px; margin: 6px 0 12px; }
+.addstock .as-ktrow { display: grid; grid-template-columns: 64px 1fr; gap: 10px; align-items: center; background: #fff; border: 3px solid var(--ink); border-radius: 14px; padding: 8px; }
+.addstock .as-ktrow.nophoto { background: #fff4d6; }
+.addstock .as-ktrow .as-cam { width: 64px; height: 64px; }
+.addstock .as-ktinfo { display: grid; gap: 4px; font-size: 15px; min-width: 0; }
+.addstock .as-ktinfo b { overflow-wrap: anywhere; }
+.addstock .as-ktvar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.addstock .as-ktvar button { font: 900 14px/1 Rubik, sans-serif; padding: 8px 12px; border: 3px solid var(--ink); border-radius: 999px; background: var(--green); cursor: pointer; }
+.addstock .as-ktvar button.sold { background: var(--pink); color: #fff; }
+.addstock .as-ktvar button:disabled { opacity: .5; }
