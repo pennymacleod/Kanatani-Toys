@@ -3,7 +3,7 @@
 import crypto from 'crypto';
 import { guard, square, explain } from '../../../lib/squareAdmin';
 import { SQUARE_LOCATION_ID } from '../../../lib/squareLocation';
-import { RESTOCK, RESTOCK_UNTIL } from '../../../lib/restock';
+import { RESTOCK, RESTOCK_UNTIL, SET_SOLD } from '../../../lib/restock';
 
 const key = () => crypto.randomUUID();
 const norm = (s) => String(s || '').toLowerCase().replace(/[–—-]/g, ' ').replace(/\s+/g, ' ');
@@ -69,6 +69,28 @@ export default async function handler(req, res) {
         },
       });
       notes.push(`${r.label}: back in stock, ${r.qty} (${`${x.item} ${vd.name || ''}`.trim()}).`);
+    }
+    for (const r of SET_SOLD) {
+      const hits = vars.filter(x => r.any.some(words => words.every(w => x.text.includes(norm(w)))));
+      if (!hits.length) { notes.push(`${r.label}: couldn’t find it in Square by name.`); continue; }
+      const left = hits.filter(x => !tracked(x.v) || counts[x.v.id] > 0);
+      if (!left.length) { notes.push(`${r.label}: already at 0 on the till.`); continue; }
+      if (left.length > 1) { notes.push(`${r.label}: more than one item matches (${left.map(x => x.item).join('; ')}), nothing changed.`); continue; }
+      const x = left[0];
+      const { object: v } = await square(`/v2/catalog/object/${x.v.id}`);
+      const vd = v.item_variation_data;
+      let changed = false;
+      if (vd.track_inventory !== true) { vd.track_inventory = true; changed = true; }
+      for (const o of vd.location_overrides || []) if (o.track_inventory === false) { o.track_inventory = true; changed = true; }
+      if (changed) await square('/v2/catalog/object', { method: 'POST', body: { idempotency_key: key(), object: v } });
+      await square('/v2/inventory/changes/batch-create', {
+        method: 'POST',
+        body: { idempotency_key: key(), changes: [{ type: 'PHYSICAL_COUNT', physical_count: {
+          catalog_object_id: x.v.id, location_id: SQUARE_LOCATION_ID, quantity: '0',
+          state: 'IN_STOCK', occurred_at: new Date().toISOString(),
+        } }] },
+      });
+      notes.push(`${r.label}: set to 0 on the till (${x.item}).`);
     }
     res.status(200).json({ ok: true, notes });
   } catch (err) {

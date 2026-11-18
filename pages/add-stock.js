@@ -8,7 +8,7 @@ import { STOCK_LISTS } from '../lib/stockLists';
 import { SHIRTS, TSHIRT_SIZES } from '../lib/tshirts';
 import { ONLINE_ITEMS, TILL_PIECES } from '../lib/onlineItems';
 import { TILL_ARTISTS } from '../lib/tillArtists';
-import { RESTOCK, RESTOCK_UNTIL, KT_SOFUBI } from '../lib/restock';
+import { RESTOCK, RESTOCK_UNTIL, KT_SOFUBI, SET_SOLD } from '../lib/restock';
 
 const PASS_KEY = 'kt-add-stock-pass';
 const CUTOUT_LIB = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
@@ -422,9 +422,10 @@ export default function AddStock() {
             {unlocked && RESTOCK.length > 0 && new Date().toISOString().slice(0, 10) <= RESTOCK_UNTIL && (
               <div className="as-till">
                 <h2>Put these back in stock</h2>
-                <p>These show SOLD but are still in the shop. One tap puts each back to 1 on the till and the website. Anything that still has stock is left alone.</p>
+                <p>These show SOLD but are still in the shop. One tap puts each back to 1 on the till and the website. Anything that still has stock is left alone. The same tap marks the sold ones at the bottom as 0 on the till.</p>
                 <ul style={{ margin: '0 0 14px', paddingLeft: 20 }}>
                   {RESTOCK.map(r => <li key={r.label}><b>{r.label}</b> → {r.qty}</li>)}
+                  {SET_SOLD.map(r => <li key={r.label}><b>{r.label}</b> → 0</li>)}
                 </ul>
                 {reMsg && <div className={`as-msg${reMsg.bad ? ' bad' : ''}`}>{reMsg.text}{(reMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
                 <button type="button" className="as-btn" onClick={restock} disabled={reBusy}>{reBusy ? 'Working…' : 'Put these back in stock'}</button>
