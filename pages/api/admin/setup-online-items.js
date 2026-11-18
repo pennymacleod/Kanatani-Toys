@@ -111,6 +111,16 @@ export default async function handler(req, res) {
           // Sold / put aside for a customer: nothing left to sell on the till.
           await square('/v2/inventory/changes/batch-create', { method: 'POST', body: { idempotency_key: key(), changes: [{ type: 'PHYSICAL_COUNT', physical_count: { catalog_object_id: v.id, location_id: SQUARE_LOCATION_ID, quantity: '0', state: 'IN_STOCK', occurred_at: new Date().toISOString() } }] } });
           stock = 'SOLD, stock 0';
+        } else if (v && p.recount != null) {
+          // Penny's recount: only ever lowers Square's count, so pressing the
+          // button again after more sales never puts stock back.
+          const counts = (await square('/v2/inventory/counts/batch-retrieve', { method: 'POST', body: { catalog_object_ids: [v.id], location_ids: [SQUARE_LOCATION_ID] } })).counts || [];
+          const now = counts.reduce((n, c) => n + (c.state && c.state !== 'IN_STOCK' ? 0 : parseInt(c.quantity || 0, 10)), 0);
+          if (fresh.includes(p.name) || !counts.length || now > p.recount) {
+            const q = fresh.includes(p.name) || !counts.length ? p.recount : Math.min(now, p.recount);
+            await square('/v2/inventory/changes/batch-create', { method: 'POST', body: { idempotency_key: key(), changes: [{ type: 'PHYSICAL_COUNT', physical_count: { catalog_object_id: v.id, location_id: SQUARE_LOCATION_ID, quantity: String(q), state: 'IN_STOCK', occurred_at: new Date().toISOString() } }] } });
+            stock = `stock set to ${q} (recount)`;
+          } else stock = `stock ${now} (already at or below the recount)`;
         } else if (v && fresh.includes(p.name)) {
           const q = carry[p.name] ?? p.stock ?? 0;
           await square('/v2/inventory/changes/batch-create', { method: 'POST', body: { idempotency_key: key(), changes: [{ type: 'PHYSICAL_COUNT', physical_count: { catalog_object_id: v.id, location_id: SQUARE_LOCATION_ID, quantity: String(q), state: 'IN_STOCK', occurred_at: new Date().toISOString() } }] } });
