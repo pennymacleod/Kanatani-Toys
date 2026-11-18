@@ -8,6 +8,7 @@ import { STOCK_LISTS } from '../lib/stockLists';
 import { SHIRTS, TSHIRT_SIZES } from '../lib/tshirts';
 import { ONLINE_ITEMS, TILL_PIECES } from '../lib/onlineItems';
 import { TILL_ARTISTS } from '../lib/tillArtists';
+import { RESTOCK, RESTOCK_UNTIL } from '../lib/restock';
 
 const PASS_KEY = 'kt-add-stock-pass';
 const CUTOUT_LIB = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
@@ -125,6 +126,21 @@ export default function AddStock() {
       if (!r.ok) throw new Error(d.error || 'Photo didn’t save');
       patchKt(it.id, { image: img, photoBusy: false });
     } catch (e) { patchKt(it.id, { photoBusy: false, err: e.message }); }
+  }
+
+  // Pieces wrongly showing SOLD (lib/restock.js): put back in stock.
+  const [reBusy, setReBusy] = useState(false);
+  const [reMsg, setReMsg] = useState(null);
+  async function restock() {
+    setReBusy(true); setReMsg(null);
+    try {
+      const r = await fetch('/api/admin/restock', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Didn’t work');
+      setReMsg({ text: 'Done:', notes: d.notes || [] });
+      if (kt) loadKt();
+    } catch (e) { setReMsg({ bad: true, text: e.message }); }
+    finally { setReBusy(false); }
   }
 
   async function ktCount(it, v, qty) {
@@ -386,6 +402,18 @@ export default function AddStock() {
                   {busy ? 'Adding…' : 'Add to Square'}
                 </button>
               </form>
+            )}
+
+            {unlocked && RESTOCK.length > 0 && new Date().toISOString().slice(0, 10) <= RESTOCK_UNTIL && (
+              <div className="as-till">
+                <h2>Put these back in stock</h2>
+                <p>These show SOLD but are still in the shop. One tap puts each back to 1 on the till and the website. Anything that still has stock is left alone.</p>
+                <ul style={{ margin: '0 0 14px', paddingLeft: 20 }}>
+                  {RESTOCK.map(r => <li key={r.label}><b>{r.label}</b> → {r.qty}</li>)}
+                </ul>
+                {reMsg && <div className={`as-msg${reMsg.bad ? ' bad' : ''}`}>{reMsg.text}{(reMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
+                <button type="button" className="as-btn" onClick={restock} disabled={reBusy}>{reBusy ? 'Working…' : 'Put these back in stock'}</button>
+              </div>
             )}
 
             {unlocked && (
