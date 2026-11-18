@@ -8,7 +8,7 @@ import { STOCK_LISTS } from '../lib/stockLists';
 import { SHIRTS, TSHIRT_SIZES } from '../lib/tshirts';
 import { ONLINE_ITEMS, TILL_PIECES } from '../lib/onlineItems';
 import { TILL_ARTISTS } from '../lib/tillArtists';
-import { RESTOCK, RESTOCK_UNTIL } from '../lib/restock';
+import { RESTOCK, RESTOCK_UNTIL, KT_SOFUBI } from '../lib/restock';
 
 const PASS_KEY = 'kt-add-stock-pass';
 const CUTOUT_LIB = 'https://cdn.jsdelivr.net/npm/@imgly/background-removal@1/+esm';
@@ -141,6 +141,21 @@ export default function AddStock() {
       if (kt) loadKt();
     } catch (e) { setReMsg({ bad: true, text: e.message }); }
     finally { setReBusy(false); }
+  }
+
+  // Shop sofubi into the KT Sofubi category (lib/restock.js KT_SOFUBI).
+  const [catBusy, setCatBusy] = useState(false);
+  const [catMsg, setCatMsg] = useState(null);
+  async function intoKt() {
+    setCatBusy(true); setCatMsg(null);
+    try {
+      const r = await fetch('/api/admin/sofubi-category', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Didn’t work');
+      setCatMsg({ text: 'Done:', notes: d.notes || [] });
+      if (kt) loadKt();
+    } catch (e) { setCatMsg({ bad: true, text: e.message }); }
+    finally { setCatBusy(false); }
   }
 
   async function ktCount(it, v, qty) {
@@ -413,6 +428,18 @@ export default function AddStock() {
                 </ul>
                 {reMsg && <div className={`as-msg${reMsg.bad ? ' bad' : ''}`}>{reMsg.text}{(reMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
                 <button type="button" className="as-btn" onClick={restock} disabled={reBusy}>{reBusy ? 'Working…' : 'Put these back in stock'}</button>
+              </div>
+            )}
+
+            {unlocked && KT_SOFUBI.length > 0 && (
+              <div className="as-till">
+                <h2>Put these in KT Sofubi</h2>
+                <p>Adds each one to the KT Sofubi category, so it comes up when you tap the Kanatani Sofubi tile on the till. Safe to press again.</p>
+                <ul style={{ margin: '0 0 14px', paddingLeft: 20 }}>
+                  {KT_SOFUBI.map(r => <li key={r.label}><b>{r.label}</b></li>)}
+                </ul>
+                {catMsg && <div className={`as-msg${catMsg.bad ? ' bad' : ''}`}>{catMsg.text}{(catMsg.notes || []).map((n, i) => <div key={i} className="as-note">{n}</div>)}</div>}
+                <button type="button" className="as-btn" onClick={intoKt} disabled={catBusy}>{catBusy ? 'Working…' : 'Put these in KT Sofubi'}</button>
               </div>
             )}
 
