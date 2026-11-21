@@ -580,3 +580,45 @@ header.night:has(.navddmenu){z-index:30}
 .addstock .as-ktvar button { font: 900 14px/1 Rubik, sans-serif; padding: 8px 12px; border: 3px solid var(--ink); border-radius: 999px; background: var(--green); cursor: pointer; }
 .addstock .as-ktvar button.sold { background: var(--pink); color: #fff; }
 .addstock .as-ktvar button:disabled { opacity: .5; }
+
+/* Sticker-wheel pop-up (components/StickerWheel.js, Nov 2026) */
+.ktw-back{position:fixed;inset:0;z-index:2000;background:rgba(20,16,24,.6);display:flex;align-items:center;justify-content:center;padding:16px;animation:ktwIn .25s ease}
+@keyframes ktwIn{from{opacity:0}to{opacity:1}}
+.ktw-box{position:relative;width:min(440px,100%);max-height:calc(100vh - 32px);overflow:auto;background:#EFB10C;border:5px solid #141018;border-radius:24px;box-shadow:8px 8px 0 #141018;padding:22px 20px 18px;text-align:center;font-family:'Rubik',system-ui,sans-serif;color:#141018;animation:ktwPop .35s cubic-bezier(.2,1.6,.4,1)}
+@keyframes ktwPop{from{transform:scale(.7)}to{transform:scale(1)}}
+.ktw-x{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:4px solid #141018;background:#FFF4D6;font:900 20px/1 'Rubik',sans-serif;cursor:pointer;color:#141018}
+.ktw-preview{background:#141018;color:#F2B705;font:700 12px 'Rubik',sans-serif;letter-spacing:.04em;border-radius:999px;padding:4px 10px;margin:0 44px 8px}
+.ktw-h{margin:4px 0 2px;font:400 clamp(40px,11vw,56px)/1 'Bagel Fat One','Rubik',sans-serif;color:#FF1F8F;-webkit-text-stroke:3px #141018;paint-order:stroke fill;text-shadow:4px 4px 0 #141018}
+.ktw-sub{margin:6px 0 10px;font-weight:700;font-size:15px}
+.ktw-stage{position:relative;width:min(260px,70vw);margin:4px auto 10px}
+.ktw-wheel{width:100%;height:auto;display:block;filter:drop-shadow(4px 4px 0 #141018)}
+.ktw-slice{font:900 19px 'Rubik',sans-serif;fill:#fff;stroke:#141018;stroke-width:4px;paint-order:stroke fill;letter-spacing:.02em}
+.ktw-hub{font:900 26px sans-serif;fill:#FF1F8F}
+.ktw-arrow{position:absolute;left:50%;top:-30px;transform:translateX(-50%);z-index:2;font-size:46px;line-height:1;color:#FF1F8F;-webkit-text-stroke:3px #141018;animation:ktwFlash .5s steps(2) infinite}
+@keyframes ktwFlash{0%{color:#FF1F8F;transform:translateX(-50%) scale(1)}100%{color:#FFF4D6;transform:translateX(-50%) scale(1.18)}}
+.ktw-form{display:grid;gap:10px}
+.ktw-form input[type=email]{font:500 17px 'Rubik',sans-serif;padding:12px 14px;border:4px solid #141018;border-radius:14px;background:#fff;color:#141018;min-width:0}
+.ktw-ok{display:flex;gap:8px;align-items:flex-start;text-align:left;font-size:13.5px;font-weight:500}
+.ktw-ok input{width:20px;height:20px;margin-top:1px;flex:none;accent-color:#FF1F8F}
+.ktw-btn{font:900 20px 'Rubik',sans-serif;letter-spacing:.03em;border:4px solid #141018;border-radius:999px;padding:12px 18px;background:#FF1F8F;color:#fff;box-shadow:0 5px 0 #141018;cursor:pointer}
+.ktw-btn:disabled{opacity:.8;cursor:default}
+.ktw-msg{margin:0;font-weight:700;color:#8E1A15}
+.ktw-small{margin:0;font-size:12px}
+.ktw-small a{color:#141018}
+.ktw-won p{font-weight:600;margin:6px 0 12px}
+.ktw-big{font:900 26px 'Rubik',sans-serif;color:#FF1F8F;-webkit-text-stroke:1.5px #141018;animation:ktwFlash2 .4s steps(2) infinite}
+@keyframes ktwFlash2{0%{color:#FF1F8F}100%{color:#3FB7F0}}
+.ktw-confetti{position:absolute;inset:-20px;pointer-events:none;overflow:visible}
+.ktw-confetti i{position:absolute;top:0;width:10px;height:14px;border:2px solid #141018;border-radius:2px;animation:ktwFall 1.6s ease-in forwards}
+@keyframes ktwFall{0%{transform:translateY(-30px) rotate(0);opacity:1}100%{transform:translateY(300px) rotate(540deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.ktw-arrow,.ktw-big,.ktw-box,.ktw-back{animation:none}.ktw-confetti{display:none}}
+
+/* Stickers download page (pages/stickers.js) */
+.pg-stickers .stk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin:18px 0}
+.pg-stickers .stk{background:#FFF4D6;border:4px solid #141018;border-radius:18px;box-shadow:6px 6px 0 #141018;padding:14px;text-align:center}
+.pg-stickers .stk img{width:100%;max-width:240px;height:auto}
+.pg-stickers .stk a{display:inline-block;margin-top:8px;font-weight:800;color:#141018}
+.pg-stickers ol{text-align:left;max-width:560px;margin:0 auto;font-weight:500;line-height:1.5}
+.news-signup{display:grid;gap:10px;margin-top:10px}
+.news-signup input[type=email]{font:500 17px 'Rubik',sans-serif;padding:12px 14px;border:4px solid #141018;border-radius:14px}
+.news-signup label{display:flex;gap:8px;color:#fff;font-size:14px;text-align:left}

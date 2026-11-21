@@ -26,6 +26,7 @@ export default function Privacy() {
               <li>Google Fonts, used to display the site's typefaces</li>
               <li>YouTube (through its privacy-enhanced youtube-nocookie.com player), which plays the shows on our Kanatani TV page. Nothing from YouTube loads until you press play. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>.</li>
               <li>Tally, which runs the wish list form on our Kanatani News page. What you send in that form (your name, Instagram handle or email, what you're looking for and any photos) is stored by Tally so we can look for it on our trips. See <a href="https://tally.so/help/privacy-policy" target="_blank" rel="noopener noreferrer">Tally's Privacy Policy</a>.</li>
+              <li>MailerLite, which sends our Kanatani News emails. If you sign up (on our Kanatani News page or the sticker-wheel pop-up), your email address is stored by MailerLite so we can send you the newsletter and your free stickers. You can unsubscribe any time from the link in every email. See <a href="https://www.mailerlite.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">MailerLite's Privacy Policy</a>.</li>
             </ul>
             <p>These are provided by Google — see <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>. Our web host (Vercel) keeps standard server access logs, like IP address and browser type, for security and reliability, as is normal for any website.</p>
 

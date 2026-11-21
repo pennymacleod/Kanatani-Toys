@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { SIGNUP_LIVE, subscribe, isEmail } from '../lib/newsletter';
 import Script from 'next/script';
 import Layout from '../components/Layout';
 
@@ -20,6 +22,28 @@ const IG = 'https://www.instagram.com/kanatani_toys';
 // Wish list form lives in Tally (form ArzyWD). Answers stay in Tally / Penny's
 // linked Google Sheet, never her inbox, and customers never get her email.
 const WISH_FORM = 'https://tally.so/embed/ArzyWD?alignLeft=1&hideTitle=1&dynamicHeight=1';
+
+function NewsSignup() {
+  const [email, setEmail] = useState('');
+  const [agree, setAgree] = useState(false);
+  const [state, setState] = useState('');
+  const go = async (e) => {
+    e.preventDefault();
+    if (!isEmail(email)) { setState('Pop a proper email address in!'); return; }
+    if (!agree) { setState('Tick the box to say you want Kanatani News emails.'); return; }
+    setState('Signing you up…');
+    try { setState((await subscribe(email)) ? "You're in! Check your inbox for your free stickers." : "Oops, that didn't go through. Try again in a moment."); }
+    catch { setState("Oops, that didn't go through. Try again in a moment."); }
+  };
+  return (
+    <form className="news-signup" onSubmit={go} noValidate>
+      <input type="email" inputMode="email" autoComplete="email" placeholder="Your email" value={email} onChange={e => setEmail(e.target.value)} aria-label="Your email" />
+      <label><input type="checkbox" checked={agree} onChange={e => setAgree(e.target.checked)} /> <span>Yes, send me Kanatani News. Unsubscribe any time.</span></label>
+      <button type="submit" className="btn" style={{ background: '#F2B705', color: '#141018' }}>Sign me up + get free stickers</button>
+      {state && <p style={{ color: '#fff', fontWeight: 700, margin: 0 }} role="status">{state}</p>}
+    </form>
+  );
+}
 
 export default function News() {
   return (
@@ -98,10 +122,12 @@ export default function News() {
               <img className="pk" src="/nl/pink_head_bold.png" alt="" />
               <h2 className="big" style={{ color: '#fff' }}>Get the news!</h2>
               <p style={{ color: '#fff' }}>Be first to hear when the Japan haul lands. No spam, ever!</p>
-              <div className="soonnote">
-                Email sign-up is coming soon. Until then, follow{' '}
-                <a href={IG} target="_blank" rel="noopener noreferrer">@kanatani_toys</a> on Instagram for all the news.
-              </div>
+              {SIGNUP_LIVE ? <NewsSignup /> : (
+                <div className="soonnote">
+                  Email sign-up is coming soon. Until then, follow{' '}
+                  <a href={IG} target="_blank" rel="noopener noreferrer">@kanatani_toys</a> on Instagram for all the news.
+                </div>
+              )}
             </div>
           </div>
         </div>
