@@ -33,7 +33,7 @@ function Wheel({ angle, spinning }) {
         return (
           <g key={i}>
             <path d={`M150 150 L${x1} ${y1} A150 150 0 0 1 ${x2} ${y2} Z`} fill={s.c} stroke="#141018" strokeWidth="4" />
-            <text x="150" y="40" transform={`rotate(${mid} 150 150)`} textAnchor="middle" className="ktw-slice">{s.t}</text>
+            <text x="238" y="150" dominantBaseline="central" transform={`rotate(${mid - 90} 150 150)`} textAnchor="middle" className="ktw-slice">{s.t}</text>
           </g>
         );
       })}
