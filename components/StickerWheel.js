@@ -56,7 +56,7 @@ export default function StickerWheel() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const forced = new URLSearchParams(window.location.search).has('wheel');
+    const forced = router.pathname === '/spin' || new URLSearchParams(window.location.search).has('wheel');
     if (forced) { setPreview(!SIGNUP_LIVE); setOpen(true); return; }
     if (!SIGNUP_LIVE) return;
     if (SKIP.some(p => router.pathname.startsWith(p))) return;
