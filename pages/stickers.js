@@ -1,9 +1,9 @@
 // Free WhatsApp sticker pack for Kanatani News subscribers (Nov 2026).
 // Linked from the MailerLite welcome email. Not in the nav, noindex, robots-disallowed.
-// When Penny has made the pack in Sticker.ly, put its share link in STICKERLY.
+// No sticker app needed (Penny, 22 Nov 2026: Sticker.ly wasn't free): people save the
+// pictures and make them into stickers with WhatsApp's own "Create sticker".
 import Layout from '../components/Layout';
 
-const STICKERLY = ''; // e.g. 'https://sticker.ly/s/XXXXXX'
 const STICKERS = [
   { file: '01-no-toy-no-life', name: 'No Toy No Life' },
   { file: '02-want', name: 'WANT!!' },
@@ -17,9 +17,6 @@ export default function Stickers() {
         <div className="wrap" style={{ textAlign: 'center' }}>
           <h1 className="big" style={{ color: 'var(--pink)' }}>YOU WON!</h1>
           <p style={{ fontWeight: 700 }}>Thanks for joining Kanatani News. Here are your free Kanatani Toys WhatsApp stickers. Go and annoy all your friends!</p>
-          {STICKERLY && (
-            <p><a className="btn" href={STICKERLY} target="_blank" rel="noopener noreferrer" style={{ background: 'var(--pink)', color: '#fff' }}>Add them to WhatsApp →</a></p>
-          )}
           <div className="stk-grid">
             {STICKERS.map(s => (
               <div className="stk" key={s.file}>
@@ -28,16 +25,14 @@ export default function Stickers() {
               </div>
             ))}
           </div>
-          <p><a className="btn" href="/stickers/Kanatani-Toys-Stickers.zip" download style={{ background: 'var(--sky)', color: '#141018' }}>Download the whole pack (zip)</a></p>
+          <p><a className="btn" href="/stickers/Kanatani-Toys-Stickers.zip" download style={{ background: 'var(--sky)', color: '#141018' }}>Download all three (zip)</a></p>
           <h2 className="mid" style={{ marginTop: 28 }}>How to add them to WhatsApp</h2>
-          <ol>
-            {STICKERLY
-              ? <li>Tap <b>Add them to WhatsApp</b> above, then tap <b>Add to WhatsApp</b> in the Sticker.ly app.</li>
-              : <>
-                  <li>Save the stickers to your phone.</li>
-                  <li>Get a free sticker app, like <b>Sticker.ly</b> or <b>Sticker Maker</b>.</li>
-                  <li>Make a new pack, add the three stickers, then tap <b>Add to WhatsApp</b>.</li>
-                </>}
+          <p>No extra app needed.</p>
+          <ol style={{ textAlign: 'left', display: 'inline-block' }}>
+            <li>Save each sticker to your photos (on a phone, press and hold the picture, then tap <b>Save</b>).</li>
+            <li>Open any chat in WhatsApp and tap the <b>sticker</b> button.</li>
+            <li>Tap <b>Create</b> (the <b>+</b>), pick the sticker from your photos and tap <b>Send</b>.</li>
+            <li>Press and hold it in the chat and tap <b>Add to favourites</b>, so it's always there to annoy people with.</li>
           </ol>
         </div>
       </section>
