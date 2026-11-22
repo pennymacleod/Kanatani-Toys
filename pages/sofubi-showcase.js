@@ -13,22 +13,20 @@ export default function SofubiShowcase() {
   // On "All", group artists in tab order: Sofubi, Resin, 3D printed, Art prints, Stickers, Clothing.
   const rank = (a) => Math.min(...a.categories.map(c => { const i = CATEGORIES.indexOf(c); return i < 0 ? 99 : i; }));
   const byTab = (list) => list.map((a, i) => [a, i]).sort((x, y) => rank(x[0]) - rank(y[0]) || x[1] - y[1]).map(x => x[0]);
-  // The newest artist (the last one added to lib/artists.js) goes to the top
-  // of "All" and pushes everyone else down.
+  // "All" starts with Sofubi (Penny, 22 Nov 2026: no newest artist pinned to the top).
   // Artists with `comingSoon: true` have a page but their stock hasn't
   // arrived yet, so they show under Coming soon instead of the main grid.
   // Newest first: lib/artists.js lists artists oldest first, so it's reversed
   // here, and each tab shows the newest artists at the top (Penny, 6 Nov 2026).
   const live = ARTISTS.filter(a => !a.comingSoon).reverse();
-  const newest = live[0];
-  const shown = cat === 'All'
-    ? [newest, ...byTab(live.filter(a => a !== newest))]
-    : byTab(live.filter(match));
+  const shown = byTab(live.filter(match));
   // Coming soon: only the next artist (first in COMING_SOON) is shown, big.
   // Add ?all to the address to see the full list (for Penny).
   const [showAll, setShowAll] = useState(false);
   useEffect(() => { setShowAll(new URLSearchParams(window.location.search).has('all')); }, []);
-  const soonAll = [...ARTISTS.filter(a => a.comingSoon), ...COMING_SOON];
+  // `soonFirst: true` puts that artist in the coming soon circle (Sofumon, Penny 22 Nov 2026).
+  const soonList = [...ARTISTS.filter(a => a.comingSoon), ...COMING_SOON];
+  const soonAll = [...soonList.filter(a => a.soonFirst), ...soonList.filter(a => !a.soonFirst)];
   const next = soonAll[0];
   const soon = showAll ? byTab(soonAll.filter(match)) : soonAll.slice(0, 1).filter(match);
 
