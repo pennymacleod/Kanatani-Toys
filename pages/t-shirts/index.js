@@ -37,6 +37,12 @@ export default function TShirts() {
               ))}
             </div>
           </div>
+          {/* Penny, 23 Nov 2026: Shogun Tapes (friends' brand from Japan) page lives under T-shirts. */}
+          <div style={{ textAlign: 'center', marginTop: 36 }}>
+            <Link href="/artist/shogun-tapes" className="btn" style={{ background: 'var(--orange)', color: '#141018' }}>
+              {t('Shogun Tapes from Japan →', '日本のShogun Tapes →')}
+            </Link>
+          </div>
         </div>
       </section>
     </Layout>

@@ -33,7 +33,8 @@ const pieceId = (name) => 'p-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').
 export default function ArtistPage({ slug }) {
   const i = ARTISTS.findIndex(a => a.slug === slug);
   const a = ARTISTS[i];
-  const next = ARTISTS[(i + 1) % ARTISTS.length];
+  const showcase = ARTISTS.filter(x => !x.tshirtsOnly);
+  const next = a.tshirtsOnly ? showcase[0] : showcase[(showcase.indexOf(a) + 1) % showcase.length];
   const cat = a.categories[0];
   const role = ROLE[cat] || 'Artist';
   const [big, setBig] = useState(null);

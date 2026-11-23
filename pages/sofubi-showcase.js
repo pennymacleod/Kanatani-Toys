@@ -18,14 +18,14 @@ export default function SofubiShowcase() {
   // arrived yet, so they show under Coming soon instead of the main grid.
   // Newest first: lib/artists.js lists artists oldest first, so it's reversed
   // here, and each tab shows the newest artists at the top (Penny, 6 Nov 2026).
-  const live = ARTISTS.filter(a => !a.comingSoon).reverse();
+  const live = ARTISTS.filter(a => !a.comingSoon && !a.tshirtsOnly).reverse();
   const shown = byTab(live.filter(match));
   // Coming soon: only the next artist (first in COMING_SOON) is shown, big.
   // Add ?all to the address to see the full list (for Penny).
   const [showAll, setShowAll] = useState(false);
   useEffect(() => { setShowAll(new URLSearchParams(window.location.search).has('all')); }, []);
   // `soonFirst: true` puts that artist in the coming soon circle (Sofumon, Penny 22 Nov 2026).
-  const soonList = [...ARTISTS.filter(a => a.comingSoon), ...COMING_SOON];
+  const soonList = [...ARTISTS.filter(a => a.comingSoon && !a.tshirtsOnly), ...COMING_SOON];
   const soonAll = [...soonList.filter(a => a.soonFirst), ...soonList.filter(a => !a.soonFirst)];
   const next = soonAll[0];
   const soon = showAll ? byTab(soonAll.filter(match)) : soonAll.slice(0, 1).filter(match);
