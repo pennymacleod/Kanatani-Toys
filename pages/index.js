@@ -156,6 +156,14 @@ export default function Home({ initialProducts, categories, error }) {
             />
           </div>
           <div className="cabinet">
+            {/* Penny, 23 Nov 2026: Shogun Tapes tees are in the shop but not online yet, so the T-shirts tab points to their page. */}
+            {activeCategory === 'T-shirts' && !search && (
+              <p style={{ textAlign: 'center', margin: '0 0 18px' }}>
+                <Link href="/artist/shogun-tapes" className="btn" style={{ background: 'var(--orange)', color: '#141018' }}>
+                  {lang === 'ja' ? '日本のShogun Tapes Tシャツ →' : 'Shogun Tapes tees from Japan →'}
+                </Link>
+              </p>
+            )}
             <p className="shopcount">{lang === 'ja' ? `${filtered.length}点` : `${filtered.length} ${filtered.length === 1 ? 'toy' : 'toys'}`}</p>
             {filtered.length === 0 ? (
               TAB_PAGES[activeCategory] && !search ? (
