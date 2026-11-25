@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { useCart, fmt } from '../../lib/cart';
 import { shopTab } from '../../lib/categories';
-import { onlinePieceFor, pieceProduct } from '../../lib/tillPieces';
+import { onlinePieceFor, pieceProduct, groupSiblings, pieceVariation, groupedProduct } from '../../lib/tillPieces';
 
 function stockText(stock) {
   if (stock === null || stock === undefined) return 'In stock';
@@ -233,18 +233,28 @@ export async function getServerSideProps({ params, res }) {
       if (!found) return { props: { product: null, error: 'Product not found' } };
       const imageMap = {};
       (idata.related_objects || []).filter(o => o.type === 'IMAGE').forEach(img => { if (img.image_data?.url) imageMap[img.id] = img.image_data.url; });
-      let stock = null;
+      // A grouped piece (one tee design in several sizes) shows all its sizes.
+      const parts = groupSiblings(found.piece)
+        .map(piece => ({ piece, variation: piece === found.piece ? fresh : pieceVariation(owner, piece) }))
+        .filter(x => x.variation);
+      const stockMap = {};
       const invR = await fetch(`${base}/v2/inventory/counts/batch-retrieve`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Square-Version': '2025-01-23', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ catalog_object_ids: [v.id], location_ids: [SQUARE_LOCATION_ID] }),
+        body: JSON.stringify({ catalog_object_ids: parts.map(x => x.variation.id), location_ids: [SQUARE_LOCATION_ID] }),
       });
       if (invR.ok) {
-        const counts = (await invR.json()).counts || [];
-        if (counts.length) stock = counts.reduce((n, c) => n + (c.state && c.state !== 'IN_STOCK' ? 0 : parseInt(c.quantity || 0, 10)), 0);
+        for (const c of (await invR.json()).counts || []) {
+          stockMap[c.catalog_object_id] = (stockMap[c.catalog_object_id] || 0) + (c.state && c.state !== 'IN_STOCK' ? 0 : parseInt(c.quantity || 0, 10));
+        }
       }
-      if (soldOutAt(fresh, SQUARE_LOCATION_ID, owner.item_data?.name)) stock = 0;
-      const { isAvailable, variationName, ...product } = pieceProduct({ piece: found.piece, variation: fresh, imageMap, stock });
+      const built = parts.map(({ piece, variation }) => {
+        let stock = stockMap[variation.id] ?? null;
+        if (soldOutAt(variation, SQUARE_LOCATION_ID, owner.item_data?.name)) stock = 0;
+        return { piece, product: pieceProduct({ piece, variation, imageMap, stock }) };
+      });
+      const one = found.piece.group ? groupedProduct(built) : built[0].product;
+      const { isAvailable, variationName, ...product } = one;
       return { props: { product, error: null } };
     }
 

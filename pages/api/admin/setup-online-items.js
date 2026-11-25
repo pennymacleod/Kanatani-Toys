@@ -71,7 +71,12 @@ export default async function handler(req, res) {
       report.push(`${p.name}: ${made ? 'made new' : 'updated'}, £${p.price}, ${stock}${photo}.`);
     }
     // Artists' pieces as choices on their numbered till button (TILL_PIECES).
-    for (const a of TILL_PIECES) {
+    for (let a of TILL_PIECES) {
+      // Pieces with no price yet (e.g. Shogun Tapes tees) wait until one is set.
+      const unpriced = a.pieces.filter(p => !(Number(p.price) > 0));
+      if (unpriced.length) report.push(`${a.artist}: ${unpriced.length} piece(s) skipped, no price yet.`);
+      a = { ...a, pieces: a.pieces.filter(p => Number(p.price) > 0) };
+      if (!a.pieces.length) continue;
       const btn = tillButtonFor(items, a.artist);
       if (!btn) { report.push(`${a.artist}: no till button found. Press "Make the artist till buttons" first.`); continue; }
       const item = (await square(`/v2/catalog/object/${btn.id}`)).object;
