@@ -5,7 +5,7 @@
 // with one tap, Escape or a tap outside. Only runs on its own when SIGNUP_LIVE.
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { SIGNUP_LIVE, subscribe, isEmail } from '../lib/newsletter';
+import { SIGNUP_LIVE, subscribe, isEmail, lastSignupError } from '../lib/newsletter';
 
 const SEEN_KEY = 'kt_wheel_seen';
 const DELAY_MS = 8000;
@@ -94,9 +94,9 @@ export default function StickerWheel() {
       const ok = await subscribe(email);
       if (!ok) throw new Error('no');
       spin();
-    } catch {
+    } catch (err) {
       setStage('error');
-      setMsg("Oops, that didn't go through. Try again in a moment.");
+      setMsg(`Oops, that didn't go through. Try again in a moment. ${lastSignupError || (err && err.message !== 'no' ? '(' + err.message + ')' : '')}`);
     }
   };
 
