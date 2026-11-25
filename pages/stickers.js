@@ -26,7 +26,7 @@ export default function Stickers() {
             ))}
           </div>
           <p><a className="btn" href="/stickers/Kanatani-Toys-Stickers.zip" download style={{ background: 'var(--sky)', color: '#141018' }}>Download all three (zip)</a></p>
-          <h2 className="mid" style={{ marginTop: 28 }}>How to add them to WhatsApp</h2>
+          <h2 className="mid" style={{ marginTop: 28, color: '#fff' }}>How to add them to WhatsApp</h2>
           <p>No extra app needed.</p>
           <ol style={{ textAlign: 'left', display: 'inline-block' }}>
             <li>Save each sticker to your photos (on a phone, press and hold the picture, then tap <b>Save</b>).</li>
