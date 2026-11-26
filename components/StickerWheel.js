@@ -7,7 +7,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { SIGNUP_LIVE, subscribe, isEmail, lastSignupError } from '../lib/newsletter';
 
-const SEEN_KEY = 'kt_wheel_seen';
+// v2 (26 Nov 2026): fresh key so everyone who saw the wheel while sign-ups were failing (25 Nov) gets it once more.
+const SEEN_KEY = 'kt_wheel_seen_v2';
 const DELAY_MS = 8000;
 const SKIP = ['/add-stock', '/order-complete', '/stickers', '/privacy', '/terms'];
 const SLICES = [
