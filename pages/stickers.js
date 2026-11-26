@@ -31,7 +31,7 @@ export default function Stickers() {
           <ol style={{ textAlign: 'left', display: 'inline-block' }}>
             <li>Save each sticker to your photos (on a phone, press and hold the picture, then tap <b>Save</b>).</li>
             <li>Open any chat in WhatsApp and tap the <b>sticker</b> button.</li>
-            <li>Tap <b>Create</b> (the <b>+</b>), pick the sticker from your photos and tap <b>Send</b>.</li>
+            <li>Tap <b>Create</b> (the <b>+</b>) and pick the sticker from your photos. If WhatsApp offers to <b>cut it out</b>, skip that, so the sticker keeps its white edge. Then tap <b>Send</b>.</li>
             <li>Press and hold it in the chat and tap <b>Add to favourites</b>, so it's always there to annoy people with.</li>
           </ol>
         </div>
