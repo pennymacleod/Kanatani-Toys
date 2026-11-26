@@ -118,8 +118,9 @@ export default function StickerWheel() {
         {stage === 'won' ? (
           <div className="ktw-won">
             <div className="ktw-big">YOU WON… EVERYTHING!</div>
-            <p>{preview ? 'In the real thing, the sticker pack goes to their inbox now.' : "Your sticker pack is on its way to your inbox. Can't see it? Check your junk folder! Welcome to Kanatani News!"}</p>
-            <button type="button" className="ktw-btn" onClick={close}>Yay! Back to the toys</button>
+            <p>{preview ? 'In the real thing, the sticker pack goes to their inbox now.' : "Grab your stickers now! We've emailed you the link too (can't see it? Check your junk folder). Welcome to Kanatani News!"}</p>
+            <a className="ktw-btn ktw-get" href="/stickers" onClick={close}>Get my stickers now →</a>
+            <button type="button" className="ktw-later" onClick={close}>Back to the toys</button>
           </div>
         ) : (
           <form className="ktw-form" onSubmit={go} noValidate>

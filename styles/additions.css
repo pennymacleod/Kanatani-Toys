@@ -606,6 +606,8 @@ header.night:has(.navddmenu){z-index:30}
 .ktw-small{margin:0;font-size:12px}
 .ktw-small a{color:#141018}
 .ktw-won p{font-weight:600;margin:6px 0 12px}
+.ktw-get{display:inline-block;text-decoration:none;background:#5BD34A;color:#141018}
+.ktw-later{display:block;margin:12px auto 0;background:none;border:0;font:700 15px 'Inter',sans-serif;text-decoration:underline;color:#141018;cursor:pointer}
 .ktw-big{font:900 26px 'Rubik',sans-serif;color:#FF1F8F;-webkit-text-stroke:1.5px #141018;animation:ktwFlash2 .4s steps(2) infinite}
 @keyframes ktwFlash2{0%{color:#FF1F8F}100%{color:#3FB7F0}}
 .ktw-confetti{position:absolute;inset:-20px;pointer-events:none;overflow:visible}
