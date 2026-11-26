@@ -32,7 +32,7 @@ function NewsSignup() {
     if (!isEmail(email)) { setState('Pop a proper email address in!'); return; }
     if (!agree) { setState('Tick the box to say you want Kanatani News emails.'); return; }
     setState('Signing you up…');
-    try { setState((await subscribe(email)) ? "You're in! Check your inbox for your free stickers." : "Oops, that didn't go through. Try again in a moment."); }
+    try { setState((await subscribe(email)) ? "You're in! Check your inbox for your free stickers. Can't see them? Check your junk folder!" : "Oops, that didn't go through. Try again in a moment."); }
     catch { setState("Oops, that didn't go through. Try again in a moment."); }
   };
   return (

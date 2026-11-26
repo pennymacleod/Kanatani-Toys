@@ -117,7 +117,7 @@ export default function StickerWheel() {
         {stage === 'won' ? (
           <div className="ktw-won">
             <div className="ktw-big">YOU WON… EVERYTHING!</div>
-            <p>{preview ? 'In the real thing, the sticker pack goes to their inbox now.' : "Your sticker pack is on its way to your inbox. Welcome to Kanatani News!"}</p>
+            <p>{preview ? 'In the real thing, the sticker pack goes to their inbox now.' : "Your sticker pack is on its way to your inbox. Can't see it? Check your junk folder! Welcome to Kanatani News!"}</p>
             <button type="button" className="ktw-btn" onClick={close}>Yay! Back to the toys</button>
           </div>
         ) : (
