@@ -590,7 +590,7 @@ header.night:has(.navddmenu){z-index:30}
 .ktw-preview{background:#141018;color:#F2B705;font:700 12px 'Rubik',sans-serif;letter-spacing:.04em;border-radius:999px;padding:4px 10px;margin:0 44px 8px}
 .ktw-h{margin:4px 0 2px;font:400 clamp(40px,11vw,56px)/1 'Bagel Fat One','Rubik',sans-serif;color:#FF1F8F;-webkit-text-stroke:3px #141018;paint-order:stroke fill;text-shadow:4px 4px 0 #141018}
 .ktw-sub{margin:6px 0 10px;font-weight:700;font-size:15px}
-.ktw-stage{position:relative;width:min(260px,70vw);margin:4px auto 10px}
+.ktw-stage{position:relative;width:min(250px,64vw);margin:36px auto 10px}
 .ktw-wheel{width:100%;height:auto;display:block;filter:drop-shadow(4px 4px 0 #141018)}
 .ktw-slice{font:900 15px 'Rubik',sans-serif;fill:#fff;stroke:#141018;stroke-width:3.5px;paint-order:stroke fill;letter-spacing:.03em}
 .ktw-hub{font:900 26px sans-serif;fill:#FF1F8F}
