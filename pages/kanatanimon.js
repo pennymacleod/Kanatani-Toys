@@ -186,7 +186,7 @@ export default function Kanatanimon() {
     setOrange(o => ({ ...o, y: 960, ms: 380 })); await wait(400);
     sfx('drop');
     setStage('button'); setPressed([]);
-    setMsg(goes === 3 ? 'Now press 3 green buttons under the packs you want!' : 'Now press a green button under the pack you want!');
+    setMsg(goes === 3 ? 'Tap 3 green lights under the packs you want! (Red ones are sold out.)' : 'Tap a green light under the pack you want! (Red ones are sold out.)');
     busyRef.current = false;
   };
 
@@ -195,7 +195,7 @@ export default function Kanatanimon() {
     if (stage !== 'button' || busyRef.current || soldOut[t.key] || pressed.includes(t.key) || !t.key.startsWith(machine)) return;
     sfx('ping');
     const np = [...pressed, t.key]; setPressed(np);
-    if (np.length < goes) { setMsg(`${goes - np.length} more to press!`); return; }
+    if (np.length < goes) { setMsg(`${goes - np.length} more green light${goes - np.length > 1 ? 's' : ''} to tap!`); return; }
     busyRef.current = true;
     setStage('drop'); setMsg('Here it comes…');
     setRumble(true); sfx('crank'); await wait(1000); setRumble(false);
@@ -273,6 +273,18 @@ export default function Kanatanimon() {
                 onClick={() => press(t)} disabled={!live} />;
             })}
 
+            {/* button step: make it obvious */}
+            {stage === 'button' && m && (() => {
+              const first = ALL_TAGS.find(t => t.key.startsWith(machine) && !soldOut[t.key] && !pressed.includes(t.key));
+              return <>
+                <span className="kdim" style={{ left: X(m.box.x), top: Y(m.box.y), width: X(m.box.w), height: Y(m.box.h) }} />
+                <span className="kpress" style={{ left: X(m.box.x + m.box.w / 2), top: Y(330) }}>
+                  {goes - pressed.length > 1 ? `Tap ${goes - pressed.length} green lights!` : 'Tap a green light!'}
+                </span>
+                {first && <span className="kfinger" style={{ left: X(first.x), top: Y(first.y + 20) }}>👆</span>}
+              </>;
+            })()}
+
             {/* pick a machine */}
             {stage === 'pick' && Object.values(MACHINES).map(mm => (
               <button key={mm.name} type="button" className={`kpick k-${mm.name}`} onClick={() => choose(mm.name)}
@@ -347,8 +359,15 @@ export default function Kanatanimon() {
         .pg-kmon .klight{position:absolute;border:0;padding:0;background:transparent;border-radius:4px;cursor:default}
         .pg-kmon .klight::after{content:'';position:absolute;right:4%;top:50%;width:22%;aspect-ratio:1;border-radius:50%;transform:translateY(-50%);background:#5BD34A;box-shadow:0 0 6px 2px rgba(91,211,74,.8)}
         .pg-kmon .klight.out::after{background:#ff3b30;box-shadow:0 0 6px 2px rgba(255,59,48,.8)}
-        .pg-kmon .klight.live{cursor:pointer;outline:3px solid #5BD34A;outline-offset:1px;animation:klive .7s ease-in-out infinite alternate}
-        @keyframes klive{from{box-shadow:0 0 0 0 rgba(91,211,74,.0)}to{box-shadow:0 0 12px 4px rgba(91,211,74,.9)}}
+        .pg-kmon .klight.live{cursor:pointer;z-index:4;background:rgba(91,211,74,.35);outline:4px solid #5BD34A;outline-offset:2px;animation:klive .6s ease-in-out infinite alternate}
+        .pg-kmon .klight.live::after{width:30%;background:#8dff7a;box-shadow:0 0 10px 5px rgba(141,255,122,1)}
+        @keyframes klive{from{transform:scale(1);box-shadow:0 0 0 0 rgba(91,211,74,0)}to{transform:scale(1.25);box-shadow:0 0 16px 6px rgba(91,211,74,1)}}
+        .pg-kmon .kdim{position:absolute;background:rgba(20,16,24,.45);border-radius:16px;pointer-events:none;z-index:3}
+        .pg-kmon .kpress{position:absolute;transform:translate(-50%,-50%) rotate(-4deg);background:#5BD34A;color:var(--ink);border:4px solid var(--ink);border-radius:999px;padding:6px 16px;font-family:Rubik,sans-serif;font-weight:900;font-size:clamp(13px,2.8vw,24px);box-shadow:4px 4px 0 var(--ink);white-space:nowrap;z-index:5;pointer-events:none;animation:kpressb .6s ease-in-out infinite alternate}
+        @keyframes kpressb{to{transform:translate(-50%,-58%) rotate(3deg)}}
+        .pg-kmon .kfinger{position:absolute;transform:translate(-50%,0);font-size:clamp(28px,6vw,52px);z-index:5;pointer-events:none;animation:kfing .5s ease-in-out infinite alternate;filter:drop-shadow(2px 2px 0 #141018)}
+        @keyframes kfing{to{transform:translate(-50%,-30%)}}
+        .pg-kmon .klight.on{z-index:4}
         .pg-kmon .klight.on{outline:3px solid #FFD21F;background:rgba(255,210,31,.5)}
         .pg-kmon .kpick{position:absolute;border:0;background:transparent;border-radius:16px;cursor:pointer;animation:kpickglow .8s ease-in-out infinite alternate}
         .pg-kmon .kpick.k-red{--g:255,31,143}.pg-kmon .kpick.k-blue{--g:63,183,240}
